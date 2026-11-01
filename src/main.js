@@ -1,10 +1,13 @@
 // ==========================================================================
 // MAIN CONTROLLER // THE BLUEPRINT UNIVERSE
-// Orchestrates 3D Blueprint Constructor, Drawing Viewer, Case Study Modal, Lenis & Audio
+// Orchestrates BlueprintWorld, ShaderImageGallery, MangaMotion, InkTrail, DrawingViewer & Audio
 // ==========================================================================
 
 import Lenis from 'lenis';
-import { BlueprintConstructor } from './blueprintConstructor.js';
+import { BlueprintWorld } from './BlueprintWorld.js';
+import { ShaderImageGallery } from './ShaderImageGallery.js';
+import { MangaMotion } from './MangaMotion.js';
+import { InkTrail } from './InkTrail.js';
 import { DrawingViewer } from './drawingViewer.js';
 import { CaseStudyModal } from './caseStudyModal.js';
 import { sound } from './audio.js';
@@ -24,84 +27,121 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   requestAnimationFrame(raf);
 
-  // 2. Initialize 3D Blueprint Constructor in Hero
-  const canvas = document.getElementById('blueprint-canvas');
-  let constructor = null;
-  if (canvas) {
-    constructor = new BlueprintConstructor(canvas);
+  // 2. Initialize Calligraphy Ink Trail (Canvas Overlay)
+  const inkCanvas = document.getElementById('ink-canvas');
+  if (inkCanvas) {
+    new InkTrail(inkCanvas);
   }
 
-  // 3. Initialize Architectural Drawing Viewer in Section C
+  // 3. Initialize MangaMotion (Scroll Storytelling & 3D Tilt)
+  new MangaMotion(lenis);
+
+  // 4. Initialize BlueprintWorld (3D Architectural Assembly in Hero)
+  const bpCanvas = document.getElementById('blueprint-canvas');
+  let blueprintWorld = null;
+  if (bpCanvas) {
+    blueprintWorld = new BlueprintWorld(bpCanvas);
+  }
+
+  // 5. Initialize WebGL Shader Image Gallery
+  const shaderCanvas = document.getElementById('shader-gallery-canvas');
+  let shaderGallery = null;
+  if (shaderCanvas) {
+    shaderGallery = new ShaderImageGallery(shaderCanvas);
+
+    // Hover effect on the shader gallery container
+    shaderCanvas.addEventListener('mouseenter', () => {
+      shaderGallery.setHover(true);
+      sound.playPencilScratch();
+    });
+    shaderCanvas.addEventListener('mouseleave', () => {
+      shaderGallery.setHover(false);
+    });
+
+    // Buttons to toggle images
+    const btnArch = document.getElementById('btn-show-arch');
+    const btnManga = document.getElementById('btn-show-manga');
+
+    btnArch?.addEventListener('click', () => {
+      shaderGallery.setTransition(0.0);
+      btnArch.classList.add('bg-navy', 'text-white');
+      btnArch.classList.remove('bg-ice', 'text-navy');
+      btnManga.classList.add('bg-ice', 'text-navy');
+      btnManga.classList.remove('bg-navy', 'text-white');
+      sound.playBlueprintUnfold();
+    });
+
+    btnManga?.addEventListener('click', () => {
+      shaderGallery.setTransition(1.0);
+      btnManga.classList.add('bg-navy', 'text-white');
+      btnManga.classList.remove('bg-ice', 'text-navy');
+      btnArch.classList.add('bg-ice', 'text-navy');
+      btnArch.classList.remove('bg-navy', 'text-white');
+      sound.playStructuralClack();
+    });
+  }
+
+  // 6. Initialize Architectural Drawing Viewer
   const dvRoot = document.getElementById('drawing-viewer-root');
   if (dvRoot) {
     new DrawingViewer('drawing-viewer-root');
   }
 
-  // 4. Initialize 7-Chapter Manhwa Case Study Modal
+  // 7. Initialize 7-Chapter Manhwa Case Study Modal
   const caseStudyModal = new CaseStudyModal();
 
-  // Attach click listeners to all Case Study buttons
   document.querySelectorAll('.btn-open-case-study').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', () => {
       const projId = btn.getAttribute('data-project-id');
-      if (projId) {
-        caseStudyModal.open(projId);
-      }
+      if (projId) caseStudyModal.open(projId);
     });
   });
 
-  // Also make project cards clickable
   document.querySelectorAll('[data-project]').forEach(card => {
     card.addEventListener('click', (e) => {
-      // Don't trigger if clicked directly on an anchor or button inside
       if (e.target.closest('a') || e.target.closest('button')) return;
       const projId = card.getAttribute('data-project');
-      if (projId) {
-        caseStudyModal.open(projId);
-      }
+      if (projId) caseStudyModal.open(projId);
     });
   });
 
-  // 5. Hero 3D Blueprint Constructor Controls
+  // 8. Hero 3D Assembly Controls
   const btnExplode = document.getElementById('btn-hero-toggle-exploded');
   const tagExplode = document.getElementById('hero-exploded-tag');
   const btnReset = document.getElementById('btn-hero-reset-cam');
   const btnCycleMode = document.getElementById('btn-hero-cycle-mode');
 
   btnExplode?.addEventListener('click', () => {
-    if (constructor) {
-      const isExploded = constructor.toggleExploded();
-      if (tagExplode) {
-        tagExplode.classList.toggle('hidden', !isExploded);
-      }
-      btnExplode.innerHTML = isExploded ? '<span>🔄 COLLAPSE 3D MODEL</span>' : '<span>💥 EXPLODE 3D MODEL</span>';
-      showToast(isExploded ? 'Exploded Assembly: Precast components separated' : 'Assembly Restored: Structural joints locked');
+    if (blueprintWorld) {
+      const isExp = blueprintWorld.toggleExploded();
+      if (tagExplode) tagExplode.classList.toggle('hidden', !isExp);
+      btnExplode.innerHTML = isExp ? '<span>🔄 COLLAPSE 3D ASSEMBLY</span>' : '<span>💥 EXPLODE 3D ASSEMBLY</span>';
+      showToast(isExp ? 'Exploded Assembly: Precast components separated' : 'Assembly Restored: Structural joints locked');
     }
   });
 
   btnReset?.addEventListener('click', () => {
-    if (constructor) {
-      constructor.resetCamera();
+    if (blueprintWorld) {
+      blueprintWorld.resetCamera();
       if (tagExplode) tagExplode.classList.add('hidden');
-      if (btnExplode) btnExplode.innerHTML = '<span>💥 EXPLODE 3D MODEL</span>';
+      if (btnExplode) btnExplode.innerHTML = '<span>💥 EXPLODE 3D ASSEMBLY</span>';
       showToast('Camera orientation reset');
     }
   });
 
   btnCycleMode?.addEventListener('click', () => {
-    if (constructor) {
-      const mode = constructor.cycleVisualMode();
+    if (blueprintWorld) {
+      const mode = blueprintWorld.cycleVisualMode();
       btnCycleMode.textContent = `MODE: ${mode.toUpperCase()}`;
       showToast(`Visual Style: ${mode.toUpperCase()}`);
     }
   });
 
-  // Layer toggles
   document.querySelectorAll('.layer-toggle-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const layer = btn.getAttribute('data-layer');
-      if (constructor && layer) {
-        const visible = constructor.toggleLayer(layer);
+      if (blueprintWorld && layer) {
+        const visible = blueprintWorld.toggleLayer(layer);
         btn.classList.toggle('bg-navy', visible);
         btn.classList.toggle('text-white', visible);
         btn.classList.toggle('bg-ice', !visible);
@@ -110,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 6. Custom Blueprint Crosshair Cursor
+  // 9. Custom Blueprint Crosshair Cursor
   const cursor = document.getElementById('blueprint-cursor');
   let mouseX = window.innerWidth / 2;
   let mouseY = window.innerHeight / 2;
@@ -132,7 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   requestAnimationFrame(renderCursor);
 
-  // Hover states on interactives
   document.querySelectorAll('a, button, input, .manhwa-panel').forEach(el => {
     el.addEventListener('mouseenter', () => {
       cursor?.classList.add('cursor-hover');
@@ -143,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 7. Audio Toggle Button
+  // 10. Audio Toggle
   const btnAudio = document.getElementById('btn-audio');
   const audioIcon = document.getElementById('audio-icon');
   const audioLabel = document.getElementById('audio-label');
@@ -157,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast(isEnabled ? 'Drafting & Assembly Audio Enabled' : 'Audio Muted');
   });
 
-  // 8. Copy Email to Clipboard & Toast
+  // 11. Copy Email & Toast
   const btnCopy = document.getElementById('btn-copy-email');
   const toast = document.getElementById('blueprint-toast');
   let toastTimer = null;
@@ -182,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   console.log(
-    '%cTHE BLUEPRINT UNIVERSE // DAGMAWI YOSEF (0xDagi)\nComputational Architecture • Precast Engineering • Creative WebGL',
+    '%cTHE BLUEPRINT UNIVERSE // ARCHITECTURAL MANHWA ENGINE LOADED\nWebGL Shaders, 3D Assembly, Ink Trail & Motion Active',
     'color: #399DD6; font-weight: bold; font-size: 14px; background: #173C5B; padding: 6px 12px; border: 2px solid #399DD6; border-radius: 4px;'
   );
 });
