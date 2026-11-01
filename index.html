@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAGIYOSI // 0xDagi — Creative Coder, Full-Stack & BIM Architect</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Fira+Code:wght@400;600;700&family=Noto+Sans+JP:wght@700;900&family=Space+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body class="bg-noir text-paper selection-crimson overflow-x-hidden">
+
+  <!-- Custom Manga Cursor -->
+  <div id="manga-cursor" class="pointer-events-none fixed z-50 transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-75">
+    <div class="cursor-dot w-3 h-3 bg-crimson rounded-full border border-white"></div>
+    <div class="cursor-ring w-9 h-9 border border-crimson rounded-full -top-3 -left-3 absolute animate-ping-slow opacity-60"></div>
+  </div>
+
+  <!-- Halftone / Screentone Texture Overlay -->
+  <div class="screentone-overlay pointer-events-none fixed inset-0 z-40 opacity-20"></div>
+  <div class="speedlines-overlay pointer-events-none fixed inset-0 z-30 opacity-0 transition-opacity duration-300"></div>
+
+  <!-- Audio & Experience Ambient Controls Header -->
+  <header class="fixed top-0 left-0 w-full z-40 px-6 py-4 flex items-center justify-between border-b-2 border-noir bg-paper/90 backdrop-blur-md text-noir transition-all">
+    <div class="flex items-center space-x-4">
+      <a href="#prologue" class="font-anton text-2xl tracking-wider hover:text-crimson transition-colors flex items-center gap-2">
+        <span class="bg-noir text-paper px-2 py-0.5 rounded text-sm font-fira font-bold">0xDagi</span>
+        <span class="text-crimson font-jp">ダギ</span>
+      </a>
+      <span class="hidden md:inline-block text-xs font-fira text-neutral-600 border-l border-neutral-400 pl-3">
+        CREATIVE CODER // FULL-STACK // BIM ARCHITECT
+      </span>
+    </div>
+
+    <nav class="hidden lg:flex items-center space-x-6 font-fira text-xs font-bold uppercase tracking-wider">
+      <a href="#prologue" class="hover:text-crimson transition-colors py-1">01. PROLOGUE</a>
+      <a href="#arsenal" class="hover:text-crimson transition-colors py-1">02. ARSENAL</a>
+      <a href="#chronicles" class="hover:text-crimson transition-colors py-1">03. CHRONICLES</a>
+      <a href="#contact" class="hover:text-crimson transition-colors py-1">04. SUMMON</a>
+    </nav>
+
+    <div class="flex items-center space-x-3">
+      <!-- Audio Toggle Button -->
+      <button id="btn-audio" class="manga-btn px-3 py-1.5 text-xs font-fira font-bold uppercase border-2 border-noir bg-paper hover:bg-noir hover:text-paper transition-all flex items-center gap-1.5 shadow-brutal-sm">
+        <span id="audio-icon">🔇</span>
+        <span id="audio-label">AUDIO: OFF</span>
+      </button>
+
+      <!-- Terminal Trigger -->
+      <button id="btn-terminal-open" class="manga-btn px-2.5 py-1.5 text-xs font-fira font-bold border-2 border-noir bg-paper hover:bg-noir hover:text-paper transition-all shadow-brutal-sm title='Open Terminal (Key: ~)'" aria-label="Terminal">
+        &gt;_
+      </button>
+
+      <!-- The Famous "EXPERIENCE" Button (from reference video) -->
+      <button id="btn-experience" class="manga-btn-crimson px-4 py-1.5 text-xs font-anton tracking-wider uppercase bg-crimson text-white border-2 border-noir hover:bg-black hover:text-crimson transition-all shadow-brutal-sm flex items-center gap-2 animate-pulse-subtle">
+        <span>EXPERIENCE</span>
+        <span class="text-[10px] font-fira font-normal bg-black text-white px-1 rounded">3D</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Background WebGL 3D Canvas (Manga Hand, Cel-Shading, Relics, Particles) -->
+  <div id="canvas-container" class="fixed inset-0 z-0 pointer-events-auto">
+    <canvas id="webgl-canvas" class="w-full h-full block"></canvas>
+  </div>
+
+  <!-- MAIN SCROLLABLE CONTENT (Lenis smooth scroll) -->
+  <main id="main-content" class="relative z-10 pt-20">
+
+    <!-- ==================== ACT 01: PROLOGUE (HERO) ==================== -->
+    <section id="prologue" class="min-h-screen flex flex-col justify-between px-6 md:px-16 py-12 relative pointer-events-none">
+      
+      <!-- Top Manga Banner / Subtitle -->
+      <div class="pointer-events-auto max-w-xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-crimson text-paper text-xs font-fira font-bold uppercase mb-4 shadow-brutal-sm">
+          <span class="animate-pulse">●</span> VOLUME 01: INK & ALGORITHMS
+        </div>
+        <div class="manga-bubble-rect bg-paper text-noir p-4 border-2 border-noir shadow-brutal max-w-md">
+          <p class="font-fira text-xs font-semibold uppercase tracking-wide leading-relaxed">
+            "I work at the intersection of design, engineering, and spatial systems. Fast, responsive, accessible, and mathematically precise."
+          </p>
+        </div>
+      </div>
+
+      <!-- Center Cinematic Headline -->
+      <div class="pointer-events-auto my-auto py-8">
+        <div class="relative inline-block">
+          <!-- Background Japanese Kanji Watermark -->
+          <span class="absolute -top-16 -left-8 font-jp font-black text-7xl md:text-9xl text-white/5 select-none pointer-events-none">
+            創造者
+          </span>
+          
+          <h1 class="font-anton text-6xl sm:text-8xl md:text-9xl tracking-tight uppercase text-paper drop-shadow-manga leading-none">
+            DAGI<span class="text-crimson">YOSI</span>
+          </h1>
+          <div class="flex flex-wrap items-center gap-3 mt-3">
+            <span class="font-fira text-sm md:text-lg font-bold bg-noir text-paper border border-white/20 px-3 py-1">
+              FULL-STACK ARCHITECT
+            </span>
+            <span class="font-fira text-sm md:text-lg font-bold bg-crimson text-white px-3 py-1">
+              CREATIVE WEBGL
+            </span>
+            <span class="font-fira text-sm md:text-lg font-bold bg-paper text-noir px-3 py-1">
+              BIM AUTOMATION
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Interactive Strip & Japanese SFX -->
+      <div class="pointer-events-auto flex flex-col md:flex-row items-start md:items-end justify-between gap-6 pb-6">
+        <div class="flex items-center gap-4 bg-paper/95 text-noir p-3 border-2 border-noir shadow-brutal-sm max-w-lg">
+          <div class="w-3 h-3 bg-crimson animate-ping"></div>
+          <p class="font-fira text-xs font-medium">
+            <strong class="text-crimson">DRAG & MOVE CURSOR:</strong> Tilt the interactive 3D manga hand and trigger real-time cel-shaded ink particles.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="font-jp text-5xl font-black text-crimson animate-bounce-gentle select-none">
+            ドーン!
+          </div>
+          <a href="#arsenal" class="manga-btn px-4 py-2 bg-paper text-noir border-2 border-noir font-fira text-xs font-bold uppercase shadow-brutal hover:bg-crimson hover:text-white transition-all flex items-center gap-2">
+            <span>SCROLL TO EXPLORE</span>
+            <span>↓</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ACT 02: ARSENAL (SKILLS MATRIX) ==================== -->
+    <section id="arsenal" class="min-h-screen px-6 md:px-16 py-24 relative bg-noir/90 backdrop-blur-md border-t-4 border-noir">
+      
+      <!-- Section Header with Manga Action Banner -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16 border-b-2 border-white/20 pb-6">
+        <div>
+          <span class="font-fira text-xs font-bold text-crimson uppercase tracking-widest block mb-1">
+            // CHAPTER 02 // TECHNICAL ARSENAL
+          </span>
+          <h2 class="font-anton text-5xl md:text-7xl text-paper uppercase tracking-wide">
+            THE TOOLBELT <span class="text-crimson font-jp text-4xl">武具</span>
+          </h2>
+        </div>
+        <p class="font-fira text-xs text-neutral-400 max-w-md">
+          "First make it work, then make it right, then make it fast." Zero bloat. Production-tested precision across frontend, backend, and engineering automation.
+        </p>
+      </div>
+
+      <!-- Comic Grid Panels -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Panel 01: Frontend & Creative 3D -->
+        <div class="manga-panel bg-paper text-noir p-6 border-3 border-noir shadow-brutal relative group hover:-translate-y-1 transition-transform">
+          <div class="panel-tag absolute top-0 right-0 bg-crimson text-white font-fira text-[10px] font-bold px-2 py-0.5 border-l-2 border-b-2 border-noir">
+            PANEL 01
+          </div>
+          <span class="font-jp text-3xl font-black text-neutral-300 block mb-2">前衛</span>
+          <h3 class="font-anton text-2xl uppercase tracking-wider mb-3">
+            FRONTEND & CREATIVE
+          </h3>
+          <p class="font-fira text-xs text-neutral-700 mb-4 leading-relaxed">
+            Fluid motion, 3D WebGL scenes, semantic markup, and responsive UI layouts that stay rock solid on every viewport.
+          </p>
+          <ul class="space-y-1.5 font-fira text-xs font-bold text-noir border-t border-noir/20 pt-3">
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> Three.js / WebGL / GLSL</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> GSAP 3 & Lenis Scroll</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> React / Next.js / TypeScript</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> Modern CSS / Tailwind / Canvas</li>
+          </ul>
+        </div>
+
+        <!-- Panel 02: Systems & Backend -->
+        <div class="manga-panel bg-paper text-noir p-6 border-3 border-noir shadow-brutal relative group hover:-translate-y-1 transition-transform">
+          <div class="panel-tag absolute top-0 right-0 bg-noir text-paper font-fira text-[10px] font-bold px-2 py-0.5 border-l-2 border-b-2 border-noir">
+            PANEL 02
+          </div>
+          <span class="font-jp text-3xl font-black text-neutral-300 block mb-2">基盤</span>
+          <h3 class="font-anton text-2xl uppercase tracking-wider mb-3">
+            BACKEND & APIS
+          </h3>
+          <p class="font-fira text-xs text-neutral-700 mb-4 leading-relaxed">
+            Robust data layers, RESTful API contracts, authenticated pipelines, and microservices built to withstand real production traffic.
+          </p>
+          <ul class="space-y-1.5 font-fira text-xs font-bold text-noir border-t border-noir/20 pt-3">
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> Python / FastAPI / Flask</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> Node.js / Express</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> PostgreSQL / SQLite / Supabase</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> REST & WebSocket Bridges</li>
+          </ul>
+        </div>
+
+        <!-- Panel 03: BIM & Engineering Systems -->
+        <div class="manga-panel bg-paper text-noir p-6 border-3 border-noir shadow-brutal relative group hover:-translate-y-1 transition-transform">
+          <div class="panel-tag absolute top-0 right-0 bg-crimson text-white font-fira text-[10px] font-bold px-2 py-0.5 border-l-2 border-b-2 border-noir">
+            PANEL 03
+          </div>
+          <span class="font-jp text-3xl font-black text-neutral-300 block mb-2">建築</span>
+          <h3 class="font-anton text-2xl uppercase tracking-wider mb-3">
+            BIM & ARCHITECTURE
+          </h3>
+          <p class="font-fira text-xs text-neutral-700 mb-4 leading-relaxed">
+            Automating building information modeling, computational precast frame engineering, and parametric structural sizing.
+          </p>
+          <ul class="space-y-1.5 font-fira text-xs font-bold text-noir border-t border-noir/20 pt-3">
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> Revit API / pyRevit / Dynamo</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> Precast Frame & Slabs (Hollow-Core)</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> OpenBIM / IFC / CAD Automation</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> Geometric & Clash Algorithmic Solvers</li>
+          </ul>
+        </div>
+
+        <!-- Panel 04: Philosophy & Tooling -->
+        <div class="manga-panel bg-noir text-paper p-6 border-3 border-paper shadow-brutal relative group hover:-translate-y-1 transition-transform">
+          <div class="panel-tag absolute top-0 right-0 bg-white text-noir font-fira text-[10px] font-bold px-2 py-0.5 border-l-2 border-b-2 border-noir">
+            PANEL 04
+          </div>
+          <span class="font-jp text-3xl font-black text-crimson block mb-2">極意</span>
+          <h3 class="font-anton text-2xl uppercase tracking-wider mb-3 text-paper">
+            WORKFLOW & CODE
+          </h3>
+          <p class="font-fira text-xs text-neutral-300 mb-4 leading-relaxed">
+            I value code that stays maintainable 6 months later. Git discipline, automated workflows, and terminal-first speed.
+          </p>
+          <ul class="space-y-1.5 font-fira text-xs font-bold text-paper border-t border-neutral-700 pt-3">
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> Git & GitHub Actions CI/CD</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> Linux / PowerShell / Terminal</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> Mobile-First & A11y Standards</li>
+            <li class="flex items-center gap-2"><span class="text-crimson">▶</span> "Ship Solid over Big & Broken"</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== ACT 03: CHRONICLES (FEATURED PROJECTS) ==================== -->
+    <section id="chronicles" class="min-h-screen px-6 md:px-16 py-24 relative bg-noir/95 text-paper border-t-4 border-crimson">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16 border-b-2 border-white/20 pb-6">
+        <div>
+          <span class="font-fira text-xs font-bold text-crimson uppercase tracking-widest block mb-1">
+            // CHAPTER 03 // MASTER ARCHIVES
+          </span>
+          <h2 class="font-anton text-5xl md:text-7xl uppercase tracking-wide">
+            CHRONICLES <span class="text-crimson font-jp text-4xl">戦績</span>
+          </h2>
+        </div>
+        <div class="font-fira text-xs text-neutral-400 max-w-sm">
+          Selected high-impact engineering and software projects built with real-world utility and mathematical discipline.
+        </div>
+      </div>
+
+      <!-- Comic Strip Project Cards -->
+      <div class="space-y-16">
+        
+        <!-- PROJECT 01: Ethiopian National Curriculum Platform -->
+        <div class="project-strip bg-paper text-noir p-6 md:p-10 border-4 border-noir shadow-brutal-lg grid grid-cols-1 lg:grid-cols-12 gap-8 relative overflow-hidden group">
+          <div class="absolute -right-6 -bottom-6 font-jp text-9xl font-black text-neutral-200 select-none pointer-events-none group-hover:text-crimson/10 transition-colors">
+            教育
+          </div>
+
+          <div class="lg:col-span-7 flex flex-col justify-between">
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="bg-crimson text-white font-fira text-xs font-bold px-2 py-0.5">FLAGSHIP PLATFORM</span>
+                <span class="bg-noir text-paper font-fira text-xs font-bold px-2 py-0.5">EDTECH / SQ3R</span>
+                <span class="border border-noir font-fira text-xs font-bold px-2 py-0.5">OFFLINE-FIRST</span>
+              </div>
+
+              <h3 class="font-anton text-3xl md:text-5xl uppercase tracking-tight mb-4">
+                ETHIOPIAN NATIONAL CURRICULUM PLATFORM
+              </h3>
+              
+              <p class="font-fira text-xs md:text-sm text-neutral-700 leading-relaxed mb-6">
+                An authentic, offline-first study, examination simulation, and honors certification platform for Ethiopian middle school students. Built on the evidence-backed <strong>SQ3R methodology</strong> and strictly aligned with the FDRE Ministry of Education CBA standards.
+              </p>
+
+              <!-- Key Metrics Grid -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 py-4 border-y-2 border-noir mb-6 font-fira">
+                <div>
+                  <span class="block text-2xl font-anton text-crimson">96</span>
+                  <span class="text-[10px] uppercase font-bold text-neutral-600">Full Units</span>
+                </div>
+                <div>
+                  <span class="block text-2xl font-anton text-noir">184</span>
+                  <span class="text-[10px] uppercase font-bold text-neutral-600">Subtopics</span>
+                </div>
+                <div>
+                  <span class="block text-2xl font-anton text-crimson">577+</span>
+                  <span class="text-[10px] uppercase font-bold text-neutral-600">CBA Exam Qs</span>
+                </div>
+                <div>
+                  <span class="block text-2xl font-anton text-noir">100%</span>
+                  <span class="text-[10px] uppercase font-bold text-neutral-600">Offline PWA</span>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-2 text-xs font-fira font-bold">
+                <span class="bg-neutral-200 px-2 py-1">HTML5 Canvas Certificate Generator</span>
+                <span class="bg-neutral-200 px-2 py-1">Exam Hall Countdown Simulator</span>
+                <span class="bg-neutral-200 px-2 py-1">Leitner 3D Flip Flashcards</span>
+                <span class="bg-neutral-200 px-2 py-1">Print-Optimized A4 Summaries</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4 mt-8 pt-4 border-t border-noir/20">
+              <a href="https://github.com/dagiyosi-pixel" target="_blank" rel="noopener noreferrer" class="manga-btn px-5 py-2.5 bg-noir text-paper font-fira text-xs font-bold uppercase shadow-brutal hover:bg-crimson hover:text-white transition-all flex items-center gap-2">
+                <span>INSPECT REPO</span>
+                <span>↗</span>
+              </a>
+              <span class="font-fira text-xs text-neutral-500 font-semibold">Grade 7 & 8 CBA Aligned</span>
+            </div>
+          </div>
+
+          <!-- Project Graphic / Mockup Card -->
+          <div class="lg:col-span-5 flex flex-col justify-center items-center bg-noir text-paper p-6 border-2 border-noir relative shadow-inner">
+            <div class="w-full text-center space-y-4">
+              <div class="border-2 border-dashed border-crimson p-4 bg-noir/80">
+                <span class="text-3xl font-anton text-crimson block">የፈተና አዳራሽ</span>
+                <span class="font-fira text-xs uppercase tracking-widest text-neutral-400">MINISTRY EXAM HALL SIMULATOR</span>
+                <div class="my-4 h-1 w-24 bg-crimson mx-auto"></div>
+                <p class="font-fira text-xs text-neutral-300">
+                  Timed diagnostic mock exams with 4-distractor autopsy, real-time scoreboard, and verified FDRE MoE psychometric scoring.
+                </p>
+              </div>
+              <div class="bg-white/10 p-3 font-fira text-[11px] text-neutral-300 text-left border-l-2 border-crimson">
+                &gt; Canvas Resolution: 1200 x 840 px HD<br>
+                &gt; Telegram 1-Click Verification Export<br>
+                &gt; Mastery Gate: Strict 80% Threshold
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROJECT 02: BIM Precast Frame & Structural Automation -->
+        <div class="project-strip bg-paper text-noir p-6 md:p-10 border-4 border-noir shadow-brutal-lg grid grid-cols-1 lg:grid-cols-12 gap-8 relative overflow-hidden group">
+          <div class="absolute -right-6 -bottom-6 font-jp text-9xl font-black text-neutral-200 select-none pointer-events-none group-hover:text-crimson/10 transition-colors">
+            構造
+          </div>
+
+          <div class="lg:col-span-7 flex flex-col justify-between">
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="bg-noir text-paper font-fira text-xs font-bold px-2 py-0.5">STRUCTURAL BIM</span>
+                <span class="bg-crimson text-white font-fira text-xs font-bold px-2 py-0.5">PRECAST AUTOMATION</span>
+                <span class="border border-noir font-fira text-xs font-bold px-2 py-0.5">REVIT API</span>
+              </div>
+
+              <h3 class="font-anton text-3xl md:text-5xl uppercase tracking-tight mb-4">
+                PRECAST BIM & COMPUTATIONAL FRAME SUITE
+              </h3>
+              
+              <p class="font-fira text-xs md:text-sm text-neutral-700 leading-relaxed mb-6">
+                Algorithmic framework for automated structural precast modeling in Autodesk Revit. Translates architectural spatial envelopes into verified hollow-core floor layouts, inverted-T ledge beams, structural corbels, and erection schedules.
+              </p>
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 py-4 border-y-2 border-noir mb-6 font-fira">
+                <div>
+                  <span class="block text-2xl font-anton text-crimson">PCI / ACI</span>
+                  <span class="text-[10px] uppercase font-bold text-neutral-600">Code Verification</span>
+                </div>
+                <div>
+                  <span class="block text-2xl font-anton text-noir">CORBELS</span>
+                  <span class="text-[10px] uppercase font-bold text-neutral-600">Ledge & Bearing Checks</span>
+                </div>
+                <div>
+                  <span class="block text-2xl font-anton text-crimson">100% API</span>
+                  <span class="text-[10px] uppercase font-bold text-neutral-600">Transaction Safe</span>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-2 text-xs font-fira font-bold">
+                <span class="bg-neutral-200 px-2 py-1">Hollow-Core Slab Layout Engine</span>
+                <span class="bg-neutral-200 px-2 py-1">Inverted-T & L-Beams Sizing</span>
+                <span class="bg-neutral-200 px-2 py-1">Parametric Column Joints</span>
+                <span class="bg-neutral-200 px-2 py-1">Shop Drawing Generation</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4 mt-8 pt-4 border-t border-noir/20">
+              <a href="https://github.com/dagiyosi-pixel" target="_blank" rel="noopener noreferrer" class="manga-btn px-5 py-2.5 bg-noir text-paper font-fira text-xs font-bold uppercase shadow-brutal hover:bg-crimson hover:text-white transition-all flex items-center gap-2">
+                <span>VIEW ARCHITECTURE REPO</span>
+                <span>↗</span>
+              </a>
+              <span class="font-fira text-xs text-neutral-500 font-semibold">Eurocode & PCI Compliance</span>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 flex flex-col justify-center items-center bg-noir text-paper p-6 border-2 border-noir relative shadow-inner">
+            <div class="w-full text-center space-y-4 font-fira">
+              <div class="border-2 border-neutral-700 p-4">
+                <span class="text-3xl font-anton text-paper block">BIM AUTOMATION VAULT</span>
+                <span class="text-xs uppercase tracking-widest text-crimson">REVIT INTERNAL PRECISION</span>
+                <div class="my-4 h-1 w-24 bg-white/20 mx-auto"></div>
+                <p class="text-xs text-neutral-300">
+                  Automated element creation inside Revit API Transactions, unit conversions (feet to mm: 304.8), and shop drawing fabrication metadata.
+                </p>
+              </div>
+              <div class="bg-white/10 p-3 text-[11px] text-neutral-300 text-left border-l-2 border-white">
+                &gt; Inverted-T Ledge Bearing Verifier<br>
+                &gt; Piece Mark Unique Tracking (ID)<br>
+                &gt; Hollow-Core Cutout & Web Preservation
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROJECT 03: Manga-Noir WebGL Shader & 3D Interactive Lab -->
+        <div class="project-strip bg-paper text-noir p-6 md:p-10 border-4 border-noir shadow-brutal-lg grid grid-cols-1 lg:grid-cols-12 gap-8 relative overflow-hidden group">
+          <div class="absolute -right-6 -bottom-6 font-jp text-9xl font-black text-neutral-200 select-none pointer-events-none group-hover:text-crimson/10 transition-colors">
+            三次元
+          </div>
+
+          <div class="lg:col-span-7 flex flex-col justify-between">
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="bg-crimson text-white font-fira text-xs font-bold px-2 py-0.5">WEBGL / THREE.JS</span>
+                <span class="bg-noir text-paper font-fira text-xs font-bold px-2 py-0.5">GLSL SHADERS</span>
+                <span class="border border-noir font-fira text-xs font-bold px-2 py-0.5">CREATIVE DEV</span>
+              </div>
+
+              <h3 class="font-anton text-3xl md:text-5xl uppercase tracking-tight mb-4">
+                MANGA-NOIR WEBGL SHADER & 3D ENGINE
+              </h3>
+              
+              <p class="font-fira text-xs md:text-sm text-neutral-700 leading-relaxed mb-6">
+                The visual engine powering this exact website. Real-time GLSL cel-shading, multi-directional ink crosshatching post-processing filters, Lenis virtual smooth scrolling, and reactive sound synthesis with the Web Audio API.
+              </p>
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 py-4 border-y-2 border-noir mb-6 font-fira">
+                <div>
+                  <span class="block text-2xl font-anton text-crimson">60+ FPS</span>
+                  <span class="text-[10px] uppercase font-bold text-neutral-600">GPU Accelerated</span>
+                </div>
+                <div>
+                  <span class="block text-2xl font-anton text-noir">CUSTOM</span>
+                  <span class="text-[10px] uppercase font-bold text-neutral-600">Cross-Hatch Shaders</span>
+                </div>
+                <div>
+                  <span class="block text-2xl font-anton text-crimson">ZERO MP3</span>
+                  <span class="text-[10px] uppercase font-bold text-neutral-600">Web Audio Synthesis</span>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-2 text-xs font-fira font-bold">
+                <span class="bg-neutral-200 px-2 py-1">Sobel Edge Toon Outlines</span>
+                <span class="bg-neutral-200 px-2 py-1">Halftone Screen-space Matrices</span>
+                <span class="bg-neutral-200 px-2 py-1">Reactive Particle Physics</span>
+                <span class="bg-neutral-200 px-2 py-1">GSAP Timeline Orchestration</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4 mt-8 pt-4 border-t border-noir/20">
+              <button id="btn-trigger-experience-2" class="manga-btn px-5 py-2.5 bg-crimson text-white font-fira text-xs font-bold uppercase shadow-brutal hover:bg-black transition-all flex items-center gap-2">
+                <span>LAUNCH 3D EXPERIENCE</span>
+                <span>▶</span>
+              </button>
+              <span class="font-fira text-xs text-neutral-500 font-semibold">Samana-Inspired Web Art</span>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 flex flex-col justify-center items-center bg-noir text-paper p-6 border-2 border-noir relative shadow-inner">
+            <div class="w-full text-center space-y-4 font-fira">
+              <div class="border-2 border-crimson p-4 bg-noir/90">
+                <span class="text-3xl font-anton text-crimson block">SHADERS & INK</span>
+                <span class="text-xs uppercase tracking-widest text-neutral-400">HIGH-PERFORMANCE RENDERING</span>
+                <div class="my-4 h-1 w-24 bg-crimson mx-auto"></div>
+                <p class="text-xs text-neutral-300">
+                  Custom GLSL fragment shaders mapping luminosity directly to comic line density, yielding an authentic hand-drawn graphic novel atmosphere at native 60fps.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== ACT 04: SUMMON (CONTACT & CONNECT) ==================== -->
+    <section id="contact" class="min-h-screen px-6 md:px-16 py-24 relative bg-noir text-paper flex flex-col justify-between border-t-4 border-white">
+      
+      <!-- Top Title -->
+      <div>
+        <span class="font-fira text-xs font-bold text-crimson uppercase tracking-widest block mb-1">
+          // CHAPTER 04 // THE CONTRACT
+        </span>
+        <h2 class="font-anton text-5xl md:text-8xl uppercase tracking-wide">
+          SUMMON ME <span class="text-crimson font-jp text-5xl">契約</span>
+        </h2>
+      </div>
+
+      <!-- Comic Dialogue Contact Card -->
+      <div class="max-w-2xl mx-auto my-12 w-full">
+        <div class="manga-bubble-rect bg-paper text-noir p-8 md:p-12 border-4 border-noir shadow-brutal-lg relative">
+          
+          <!-- Japanese Hanko Stamp Effect -->
+          <div id="hanko-seal" class="absolute -top-6 -right-6 w-20 h-20 border-4 border-crimson rounded-full flex flex-col items-center justify-center font-jp font-black text-crimson text-xs bg-paper shadow-brutal rotate-12 select-none hover:rotate-0 transition-transform">
+            <span>承認</span>
+            <span class="text-[9px] font-fira font-bold text-noir">DAGI</span>
+            <span>印</span>
+          </div>
+
+          <span class="font-fira text-xs font-bold text-crimson uppercase tracking-wider block mb-2">
+            // OPEN FOR COLLABORATIONS & FREELANCE BUILDS
+          </span>
+
+          <h3 class="font-anton text-3xl md:text-4xl uppercase mb-4 text-noir">
+            LET'S BUILD SOMETHING EXTRAORDINARY.
+          </h3>
+
+          <p class="font-fira text-xs md:text-sm text-neutral-700 leading-relaxed mb-6">
+            Whether you want an Awwwards-caliber WebGL interactive experience, a bulletproof full-stack web application, or computational BIM architecture automation — my line is open.
+          </p>
+
+          <!-- Email Copy Bar -->
+          <div class="flex flex-col sm:flex-row items-stretch gap-3 mb-6">
+            <div class="flex-1 bg-neutral-100 border-2 border-noir px-4 py-3 font-fira text-sm font-bold text-noir flex items-center justify-between">
+              <span id="contact-email">dagiyosi5321@gmail.com</span>
+              <span class="text-xs text-neutral-400 font-normal">[Click to copy]</span>
+            </div>
+            <button id="btn-copy-email" class="manga-btn px-6 py-3 bg-crimson text-white font-fira text-xs font-bold uppercase border-2 border-noir shadow-brutal hover:bg-black transition-all">
+              COPY EMAIL
+            </button>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="flex flex-wrap items-center gap-4 pt-4 border-t-2 border-noir font-fira text-xs font-bold">
+            <a href="https://github.com/dagiyosi-pixel" target="_blank" rel="noopener noreferrer" class="hover:text-crimson transition-colors flex items-center gap-1">
+              <span>GITHUB: @dagiyosi-pixel</span>
+              <span>↗</span>
+            </a>
+            <span class="text-neutral-400">•</span>
+            <a href="mailto:dagiyosi5321@gmail.com" class="hover:text-crimson transition-colors flex items-center gap-1">
+              <span>DIRECT INBOX</span>
+              <span>✉</span>
+            </a>
+            <span class="text-neutral-400">•</span>
+            <span class="text-neutral-500 font-normal">Based in Addis Ababa // Worldwide Remote</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Info -->
+      <footer class="pt-8 border-t border-white/20 flex flex-col md:flex-row items-center justify-between gap-4 font-fira text-xs text-neutral-400">
+        <div>
+          DESIGNED & CODED BY <strong class="text-paper">DAGIYOSI (0xDagi)</strong>. INSPIRED BY MANGA-NOIR & SAMANA STUDIO.
+        </div>
+        <div class="flex items-center gap-4">
+          <span>HTML5 / THREE.JS / GLSL / GSAP</span>
+          <span>© 2026 ALL RIGHTS RESERVED</span>
+        </div>
+      </footer>
+
+    </section>
+
+  </main>
+
+  <!-- ==================== THE FULLSCREEN "EXPERIENCE" CINEMA MODAL ==================== -->
+  <div id="experience-modal" class="fixed inset-0 z-50 bg-black/95 text-paper flex flex-col justify-between p-6 md:p-12 opacity-0 pointer-events-none transition-opacity duration-500">
+    
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between border-b border-white/20 pb-4">
+      <div class="flex items-center gap-3">
+        <span class="w-3 h-3 bg-crimson rounded-full animate-ping"></span>
+        <span class="font-anton text-2xl uppercase tracking-wider text-crimson">THE 3D MANGA EXPERIENCE</span>
+        <span class="font-fira text-xs text-neutral-400">// INTERACTIVE CINEMATIC MODE</span>
+      </div>
+      <button id="btn-close-experience" class="manga-btn px-4 py-1.5 bg-paper text-noir border-2 border-paper font-fira text-xs font-bold uppercase hover:bg-crimson hover:text-white transition-all shadow-brutal-sm">
+        ESC / CLOSE [✕]
+      </button>
+    </div>
+
+    <!-- Modal Cinematic Center -->
+    <div class="my-auto max-w-4xl mx-auto text-center space-y-6">
+      <div class="font-jp text-6xl md:text-8xl font-black text-crimson animate-pulse select-none">
+        覚醒 // AWAKENING
+      </div>
+      <h2 class="font-anton text-4xl md:text-7xl uppercase tracking-tight text-paper">
+        ENGINEERING AT THE SPEED OF THOUGHT
+      </h2>
+      <p class="font-fira text-sm md:text-base text-neutral-300 max-w-2xl mx-auto leading-relaxed">
+        You are experiencing the WebGL manga-noir engine. Rotate the camera, inspect the 3D artifacts, and observe how each line reacts to mathematical lighting coordinates.
+      </p>
+
+      <!-- Interactive Controls in Experience Mode -->
+      <div class="flex flex-wrap justify-center gap-4 pt-4">
+        <button id="btn-exp-spawn-burst" class="manga-btn-crimson px-6 py-3 bg-crimson text-white font-fira text-xs font-bold uppercase border-2 border-white shadow-brutal hover:bg-white hover:text-noir transition-all">
+          💥 TRIGGER INK EXPLOSION
+        </button>
+        <button id="btn-exp-switch-shader" class="manga-btn px-6 py-3 bg-paper text-noir font-fira text-xs font-bold uppercase border-2 border-paper shadow-brutal hover:bg-crimson hover:text-white transition-all">
+          🔄 TOGGLE CROSS-HATCH SHADER
+        </button>
+        <button id="btn-exp-reset-cam" class="manga-btn px-6 py-3 bg-neutral-800 text-paper font-fira text-xs font-bold uppercase border-2 border-white/40 shadow-brutal hover:bg-white hover:text-noir transition-all">
+          🎯 RESET 3D CAMERA
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="border-t border-white/20 pt-4 flex items-center justify-between font-fira text-xs text-neutral-400">
+      <span>Navigation: Drag left/right to orbit 3D hand & artifacts</span>
+      <span>Press [ESC] to exit back to portfolio</span>
+    </div>
+  </div>
+
+  <!-- ==================== MANGA TERMINAL CLI (EASTER EGG) ==================== -->
+  <div id="manga-terminal" class="fixed bottom-6 right-6 w-96 max-w-[90vw] z-50 bg-black/95 text-green-400 border-2 border-white font-fira text-xs shadow-brutal-lg hidden">
+    <div class="bg-neutral-900 text-paper px-3 py-1.5 flex items-center justify-between border-b border-white/30">
+      <span class="font-bold flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-crimson inline-block"></span>
+        0xDagi // MANGA-TERMINAL v1.0
+      </span>
+      <button id="btn-terminal-close" class="hover:text-crimson font-bold">✕</button>
+    </div>
+    <div id="terminal-output" class="p-4 h-48 overflow-y-auto space-y-1 text-[11px] leading-tight">
+      <div class="text-neutral-400">Type <span class="text-crimson font-bold">'help'</span> for available commands.</div>
+    </div>
+    <div class="p-2 border-t border-white/20 flex items-center gap-2 bg-black">
+      <span class="text-crimson font-bold">&gt;</span>
+      <input id="terminal-input" type="text" class="w-full bg-transparent outline-none text-paper font-fira text-xs" placeholder="enter command..." autocomplete="off">
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="manga-toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-crimson text-white font-fira text-xs font-bold uppercase border-2 border-black shadow-brutal transition-all duration-300 opacity-0 pointer-events-none">
+    Email copied to clipboard!
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
