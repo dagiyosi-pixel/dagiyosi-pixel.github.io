@@ -3,29 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DAGMAWI YOSEF (0xDagi) // THE BLUEPRINT UNIVERSE — Architecture, Engineering & Creative Code</title>
+  <title>DAGMAWI YOSEF (0xDagi) // THE BLUEPRINT UNIVERSE — Architectural Manhwa & Creative Technology</title>
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Fira+Code:wght@400;600;700&family=Noto+Sans+JP:wght@700;900&family=Space+Grotesk:wght@400;500;600;700;900&display=swap" rel="stylesheet">
   
-  <script type="module" crossorigin src="./assets/index-DWWOApa2.js"></script>
+  <script type="module" crossorigin src="./assets/index-D8-OHn7d.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-Dm4qGb_w.css">
 </head>
-<body class="bg-cloud text-ink blueprint-grid-canvas">
+<body class="bg-cloud text-ink blueprint-grid-canvas relative selection:bg-azure selection:text-white">
+
+  <!-- Interactive Calligraphy Ink Trail Overlay -->
+  <canvas id="ink-canvas" class="fixed inset-0 pointer-events-none z-30 w-full h-full"></canvas>
+
+  <!-- Manga Speedlines Dynamic Flash Overlay -->
+  <div class="speedlines-overlay pointer-events-none fixed inset-0 z-20 opacity-0 transition-opacity duration-200"></div>
 
   <!-- Custom Blueprint Crosshair Cursor -->
   <div id="blueprint-cursor" class="pointer-events-none fixed z-50 transform -translate-x-1/2 -translate-y-1/2">
     <div class="cursor-center w-3 h-3 bg-navy rounded-full border border-white"></div>
-    <div class="cursor-ring w-8 h-8 border border-azure rounded-full -top-2.5 -left-2.5 absolute opacity-70"></div>
+    <div class="cursor-ring w-9 h-9 border-2 border-azure rounded-full -top-3 -left-3 absolute opacity-70"></div>
   </div>
 
   <!-- ==================== GLOBAL NAVIGATION HEADER ==================== -->
   <header class="fixed top-0 left-0 w-full z-40 px-6 py-3.5 flex items-center justify-between border-b-2 border-navy bg-white/95 backdrop-blur-md shadow-sm">
     <div class="flex items-center space-x-3">
       <a href="#hero" class="flex items-center gap-2 text-decoration-none">
-        <span class="bg-navy text-white px-2 py-0.5 rounded text-xs font-fira font-bold shadow-brutal-sm">0xDAGI</span>
+        <span class="bg-navy text-white px-2.5 py-0.5 rounded text-xs font-fira font-bold shadow-brutal-sm">0xDAGI</span>
         <span class="font-anton text-xl tracking-wide text-navy">DAGMAWI YOSEF</span>
         <span class="hidden md:inline-block text-[11px] font-fira text-azure font-bold border-l-2 border-light pl-2">
           // THE BLUEPRINT UNIVERSE
@@ -36,23 +42,22 @@
     <!-- Navigation Links -->
     <nav class="hidden lg:flex items-center space-x-6 font-fira text-xs font-bold uppercase tracking-wider text-navy">
       <a href="#hero" class="hover:text-azure transition">01. HOME</a>
-      <a href="#blueprint-wall" class="hover:text-azure transition">02. WORK</a>
-      <a href="#building-ideas" class="hover:text-azure transition">03. ARCHITECTURE</a>
-      <a href="#digital-lab" class="hover:text-azure transition">04. EXPERIMENTS</a>
-      <a href="#process" class="hover:text-azure transition">05. PROCESS</a>
-      <a href="#about" class="hover:text-azure transition">06. ABOUT</a>
-      <a href="#contact" class="hover:text-azure transition">07. CONTACT</a>
+      <a href="#shader-gallery-section" class="hover:text-azure transition">02. GALLERY</a>
+      <a href="#blueprint-wall" class="hover:text-azure transition">03. WORK</a>
+      <a href="#building-ideas" class="hover:text-azure transition">04. DRAFTING</a>
+      <a href="#digital-lab" class="hover:text-azure transition">05. LABS</a>
+      <a href="#process" class="hover:text-azure transition">06. PROCESS</a>
+      <a href="#about" class="hover:text-azure transition">07. ABOUT</a>
+      <a href="#contact" class="hover:text-azure transition">08. CONTACT</a>
     </nav>
 
     <!-- Controls -->
     <div class="flex items-center space-x-2.5">
-      <!-- Audio Toggle -->
       <button id="btn-audio" class="manga-btn px-3 py-1.5 text-xs font-fira font-bold uppercase border-2 border-navy bg-white hover:bg-ice text-navy rounded shadow-brutal-sm flex items-center gap-1.5">
         <span id="audio-icon">📐</span>
         <span id="audio-label" class="hidden sm:inline">SOUND: OFF</span>
       </button>
 
-      <!-- Signature Constructor Button -->
       <a href="#hero" class="manga-btn px-3.5 py-1.5 text-xs font-fira font-bold uppercase bg-azure text-white border-2 border-navy rounded shadow-brutal-sm hover:bg-navy transition flex items-center gap-1.5">
         <span>3D CONSTRUCTOR</span>
         <span class="text-[10px] bg-white text-navy px-1 rounded font-black">EXP</span>
@@ -60,7 +65,7 @@
     </div>
   </header>
 
-  <!-- MAIN SCROLLABLE WRAPPER -->
+  <!-- ==================== MAIN CONTENT ==================== -->
   <main class="relative z-10 pt-16">
 
     <!-- ==================== HERO SECTION — ENTER THE BLUEPRINT UNIVERSE ==================== -->
@@ -83,7 +88,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 my-auto py-8 items-center">
         
         <!-- Left: Editorial Headline & Identity -->
-        <div class="lg:col-span-6 space-y-6">
+        <div class="lg:col-span-5 space-y-6">
           <div class="inline-flex items-center gap-2 px-3 py-1 bg-ice border-2 border-navy rounded text-xs font-fira font-bold text-navy shadow-brutal-sm">
             <span class="text-gold font-black">★</span> ARCHITECTURAL MANHWA × COMPUTATIONAL DESIGN
           </div>
@@ -105,21 +110,21 @@
               <span>↓</span>
             </a>
             <button id="btn-hero-toggle-exploded" class="manga-btn px-6 py-3.5 bg-ice text-navy rounded border-2 border-navy shadow-brutal hover:bg-white transition flex items-center gap-2">
-              <span>💥 EXPLODE 3D MODEL</span>
+              <span>💥 EXPLODE 3D ASSEMBLY</span>
             </button>
           </div>
         </div>
 
-        <!-- Right: The 3D Interactive Blueprint Constructor Viewport -->
-        <div class="lg:col-span-6">
+        <!-- Right: The 3D Interactive Blueprint World Viewport -->
+        <div class="lg:col-span-7">
           <div class="manhwa-panel p-4 bg-white rounded border-3 border-navy shadow-brutal-lg relative">
             
             <!-- Canvas Frame Header -->
             <div class="flex items-center justify-between border-b-2 border-navy pb-3 mb-3 font-fira text-xs">
               <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                <span class="font-bold text-navy">THE BLUEPRINT CONSTRUCTOR</span>
-                <span class="text-[10px] bg-ice px-1.5 py-0.5 rounded text-azure font-bold">3D ASSEMBLY</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                <span class="font-bold text-navy">BLUEPRINT WORLD // 3D STRUCTURAL ASSEMBLY</span>
+                <span class="text-[10px] bg-ice px-1.5 py-0.5 rounded text-azure font-bold">INTERACTIVE</span>
               </div>
               <button id="btn-hero-reset-cam" class="text-[11px] font-bold text-neutral-500 hover:text-navy transition">
                 [ RESET CAMERA ]
@@ -127,16 +132,16 @@
             </div>
 
             <!-- Three.js Canvas Container -->
-            <div class="relative w-full h-[380px] sm:h-[440px] bg-gradient-to-b from-ice/40 to-cloud rounded overflow-hidden border border-navy/30">
+            <div class="relative w-full h-[400px] sm:h-[480px] bg-gradient-to-b from-ice/40 to-cloud rounded overflow-hidden border border-navy/30">
               <canvas id="blueprint-canvas" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
               
               <!-- Floating Drag Hint -->
-              <div class="absolute bottom-3 left-3 pointer-events-none bg-white/90 backdrop-blur-sm border border-navy px-2.5 py-1 rounded text-[10px] font-fira font-bold text-navy shadow-sm">
-                🖱️ DRAG TO ORBIT • PINCH TO ZOOM
+              <div class="absolute bottom-3 left-3 pointer-events-none bg-white/95 backdrop-blur-sm border border-navy px-3 py-1 rounded text-[11px] font-fira font-bold text-navy shadow-sm">
+                🖱️ DRAG TO ORBIT • SCROLL TO ZOOM
               </div>
 
-              <!-- Exploded indicator -->
-              <div id="hero-exploded-tag" class="absolute top-3 right-3 pointer-events-none bg-gold text-navy font-fira font-black text-[10px] px-2 py-0.5 rounded border border-navy hidden">
+              <!-- Exploded Tag -->
+              <div id="hero-exploded-tag" class="absolute top-3 right-3 pointer-events-none bg-gold text-navy font-fira font-black text-xs px-2.5 py-1 rounded border-2 border-navy hidden">
                 EXPLODED VIEW ACTIVE
               </div>
             </div>
@@ -145,14 +150,16 @@
             <div class="mt-3 pt-3 border-t border-navy/20 flex flex-wrap items-center justify-between gap-2 font-fira text-xs">
               <!-- Layer Toggles -->
               <div class="flex flex-wrap items-center gap-1.5">
-                <button class="layer-toggle-btn px-2 py-1 rounded border border-navy text-[11px] font-bold bg-navy text-white" data-layer="wireframe">WIREFRAME</button>
-                <button class="layer-toggle-btn px-2 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="columns">COLUMNS</button>
-                <button class="layer-toggle-btn px-2 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="slabs">SLABS</button>
-                <button class="layer-toggle-btn px-2 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="canopy">CANOPY</button>
+                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-navy text-white" data-layer="wireframe">WIREFRAME</button>
+                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="columns">COLUMNS</button>
+                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="beams">BEAMS</button>
+                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="slabs">SLABS</button>
+                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="stairs">STAIRS</button>
+                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="perspectiveRays">PERSPECTIVE</button>
               </div>
 
               <!-- Visual Mode Cycle -->
-              <button id="btn-hero-cycle-mode" class="px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-white hover:bg-ice text-navy transition shadow-sm">
+              <button id="btn-hero-cycle-mode" class="px-3 py-1 rounded border border-navy text-[11px] font-bold bg-white hover:bg-ice text-navy transition shadow-sm">
                 MODE: BLUEPRINT
               </button>
             </div>
@@ -165,19 +172,19 @@
       <!-- Bottom Dimension Strip -->
       <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-navy/20 font-fira text-xs text-neutral-600">
         <div class="flex items-center gap-4">
-          <span>STRUCTURAL GRID: 7.2m × 4.8m</span>
+          <span>STRUCTURAL GRID: 9.0m × 6.0m</span>
           <span>•</span>
           <span>PRECAST HOLLOW-CORE: HC-250</span>
           <span>•</span>
-          <span>CORBELS: REINFORCED SHEAR-FRICTION</span>
+          <span>PERSPECTIVE: RADIANT VANISHING VECTORS</span>
         </div>
         <div class="font-bold text-navy">
-          SCROLL TO EXPLORE THE WORK ↓
+          SCROLL TO EXPLORE THE UNIVERSE ↓
         </div>
       </div>
     </section>
 
-    <!-- ==================== SECTION A — THE INTRODUCTION ==================== -->
+    <!-- ==================== SECTION A — THE MULTIDISCIPLINARY ARCHETYPE ==================== -->
     <section id="introduction" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-white">
       <div class="max-w-5xl mx-auto space-y-8">
         
@@ -203,7 +210,6 @@
             </p>
           </div>
 
-          <!-- Quick Stats Panel -->
           <div class="md:col-span-5 bg-cloud p-6 rounded border-2 border-navy shadow-brutal space-y-4 font-fira text-xs">
             <div class="flex items-center justify-between border-b border-navy/20 pb-2">
               <span class="text-neutral-500 font-bold">PRIMARY DISCIPLINES</span>
@@ -229,14 +235,56 @@
       </div>
     </section>
 
-    <!-- ==================== SECTION B — THE BLUEPRINT WALL (FEATURED PROJECTS) ==================== -->
+    <!-- ==================== SECTION B — WEBGL SHADER IMAGE GALLERY ==================== -->
+    <section id="shader-gallery-section" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-cloud">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 border-b-2 border-navy pb-6">
+        <div>
+          <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-1">
+            // SECTION B // SHADER IMAGE GALLERY
+          </span>
+          <h2 class="font-anton text-4xl sm:text-7xl text-navy uppercase tracking-tight">
+            THE ART OF INK & PERSPECTIVE
+          </h2>
+        </div>
+        <p class="font-fira text-xs text-neutral-600 max-w-md">
+          Real-time WebGL image interactions powered by custom GLSL fragment shaders. Move your cursor over the canvas to trigger dynamic wave ripples, chromatic aberration, and screentone displacement.
+        </p>
+      </div>
+
+      <!-- WebGL Shader Gallery Mount -->
+      <div class="manhwa-panel p-4 bg-white rounded border-3 border-navy shadow-brutal-lg max-w-5xl mx-auto">
+        <div class="flex items-center justify-between border-b-2 border-navy pb-3 mb-3 font-fira text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-azure animate-ping"></span>
+            <span class="font-bold text-navy">GLSL IMAGE SHADER INTERACTION</span>
+          </div>
+
+          <!-- Transition Switcher -->
+          <div class="flex items-center gap-2">
+            <button id="btn-show-arch" class="px-3 py-1 bg-navy text-white rounded border border-navy text-[11px] font-bold">1. ARCH PERSPECTIVE</button>
+            <button id="btn-show-manga" class="px-3 py-1 bg-ice text-navy rounded border border-navy text-[11px] font-bold">2. MANGA AWAKENING</button>
+          </div>
+        </div>
+
+        <div class="relative w-full h-[460px] bg-navy rounded overflow-hidden border border-navy/30">
+          <canvas id="shader-gallery-canvas" class="w-full h-full block cursor-crosshair"></canvas>
+          
+          <div class="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm border border-navy px-3 py-1.5 rounded text-xs font-fira font-bold text-navy shadow-sm pointer-events-none">
+            🌊 HOVER TO DISPLACE • VELOCITY SENSITIVE RGB SPLIT
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== SECTION C — THE BLUEPRINT WALL (FEATURED PROJECTS) ==================== -->
     <section id="blueprint-wall" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-ice/40">
       
-      <!-- Section Title -->
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16 border-b-2 border-navy pb-6">
         <div>
           <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-1">
-            // SECTION B // THE BLUEPRINT WALL
+            // SECTION C // THE BLUEPRINT WALL
           </span>
           <h2 class="font-anton text-4xl sm:text-7xl text-navy uppercase tracking-tight">
             SELECTED CHRONICLES
@@ -247,10 +295,9 @@
         </p>
       </div>
 
-      <!-- Project Cards Grid in Editorial Manhwa Panels -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         
-        <!-- CARD 1: Precast BIM & Structural Framework -->
+        <!-- CARD 1: Precast BIM -->
         <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="precast-bim">
           <div>
             <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
@@ -278,7 +325,7 @@
           </div>
         </div>
 
-        <!-- CARD 2: Theory of Structures Mastery Lab -->
+        <!-- CARD 2: Theory of Structures -->
         <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="theory-of-structures">
           <div>
             <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
@@ -306,7 +353,7 @@
           </div>
         </div>
 
-        <!-- CARD 3: Ethiopian National Curriculum Platform -->
+        <!-- CARD 3: Ethiopian Curriculum Platform -->
         <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="ethiopia-curriculum">
           <div>
             <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
@@ -337,13 +384,13 @@
       </div>
     </section>
 
-    <!-- ==================== SECTION C — BUILDING THE IDEAS (ARCHITECTURE & DRAWING VIEWER) ==================== -->
+    <!-- ==================== SECTION D — ARCHITECTURAL DRAFTING VIEWER ==================== -->
     <section id="building-ideas" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-white">
       
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 border-b-2 border-navy pb-6">
         <div>
           <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-1">
-            // SECTION C // BUILDING THE IDEAS
+            // SECTION D // BUILDING THE IDEAS
           </span>
           <h2 class="font-anton text-4xl sm:text-7xl text-navy uppercase tracking-tight">
             ARCHITECTURAL DRAFTING VIEWER
@@ -354,12 +401,9 @@
         </p>
       </div>
 
-      <!-- Architectural Drawing Viewer Mount -->
-      <div id="drawing-viewer-root" class="w-full mb-8">
-        <!-- Rendered by DrawingViewer class in JS -->
-      </div>
+      <div id="drawing-viewer-root" class="w-full mb-8"></div>
 
-      <!-- Structural Precast Detail Cards -->
+      <!-- Engineering Details -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 font-fira text-xs">
         <div class="bg-ice p-5 rounded border-2 border-navy shadow-brutal-sm">
           <span class="text-azure font-bold block mb-1">HOLLOW-CORE BEARING CHECKS</span>
@@ -383,13 +427,13 @@
 
     </section>
 
-    <!-- ==================== SECTION D — THE DIGITAL LABORATORY (3D EXPERIMENTS) ==================== -->
+    <!-- ==================== SECTION E — THE DIGITAL LABORATORY (3D EXPERIMENTS) ==================== -->
     <section id="digital-lab" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-cloud">
       
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16 border-b-2 border-navy pb-6">
         <div>
           <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-1">
-            // SECTION D // THE DIGITAL LABORATORY
+            // SECTION E // THE DIGITAL LABORATORY
           </span>
           <h2 class="font-anton text-4xl sm:text-7xl text-navy uppercase tracking-tight">
             INTERACTIVE EXPERIMENTS
@@ -402,7 +446,6 @@
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         
-        <!-- LAB 01: Manga-Noir WebGL Shader Lab -->
         <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="manga-noir">
           <div>
             <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
@@ -421,7 +464,6 @@
           </button>
         </div>
 
-        <!-- LAB 02: ETHIOPIA//360 Community Atlas -->
         <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="ethiopia-360">
           <div>
             <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
@@ -440,7 +482,6 @@
           </button>
         </div>
 
-        <!-- LAB 03: AMT Exam Platform -->
         <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="amt-exam">
           <div>
             <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
@@ -460,16 +501,15 @@
         </div>
 
       </div>
-
     </section>
 
-    <!-- ==================== SECTION E — MY PROCESS ==================== -->
+    <!-- ==================== SECTION F — MY PROCESS ==================== -->
     <section id="process" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-white">
       
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16 border-b-2 border-navy pb-6">
         <div>
           <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-1">
-            // SECTION E // THE 5-STAGE MANHWA PIPELINE
+            // SECTION F // THE 5-STAGE MANHWA PIPELINE
           </span>
           <h2 class="font-anton text-4xl sm:text-7xl text-navy uppercase tracking-tight">
             HOW IDEAS BECOME REALITY
@@ -480,9 +520,7 @@
         </p>
       </div>
 
-      <!-- Process Steps -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-        
         <div class="p-6 bg-cloud border-2 border-navy rounded shadow-brutal-sm relative">
           <span class="font-anton text-4xl text-azure/40 block mb-2">01</span>
           <span class="font-fira text-xs font-bold text-azure uppercase tracking-wider block mb-1">THE IDEA</span>
@@ -527,18 +565,14 @@
             Fast, mathematically verified, accessible products that work seamlessly on every screen and device.
           </p>
         </div>
-
       </div>
-
     </section>
 
-    <!-- ==================== SECTION F — ABOUT ME ==================== -->
+    <!-- ==================== SECTION G — ABOUT ME ==================== -->
     <section id="about" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-ice/30">
-      
       <div class="max-w-4xl mx-auto manhwa-panel p-8 md:p-12 rounded border-3 border-navy shadow-brutal-lg bg-white">
-        
         <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-2">
-          // SECTION F // IDENTITY & PHILOSOPHY
+          // SECTION G // IDENTITY & PHILOSOPHY
         </span>
         <h2 class="font-anton text-3xl sm:text-5xl text-navy uppercase tracking-tight mb-6">
           "FIRST MAKE IT WORK, THEN MAKE IT RIGHT, THEN MAKE IT FAST."
@@ -571,17 +605,14 @@
             <span class="font-bold text-azure">Zero Bloat</span>
           </div>
         </div>
-
       </div>
-
     </section>
 
-    <!-- ==================== SECTION G — CONTACT / CONTRACT ==================== -->
+    <!-- ==================== SECTION H — CONTACT / CONTRACT ==================== -->
     <section id="contact" class="py-24 px-6 md:px-16 bg-navy text-white relative">
-      
       <div class="max-w-3xl mx-auto text-center space-y-6">
         <span class="font-fira text-xs font-bold text-sky uppercase tracking-widest block">
-          // SECTION G // THE CONTRACT
+          // SECTION H // THE CONTRACT
         </span>
         <h2 class="font-anton text-4xl sm:text-7xl uppercase tracking-tight text-white">
           LET'S BUILD SOMETHING EXTRAORDINARY.
@@ -590,7 +621,6 @@
           Whether you need computational architecture automation, an Awwwards-caliber WebGL 3D interactive experience, or a bulletproof full-stack web application — my drafting table is ready.
         </p>
 
-        <!-- Email Copy Box -->
         <div class="pt-6 max-w-md mx-auto">
           <div class="flex items-center gap-2 p-2 bg-cloud text-navy rounded border-2 border-white shadow-brutal">
             <span id="contact-email-text" class="flex-1 font-fira text-xs sm:text-sm font-bold text-left px-3">dagiyosi5321@gmail.com</span>
@@ -613,10 +643,8 @@
           <span class="text-neutral-500">•</span>
           <span class="text-neutral-400">Telegram: @dagiyosi</span>
         </div>
-
       </div>
 
-      <!-- Footer Info -->
       <footer class="mt-20 pt-8 border-t border-white/20 flex flex-col sm:flex-row items-center justify-between gap-4 font-fira text-[11px] text-neutral-400">
         <div>
           THE BLUEPRINT UNIVERSE // CONCEIVED & ENGINEERED BY <strong class="text-white">DAGMAWI YOSEF (0xDagi)</strong>
@@ -625,16 +653,13 @@
           © 2026 ALL RIGHTS RESERVED • LIGHT-BLUE VISUAL IDENTITY
         </div>
       </footer>
-
     </section>
 
   </main>
 
   <!-- ==================== REUSABLE 7-CHAPTER MANHWA CASE STUDY MODAL ==================== -->
-  <div id="case-study-modal" class="fixed inset-0 z-50 bg-navy/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 hidden">
+  <div id="case-study-modal" class="fixed inset-0 z-50 bg-navy/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 hidden">
     <div class="bg-cloud border-3 border-navy rounded-lg shadow-brutal-lg max-w-5xl w-full max-h-[92vh] flex flex-col overflow-hidden relative">
-      
-      <!-- Top Modal Bar -->
       <div class="bg-white border-b-2 border-navy px-6 py-3 flex items-center justify-between">
         <span class="font-fira text-xs font-bold text-navy flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-azure inline-block animate-ping"></span>
@@ -645,11 +670,7 @@
         </button>
       </div>
 
-      <!-- Modal Content Body -->
-      <div id="case-study-content" class="flex-1 overflow-y-auto p-6 sm:p-10">
-        <!-- Rendered dynamically by CaseStudyModal class in JS -->
-      </div>
-
+      <div id="case-study-content" class="flex-1 overflow-y-auto p-6 sm:p-10"></div>
     </div>
   </div>
 
