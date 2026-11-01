@@ -11,8 +11,9 @@ export class ShaderImageGallery {
     this.scene = null;
     this.camera = null;
     this.renderer = null;
-    this.planes = [];
+    this.mesh = null;
     this.mouse = { x: 0.5, y: 0.5, targetX: 0.5, targetY: 0.5, velX: 0, velY: 0 };
+    this.targetHover = 0.45; // Always gently alive!
     this.clock = new THREE.Clock();
 
     this.init();
@@ -25,7 +26,7 @@ export class ShaderImageGallery {
     const height = this.canvas.clientHeight || 500;
 
     this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    this.camera.position.z = 5;
+    this.camera.position.z = 4.8;
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -65,15 +66,15 @@ export class ShaderImageGallery {
     texManga.generateMipmaps = true;
     texArch.generateMipmaps = true;
 
-    // Aspect ratio plane (16:9 cinematic)
-    const geo = new THREE.PlaneGeometry(6.4, 3.6, 64, 64);
+    // 16:9 aspect ratio geometry with high vertex density for wave displacement
+    const geo = new THREE.PlaneGeometry(6.6, 3.8, 80, 80);
 
     this.uniforms = {
       uTex1: { value: texArch },
       uTex2: { value: texManga },
       uTransition: { value: 0.0 }, // 0 = Arch, 1 = Manga
       uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-      uHover: { value: 0.0 },
+      uHover: { value: 0.45 },
       uVelocity: { value: 0.0 },
       uTime: { value: 0.0 },
       uResolution: { value: new THREE.Vector2(w, h) }
@@ -90,9 +91,10 @@ export class ShaderImageGallery {
         vUv = uv;
         vec3 pos = position;
 
-        // Wave distortion reacting to mouse distance
+        // Wave distortion reacting to mouse distance + ambient pulse
         float dist = distance(uv, uMouse);
-        float wave = sin(dist * 20.0 - uTime * 4.0) * 0.08 * uHover * smoothstep(0.6, 0.0, dist);
+        float wave = sin(dist * 22.0 - uTime * 4.5) * 0.1 * uHover * smoothstep(0.7, 0.0, dist);
+        wave += sin(pos.x * 2.0 + uTime * 2.0) * cos(pos.y * 2.0 + uTime * 2.0) * 0.03;
         pos.z += wave;
 
         gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
@@ -115,10 +117,10 @@ export class ShaderImageGallery {
 
         // Mouse displacement ripple
         float dist = distance(uv, uMouse);
-        vec2 offset = normalize(uv - uMouse) * sin(dist * 24.0 - uTime * 5.0) * 0.02 * uHover;
+        vec2 offset = normalize(uv - uMouse) * sin(dist * 26.0 - uTime * 5.0) * 0.025 * uHover;
 
-        // Chromatic Aberration / RGB Split based on mouse velocity
-        float split = 0.008 * (1.0 + uVelocity * 15.0) * uHover;
+        // Chromatic Aberration / RGB Split based on mouse velocity + hover
+        float split = 0.006 * (1.0 + uVelocity * 20.0) * max(uHover, 0.3);
         
         vec4 col1R = texture2D(uTex1, uv + offset + vec2(split, 0.0));
         vec4 col1G = texture2D(uTex1, uv + offset);
@@ -131,14 +133,18 @@ export class ShaderImageGallery {
         vec4 col2 = vec4(col2R.r, col2G.g, col2B.b, 1.0);
 
         // Crossfade with diagonal slice transition
-        float slice = smoothstep(uv.x - 0.2, uv.x + 0.2, uTransition * 1.4);
+        float slice = smoothstep(uv.x - 0.25, uv.x + 0.25, uTransition * 1.5);
         vec4 finalCol = mix(col1, col2, slice);
 
         // Manga ink screentone overlay on hover
-        float dotPattern = sin(uv.x * 200.0) * sin(uv.y * 200.0);
-        if (dotPattern > 0.8 && uHover > 0.1) {
-          finalCol = mix(finalCol, vec4(0.09, 0.24, 0.36, 1.0), 0.25 * uHover);
+        float dotPattern = sin(uv.x * 240.0) * sin(uv.y * 240.0);
+        if (dotPattern > 0.82 && uHover > 0.2) {
+          finalCol = mix(finalCol, vec4(0.09, 0.09, 0.11, 1.0), 0.35 * uHover);
         }
+
+        // Red perspective rim glow
+        float edgeGlow = smoothstep(0.48, 0.5, abs(uv.x - 0.5)) * 0.25;
+        finalCol.rgb += vec3(0.9, 0.13, 0.2) * edgeGlow * uHover;
 
         gl_FragColor = finalCol;
       }
@@ -161,9 +167,7 @@ export class ShaderImageGallery {
   }
 
   setHover(isHovering) {
-    if (this.uniforms) {
-      this.targetHover = isHovering ? 1.0 : 0.0;
-    }
+    this.targetHover = isHovering ? 1.0 : 0.45;
   }
 
   onResize() {
@@ -184,7 +188,6 @@ export class ShaderImageGallery {
   animate() {
     requestAnimationFrame(this.animate.bind(this));
 
-    const delta = this.clock.getDelta();
     const time = this.clock.getElapsedTime();
 
     this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.1;
@@ -196,8 +199,7 @@ export class ShaderImageGallery {
 
       // Smooth hover lerp
       const curHover = this.uniforms.uHover.value;
-      const targetHover = this.targetHover || 0.0;
-      this.uniforms.uHover.value += (targetHover - curHover) * 0.08;
+      this.uniforms.uHover.value += (this.targetHover - curHover) * 0.08;
 
       // Smooth velocity decay
       this.uniforms.uVelocity.value += (this.mouse.velX + this.mouse.velY - this.uniforms.uVelocity.value) * 0.1;
@@ -206,9 +208,8 @@ export class ShaderImageGallery {
     }
 
     if (this.mesh) {
-      // Subtle 3D tilt following mouse
-      this.mesh.rotation.y = (this.mouse.x - 0.5) * 0.25;
-      this.mesh.rotation.x = -(this.mouse.y - 0.5) * 0.2;
+      this.mesh.rotation.y = (this.mouse.x - 0.5) * 0.28;
+      this.mesh.rotation.x = -(this.mouse.y - 0.5) * 0.22;
     }
 
     this.renderer.render(this.scene, this.camera);

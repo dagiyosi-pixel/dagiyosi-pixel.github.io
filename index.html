@@ -10,10 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Fira+Code:wght@400;600;700&family=Noto+Sans+JP:wght@700;900&family=Space+Grotesk:wght@400;500;600;700;900&display=swap" rel="stylesheet">
   
-  <script type="module" crossorigin src="./assets/index-8bnDkiOI.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Dm4qGb_w.css">
+  <link rel="stylesheet" href="./src/style.css">
 </head>
-<body class="bg-cloud text-ink blueprint-grid-canvas relative selection:bg-azure selection:text-white">
+<body class="bg-ink-deep text-cloud blueprint-grid-canvas relative selection:bg-crimson selection:text-white">
 
   <!-- Interactive Calligraphy Ink Trail Overlay -->
   <canvas id="ink-canvas" class="fixed inset-0 pointer-events-none z-30 w-full h-full"></canvas>
@@ -23,44 +22,44 @@
 
   <!-- Custom Blueprint Crosshair Cursor -->
   <div id="blueprint-cursor" class="pointer-events-none fixed z-50 transform -translate-x-1/2 -translate-y-1/2">
-    <div class="cursor-center w-3 h-3 bg-navy rounded-full border border-white"></div>
+    <div class="cursor-center w-3 h-3 bg-crimson rounded-full border border-white"></div>
     <div class="cursor-ring w-9 h-9 border-2 border-azure rounded-full -top-3 -left-3 absolute opacity-70"></div>
   </div>
 
   <!-- ==================== GLOBAL NAVIGATION HEADER ==================== -->
-  <header class="fixed top-0 left-0 w-full z-40 px-6 py-3.5 flex items-center justify-between border-b-2 border-navy bg-white/95 backdrop-blur-md shadow-sm">
+  <header class="fixed top-0 left-0 w-full z-40 px-6 py-3.5 flex items-center justify-between border-b-2 border-crimson bg-ink-deep/95 backdrop-blur-md shadow-brutal-sm">
     <div class="flex items-center space-x-3">
       <a href="#hero" class="flex items-center gap-2 text-decoration-none">
-        <span class="bg-navy text-white px-2.5 py-0.5 rounded text-xs font-fira font-bold shadow-brutal-sm">0xDAGI</span>
-        <span class="font-anton text-xl tracking-wide text-navy">DAGMAWI YOSEF</span>
-        <span class="hidden md:inline-block text-[11px] font-fira text-azure font-bold border-l-2 border-light pl-2">
+        <span class="bg-crimson text-white px-2.5 py-0.5 rounded text-xs font-fira font-black shadow-brutal-sm">0xDAGI</span>
+        <span class="font-anton text-xl tracking-wide text-white">DAGMAWI YOSEF</span>
+        <span class="hidden md:inline-block text-[11px] font-fira text-azure font-bold border-l-2 border-crimson pl-2">
           // THE BLUEPRINT UNIVERSE
         </span>
       </a>
     </div>
 
     <!-- Navigation Links -->
-    <nav class="hidden lg:flex items-center space-x-6 font-fira text-xs font-bold uppercase tracking-wider text-navy">
-      <a href="#hero" class="hover:text-azure transition">01. HOME</a>
-      <a href="#shader-gallery-section" class="hover:text-azure transition">02. GALLERY</a>
-      <a href="#blueprint-wall" class="hover:text-azure transition">03. WORK</a>
-      <a href="#building-ideas" class="hover:text-azure transition">04. DRAFTING</a>
-      <a href="#digital-lab" class="hover:text-azure transition">05. LABS</a>
-      <a href="#process" class="hover:text-azure transition">06. PROCESS</a>
-      <a href="#about" class="hover:text-azure transition">07. ABOUT</a>
-      <a href="#contact" class="hover:text-azure transition">08. CONTACT</a>
+    <nav class="hidden lg:flex items-center space-x-6 font-fira text-xs font-bold uppercase tracking-wider text-cloud">
+      <a href="#hero" class="hover:text-crimson transition">01. HOME</a>
+      <a href="#shader-gallery-section" class="hover:text-crimson transition">02. GALLERY</a>
+      <a href="#blueprint-wall" class="hover:text-crimson transition">03. WORK</a>
+      <a href="#building-ideas" class="hover:text-crimson transition">04. DRAFTING</a>
+      <a href="#digital-lab" class="hover:text-crimson transition">05. LABS</a>
+      <a href="#process" class="hover:text-crimson transition">06. PROCESS</a>
+      <a href="#about" class="hover:text-crimson transition">07. ABOUT</a>
+      <a href="#contact" class="hover:text-crimson transition">08. CONTACT</a>
     </nav>
 
     <!-- Controls -->
     <div class="flex items-center space-x-2.5">
-      <button id="btn-audio" class="manga-btn px-3 py-1.5 text-xs font-fira font-bold uppercase border-2 border-navy bg-white hover:bg-ice text-navy rounded shadow-brutal-sm flex items-center gap-1.5">
+      <button id="btn-audio" class="manga-btn px-3 py-1.5 text-xs font-fira font-bold uppercase border-2 border-crimson bg-ink-slate hover:bg-crimson text-white rounded shadow-brutal-sm flex items-center gap-1.5">
         <span id="audio-icon">📐</span>
         <span id="audio-label" class="hidden sm:inline">SOUND: OFF</span>
       </button>
 
-      <a href="#hero" class="manga-btn px-3.5 py-1.5 text-xs font-fira font-bold uppercase bg-azure text-white border-2 border-navy rounded shadow-brutal-sm hover:bg-navy transition flex items-center gap-1.5">
+      <a href="#hero" class="manga-btn manga-btn-crimson px-3.5 py-1.5 text-xs font-fira font-bold uppercase rounded shadow-brutal-sm hover:bg-white hover:text-ink-deep transition flex items-center gap-1.5">
         <span>3D CONSTRUCTOR</span>
-        <span class="text-[10px] bg-white text-navy px-1 rounded font-black">EXP</span>
+        <span class="text-[10px] bg-white text-ink-deep px-1 rounded font-black">EXP</span>
       </a>
     </div>
   </header>
@@ -68,210 +67,228 @@
   <!-- ==================== MAIN CONTENT ==================== -->
   <main class="relative z-10 pt-16">
 
-    <!-- ==================== HERO SECTION — ENTER THE BLUEPRINT UNIVERSE ==================== -->
-    <section id="hero" class="min-h-screen px-6 md:px-16 py-12 flex flex-col justify-between relative border-b-2 border-navy bg-cloud">
+    <!-- ==================== HERO SECTION — DRAMATIC FULLSCREEN LIVING COMPOSITION ==================== -->
+    <section id="hero" class="relative w-full min-h-screen overflow-hidden bg-ink-deep flex flex-col justify-between border-b-4 border-crimson">
       
-      <!-- Top Blueprint Header Tag -->
-      <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-b border-navy/20 pb-4 font-fira text-xs">
-        <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-azure animate-ping"></span>
-          <span class="font-bold text-navy uppercase">PROJECT: THE BLUEPRINT UNIVERSE</span>
-          <span class="text-neutral-400">•</span>
-          <span class="text-neutral-600">DWG-REF: DY-2026-ARCH-01</span>
-        </div>
-        <div class="text-neutral-500 font-medium">
-          LOCATION: ADDIS ABABA // GLOBAL REMOTE
-        </div>
+      <!-- 1. Fullscreen WebGL Three.js Canvas (Grand Perspective Staircase, Red Rays, Dome, Hand, Particles) -->
+      <canvas id="blueprint-canvas" class="hero-canvas"></canvas>
+
+      <!-- 2. Manga Atmospheric Vignette & Perspective Depth Mask -->
+      <div class="absolute inset-0 pointer-events-none z-0 bg-gradient-to-t from-ink-deep via-transparent to-ink-deep/70"></div>
+      <div class="absolute inset-0 pointer-events-none z-0 manga-screentone-dot opacity-40"></div>
+
+      <!-- 3. Floating Japanese Katakana Sound Effects (Onomatopoeia) -->
+      <div class="absolute top-24 right-8 z-10 pointer-events-none hidden sm:block">
+        <span class="sfx-impact text-6xl sm:text-8xl md:text-9xl">ドーン!</span>
+        <span class="block font-fira text-[11px] font-bold text-crimson tracking-widest text-right mt-1">// IMPACT: CREATION</span>
       </div>
 
-      <!-- Center Hero Grid: Typography on Left, 3D Interactive Constructor on Right -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 my-auto py-8 items-center">
+      <div class="absolute top-1/3 left-6 z-10 pointer-events-none hidden md:block">
+        <span class="sfx-rumble text-4xl sm:text-5xl">ゴゴゴゴ</span>
+        <span class="block font-fira text-[10px] font-bold text-azure tracking-widest mt-1">// RUMBLE: STRUCTURAL FORCES</span>
+      </div>
+
+      <div class="absolute bottom-32 right-12 z-10 pointer-events-none hidden lg:block">
+        <span class="sfx-construction text-3xl sm:text-4xl">ズドドド</span>
+        <span class="block font-fira text-[10px] font-bold text-white tracking-widest text-right mt-1">// ASSEMBLY: PRECAST LOCK</span>
+      </div>
+
+      <!-- 4. Hero Foreground Living Composition -->
+      <div class="relative z-10 px-6 md:px-16 pt-8 pb-4 flex-1 flex flex-col justify-between">
         
-        <!-- Left: Editorial Headline & Identity -->
-        <div class="lg:col-span-5 space-y-6">
-          <div class="inline-flex items-center gap-2 px-3 py-1 bg-ice border-2 border-navy rounded text-xs font-fira font-bold text-navy shadow-brutal-sm">
-            <span class="text-gold font-black">★</span> ARCHITECTURAL MANHWA × COMPUTATIONAL DESIGN
+        <!-- Top Blueprint Coordinates Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-crimson/40 pb-3 font-fira text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-crimson animate-ping"></span>
+            <span class="font-black text-crimson uppercase tracking-wider">PROJECT: THE BLUEPRINT UNIVERSE</span>
+            <span class="text-neutral-500">•</span>
+            <span class="text-sky">DWG-REF: DY-2026-MANGA-01</span>
+          </div>
+          <div class="text-neutral-400 font-bold flex items-center gap-2">
+            <span>GRID: 9.0m × 6.0m</span>
+            <span>•</span>
+            <span>BEARING: 90mm NOMINAL (PCI 8TH ED.)</span>
+          </div>
+        </div>
+
+        <!-- Center Stage: Asymmetrical Editorial Spread -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 my-auto py-8 items-center">
+          
+          <!-- Left: Hero Headline & Action Matrix -->
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-ink-slate border-2 border-crimson rounded text-xs font-fira font-bold text-white shadow-crimson-sm">
+              <span class="text-crimson font-black">★</span> FANTASY CONSTRUCTION × COMPUTATIONAL ARCHITECTURE × CREATIVE 3D
+            </div>
+
+            <h1 class="font-anton text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-white uppercase tracking-tight leading-none drop-shadow-[0_4px_24px_rgba(255,34,51,0.5)]">
+              BUILDING IDEAS<br/>
+              <span class="text-crimson italic underline decoration-4 decoration-white">BEYOND</span> THE<br/>
+              <span class="text-azure">BLUEPRINT.</span>
+            </h1>
+
+            <p class="font-sans text-base sm:text-lg text-neutral-300 leading-relaxed max-w-2xl bg-ink-deep/80 backdrop-blur-sm p-4 rounded border-l-4 border-crimson">
+              Where computational precast BIM, structural matrix algorithms, and immersive WebGL graphics collide. Ideas become drawings, drawings become structures, and structures become interactive digital reality.
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center gap-3 pt-2 font-fira text-xs font-bold">
+              <a href="#blueprint-wall" class="manga-btn manga-btn-crimson px-6 py-3.5 rounded shadow-brutal hover:bg-white hover:text-ink-deep transition flex items-center gap-2">
+                <span>EXPLORE CHRONICLES</span>
+                <span>↓</span>
+              </a>
+              <button id="btn-hero-toggle-exploded" class="manga-btn px-6 py-3.5 bg-ink-slate text-white border-2 border-azure rounded shadow-brutal hover:bg-azure hover:text-ink-deep transition flex items-center gap-2">
+                <span>💥 EXPLODE 3D ASSEMBLY</span>
+              </button>
+              <button id="btn-hero-reset-cam" class="manga-btn px-4 py-3.5 bg-ink-deep text-neutral-300 border-2 border-neutral-700 rounded shadow-brutal-sm hover:text-white transition">
+                <span>[ RESET VIEW ]</span>
+              </button>
+            </div>
           </div>
 
-          <h1 class="font-anton text-5xl sm:text-7xl md:text-8xl text-navy uppercase tracking-tight leading-none drop-shadow-sm">
-            BUILDING IDEAS<br/>
-            <span class="text-azure underline decoration-4 decoration-gold">BEYOND</span> THE<br/>
-            BLUEPRINT.
-          </h1>
+          <!-- Right: Hero Diagonal Comic Shard with Uploaded Protagonist Artwork -->
+          <div class="lg:col-span-5 flex justify-center lg:justify-end">
+            <div class="comic-shard w-full max-w-sm sm:max-w-md bg-ink-slate p-2 border-4 border-crimson shadow-crimson-lg relative overflow-hidden group">
+              <div class="relative w-full h-[320px] sm:h-[380px] overflow-hidden rounded bg-ink-deep">
+                <img src="./images/manga-awakening.jpg" alt="Manga Awakening Protagonist" class="w-full h-full object-cover filter contrast-125 group-hover:scale-105 transition duration-500" />
+                
+                <!-- Floating Shard Badge -->
+                <div class="absolute bottom-3 left-3 bg-ink-deep/90 border-2 border-crimson px-3 py-1.5 rounded font-fira text-xs font-bold text-white shadow-brutal-sm">
+                  <span class="text-crimson font-black">第0章</span> THE ARCHITECT AWAKENS
+                </div>
 
-          <p class="font-sans text-base sm:text-lg text-neutral-700 leading-relaxed max-w-xl">
-            Exploring architecture, engineering and technology through computational design and interactive experiences. Where ideas become drawings, drawings become structures, and structures become interactive software.
-          </p>
+                <!-- Red Perspective Slash Ribbon -->
+                <div class="absolute top-3 right-3 bg-crimson text-white font-fira text-[10px] font-black px-2 py-0.5 uppercase tracking-wider rounded">
+                  RED PERSPECTIVE VECTOR
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <!-- Action Buttons -->
-          <div class="flex flex-wrap items-center gap-3 pt-2 font-fira text-xs font-bold">
-            <a href="#blueprint-wall" class="manga-btn px-6 py-3.5 bg-navy text-white rounded border-2 border-navy shadow-brutal hover:bg-azure transition flex items-center gap-2">
-              <span>EXPLORE MY WORK</span>
-              <span>↓</span>
-            </a>
-            <button id="btn-hero-toggle-exploded" class="manga-btn px-6 py-3.5 bg-ice text-navy rounded border-2 border-navy shadow-brutal hover:bg-white transition flex items-center gap-2">
-              <span>💥 EXPLODE 3D ASSEMBLY</span>
+        </div>
+
+        <!-- 5. Bottom Interactive HUD Controls Bar -->
+        <div class="border-t-2 border-crimson/50 pt-3 pb-2 flex flex-wrap items-center justify-between gap-3 font-fira text-xs bg-ink-deep/90 backdrop-blur-md px-4 rounded border border-ink-slate">
+          
+          <!-- Left: 3D Layer Toggles -->
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="font-bold text-neutral-400 mr-1 hidden sm:inline">LAYERS:</span>
+            <button class="layer-toggle-btn px-2.5 py-1 rounded border border-crimson text-[11px] font-bold bg-crimson text-white" data-layer="perspectiveRays">PERSPECTIVE</button>
+            <button class="layer-toggle-btn px-2.5 py-1 rounded border border-azure text-[11px] font-bold bg-ink-slate text-cloud" data-layer="columns">COLUMNS</button>
+            <button class="layer-toggle-btn px-2.5 py-1 rounded border border-azure text-[11px] font-bold bg-ink-slate text-cloud" data-layer="beams">BEAMS</button>
+            <button class="layer-toggle-btn px-2.5 py-1 rounded border border-azure text-[11px] font-bold bg-ink-slate text-cloud" data-layer="slabs">SLABS</button>
+            <button class="layer-toggle-btn px-2.5 py-1 rounded border border-azure text-[11px] font-bold bg-ink-slate text-cloud" data-layer="stairs">STAIRS</button>
+            <button class="layer-toggle-btn px-2.5 py-1 rounded border border-azure text-[11px] font-bold bg-ink-slate text-cloud" data-layer="dome">DOME</button>
+            <button class="layer-toggle-btn px-2.5 py-1 rounded border border-azure text-[11px] font-bold bg-ink-slate text-cloud" data-layer="mangaHand">HAND</button>
+          </div>
+
+          <!-- Right: Visual Mode Switcher -->
+          <div class="flex items-center gap-2">
+            <button id="btn-hero-cycle-mode" class="px-3 py-1 rounded border-2 border-crimson text-[11px] font-black bg-crimson text-white shadow-brutal-sm hover:bg-white hover:text-ink-deep transition">
+              MODE: CRIMSON MANGA
             </button>
+            <div class="text-[11px] text-neutral-400 font-bold hidden md:inline">
+              🖱️ DRAG TO ROTATE • SCROLL TO FLY
+            </div>
           </div>
-        </div>
 
-        <!-- Right: The 3D Interactive Blueprint World Viewport -->
-        <div class="lg:col-span-7">
-          <div class="manhwa-panel p-4 bg-white rounded border-3 border-navy shadow-brutal-lg relative">
-            
-            <!-- Canvas Frame Header -->
-            <div class="flex items-center justify-between border-b-2 border-navy pb-3 mb-3 font-fira text-xs">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
-                <span class="font-bold text-navy">BLUEPRINT WORLD // 3D STRUCTURAL ASSEMBLY</span>
-                <span class="text-[10px] bg-ice px-1.5 py-0.5 rounded text-azure font-bold">INTERACTIVE</span>
-              </div>
-              <button id="btn-hero-reset-cam" class="text-[11px] font-bold text-neutral-500 hover:text-navy transition">
-                [ RESET CAMERA ]
-              </button>
-            </div>
-
-            <!-- Three.js Canvas Container -->
-            <div class="relative w-full h-[400px] sm:h-[480px] bg-gradient-to-b from-ice/40 to-cloud rounded overflow-hidden border border-navy/30">
-              <canvas id="blueprint-canvas" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
-              
-              <!-- Floating Drag Hint -->
-              <div class="absolute bottom-3 left-3 pointer-events-none bg-white/95 backdrop-blur-sm border border-navy px-3 py-1 rounded text-[11px] font-fira font-bold text-navy shadow-sm">
-                🖱️ DRAG TO ORBIT • SCROLL TO ZOOM
-              </div>
-
-              <!-- Exploded Tag -->
-              <div id="hero-exploded-tag" class="absolute top-3 right-3 pointer-events-none bg-gold text-navy font-fira font-black text-xs px-2.5 py-1 rounded border-2 border-navy hidden">
-                EXPLODED VIEW ACTIVE
-              </div>
-            </div>
-
-            <!-- Constructor Controls Bar -->
-            <div class="mt-3 pt-3 border-t border-navy/20 flex flex-wrap items-center justify-between gap-2 font-fira text-xs">
-              <!-- Layer Toggles -->
-              <div class="flex flex-wrap items-center gap-1.5">
-                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-navy text-white" data-layer="wireframe">WIREFRAME</button>
-                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="columns">COLUMNS</button>
-                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="beams">BEAMS</button>
-                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="slabs">SLABS</button>
-                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="stairs">STAIRS</button>
-                <button class="layer-toggle-btn px-2.5 py-1 rounded border border-navy text-[11px] font-bold bg-ice text-navy" data-layer="perspectiveRays">PERSPECTIVE</button>
-              </div>
-
-              <!-- Visual Mode Cycle -->
-              <button id="btn-hero-cycle-mode" class="px-3 py-1 rounded border border-navy text-[11px] font-bold bg-white hover:bg-ice text-navy transition shadow-sm">
-                MODE: BLUEPRINT
-              </button>
-            </div>
-
-          </div>
         </div>
 
       </div>
 
-      <!-- Bottom Dimension Strip -->
-      <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-navy/20 font-fira text-xs text-neutral-600">
-        <div class="flex items-center gap-4">
-          <span>STRUCTURAL GRID: 9.0m × 6.0m</span>
-          <span>•</span>
-          <span>PRECAST HOLLOW-CORE: HC-250</span>
-          <span>•</span>
-          <span>PERSPECTIVE: RADIANT VANISHING VECTORS</span>
-        </div>
-        <div class="font-bold text-navy">
-          SCROLL TO EXPLORE THE UNIVERSE ↓
-        </div>
-      </div>
     </section>
 
     <!-- ==================== SECTION A — THE MULTIDISCIPLINARY ARCHETYPE ==================== -->
-    <section id="introduction" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-white">
-      <div class="max-w-5xl mx-auto space-y-8">
+    <section id="introduction" class="py-24 px-6 md:px-16 border-b-4 border-ink-deep bg-cloud text-ink-slate relative">
+      <div class="max-w-6xl mx-auto space-y-10">
         
-        <div class="border-l-4 border-azure pl-6">
-          <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-1">
+        <div class="border-l-6 border-crimson pl-6">
+          <span class="font-fira text-xs font-bold text-crimson uppercase tracking-widest block mb-1">
             // SECTION A // THE MULTIDISCIPLINARY ARCHETYPE
           </span>
-          <h2 class="font-anton text-4xl sm:text-6xl text-navy uppercase tracking-tight">
+          <h2 class="font-anton text-4xl sm:text-6xl md:text-7xl text-ink-deep uppercase tracking-tight">
             THE ARCHITECT'S WORKSHOP
           </h2>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-          <div class="md:col-span-7 space-y-4 font-sans text-neutral-700 leading-relaxed text-base md:text-lg">
+          
+          <div class="md:col-span-7 space-y-4 font-sans text-neutral-800 leading-relaxed text-base md:text-lg">
             <p>
-              I am <strong>Dagi (Dagmawi Yosef)</strong> — an architectural designer, computational structural engineer, and full-stack creative technologist.
+              I am <strong>Dagi (Dagmawi Yosef)</strong> — an architectural designer, computational structural engineer, and full-stack creative technologist based in Addis Ababa.
             </p>
             <p>
               Much like the imaginative construction journeys in <em>The Greatest Estate Developer</em>, I believe software and engineering should transform abstract ideas, mathematical equations, and terrain into solid, elegant reality.
             </p>
-            <p class="font-fira text-sm text-navy bg-ice p-4 rounded border-2 border-navy">
+            <p class="font-fira text-sm text-ink-deep bg-ice p-5 rounded border-3 border-ink-deep shadow-brutal">
               &gt; "I care about semantic markup, responsive layouts that behave on every screen size, accessible components, and code that stays clean six months later. On the engineering side, I automate complex precast structural workflows with millimeter precision."
             </p>
           </div>
 
-          <div class="md:col-span-5 bg-cloud p-6 rounded border-2 border-navy shadow-brutal space-y-4 font-fira text-xs">
-            <div class="flex items-center justify-between border-b border-navy/20 pb-2">
-              <span class="text-neutral-500 font-bold">PRIMARY DISCIPLINES</span>
-              <span class="text-azure font-bold">3 CORE PILLARS</span>
+          <!-- 3 Core Pillars Comic Box -->
+          <div class="md:col-span-5 bg-white p-6 rounded border-3 border-ink-deep shadow-crimson space-y-4 font-fira text-xs">
+            <div class="flex items-center justify-between border-b-2 border-ink-deep pb-2">
+              <span class="text-neutral-500 font-black">PRIMARY WEAPONS</span>
+              <span class="text-crimson font-black">3 CORE PILLARS</span>
             </div>
-            <div class="space-y-3">
-              <div>
-                <span class="block font-bold text-navy text-sm">1. COMPUTATIONAL ARCHITECTURE & BIM</span>
-                <span class="text-neutral-600">Revit API Automation, Precast Frame Systems, Sizing Algorithms</span>
+            
+            <div class="space-y-4">
+              <div class="p-3 bg-ice rounded border border-ink-deep">
+                <span class="block font-bold text-ink-deep text-sm mb-1">1. COMPUTATIONAL ARCHITECTURE & BIM</span>
+                <span class="text-neutral-700">Autodesk Revit API, Precast Hollow-Core Systems, Eurocode 2 & PCI 8th Ed. Bearing Algorithms</span>
               </div>
-              <div>
-                <span class="block font-bold text-navy text-sm">2. FULL-STACK ENGINEERING</span>
-                <span class="text-neutral-600">Python (FastAPI), Node.js, TypeScript, PostgreSQL, REST APIs</span>
+              <div class="p-3 bg-cloud rounded border border-ink-deep">
+                <span class="block font-bold text-ink-deep text-sm mb-1">2. STRUCTURAL ANALYSIS SOLVERS</span>
+                <span class="text-neutral-700">Theory of Structures Mastery Lab, Virtual Work, Slope Deflection, KaTeX LaTeX Equation Rendering</span>
               </div>
-              <div>
-                <span class="block font-bold text-navy text-sm">3. CREATIVE 3D & DIGITAL LABS</span>
-                <span class="text-neutral-600">Three.js, WebGL, Custom GLSL Shaders, GSAP Motion</span>
+              <div class="p-3 bg-ice rounded border border-ink-deep">
+                <span class="block font-bold text-ink-deep text-sm mb-1">3. CREATIVE 3D & FULL-STACK</span>
+                <span class="text-neutral-700">Three.js, WebGL, Custom GLSL Shaders, GSAP 3, Python (FastAPI), TypeScript, PostgreSQL</span>
               </div>
             </div>
           </div>
+
         </div>
 
       </div>
     </section>
 
     <!-- ==================== SECTION B — WEBGL SHADER IMAGE GALLERY ==================== -->
-    <section id="shader-gallery-section" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-cloud">
+    <section id="shader-gallery-section" class="py-24 px-6 md:px-16 border-b-4 border-crimson bg-ink-deep text-white relative">
       
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 border-b-2 border-navy pb-6">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 border-b-2 border-crimson/40 pb-6 max-w-6xl mx-auto">
         <div>
-          <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-1">
-            // SECTION B // SHADER IMAGE GALLERY
+          <span class="font-fira text-xs font-bold text-crimson uppercase tracking-widest block mb-1">
+            // SECTION B // GLSL SHADER LABORATORY
           </span>
-          <h2 class="font-anton text-4xl sm:text-7xl text-navy uppercase tracking-tight">
+          <h2 class="font-anton text-4xl sm:text-7xl text-white uppercase tracking-tight">
             THE ART OF INK & PERSPECTIVE
           </h2>
         </div>
-        <p class="font-fira text-xs text-neutral-600 max-w-md">
-          Real-time WebGL image interactions powered by custom GLSL fragment shaders. Move your cursor over the canvas to trigger dynamic wave ripples, chromatic aberration, and screentone displacement.
+        <p class="font-fira text-xs text-neutral-400 max-w-md">
+          Real-time WebGL image interactions powered by custom GLSL fragment shaders. Move your cursor over the canvas to trigger dynamic wave ripples, chromatic aberration (RGB split), and screentone displacement.
         </p>
       </div>
 
       <!-- WebGL Shader Gallery Mount -->
-      <div class="manhwa-panel p-4 bg-white rounded border-3 border-navy shadow-brutal-lg max-w-5xl mx-auto">
-        <div class="flex items-center justify-between border-b-2 border-navy pb-3 mb-3 font-fira text-xs">
+      <div class="manhwa-panel-dark p-4 rounded border-4 border-crimson shadow-crimson-lg max-w-5xl mx-auto">
+        <div class="flex items-center justify-between border-b-2 border-crimson pb-3 mb-3 font-fira text-xs">
           <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-azure animate-ping"></span>
-            <span class="font-bold text-navy">GLSL IMAGE SHADER INTERACTION</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-crimson animate-ping"></span>
+            <span class="font-bold text-white">GLSL IMAGE SHADER INTERACTION</span>
           </div>
 
           <!-- Transition Switcher -->
           <div class="flex items-center gap-2">
-            <button id="btn-show-arch" class="px-3 py-1 bg-navy text-white rounded border border-navy text-[11px] font-bold">1. ARCH PERSPECTIVE</button>
-            <button id="btn-show-manga" class="px-3 py-1 bg-ice text-navy rounded border border-navy text-[11px] font-bold">2. MANGA AWAKENING</button>
+            <button id="btn-show-arch" class="manga-btn px-3 py-1 bg-crimson text-white rounded border border-white text-[11px] font-bold">1. ARCH PERSPECTIVE</button>
+            <button id="btn-show-manga" class="manga-btn px-3 py-1 bg-ink-slate text-cloud rounded border border-azure text-[11px] font-bold">2. MANGA AWAKENING</button>
           </div>
         </div>
 
-        <div class="relative w-full h-[460px] bg-navy rounded overflow-hidden border border-navy/30">
+        <div class="relative w-full h-[440px] sm:h-[500px] bg-ink-deep rounded overflow-hidden border-2 border-ink-slate">
           <canvas id="shader-gallery-canvas" class="w-full h-full block cursor-crosshair"></canvas>
           
-          <div class="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm border border-navy px-3 py-1.5 rounded text-xs font-fira font-bold text-navy shadow-sm pointer-events-none">
-            🌊 HOVER TO DISPLACE • VELOCITY SENSITIVE RGB SPLIT
+          <div class="absolute bottom-4 left-4 bg-ink-deep/95 backdrop-blur-sm border-2 border-crimson px-3 py-1.5 rounded text-xs font-fira font-bold text-white shadow-brutal-sm pointer-events-none">
+            🌊 HOVER TO DISPLACE • VELOCITY-SENSITIVE RGB SPLIT
           </div>
         </div>
       </div>
@@ -279,147 +296,246 @@
     </section>
 
     <!-- ==================== SECTION C — THE BLUEPRINT WALL (FEATURED PROJECTS) ==================== -->
-    <section id="blueprint-wall" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-ice/40">
+    <section id="blueprint-wall" class="py-24 px-6 md:px-16 border-b-4 border-ink-deep bg-cloud text-ink-slate relative">
       
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16 border-b-2 border-navy pb-6">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16 border-b-3 border-ink-deep pb-6 max-w-7xl mx-auto">
         <div>
-          <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-1">
+          <span class="font-fira text-xs font-bold text-crimson uppercase tracking-widest block mb-1">
             // SECTION C // THE BLUEPRINT WALL
           </span>
-          <h2 class="font-anton text-4xl sm:text-7xl text-navy uppercase tracking-tight">
+          <h2 class="font-anton text-4xl sm:text-7xl text-ink-deep uppercase tracking-tight">
             SELECTED CHRONICLES
           </h2>
         </div>
         <p class="font-fira text-xs text-neutral-600 max-w-md">
-          A curated exhibition of verified engineering systems, interactive educational platforms, and architectural automation. Click any dossier to open its 7-Chapter Manhwa case study.
+          An asymmetrical exhibition of verified engineering systems, interactive educational platforms, and architectural automation. Click any dossier to launch its 7-Chapter Manhwa case study.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Asymmetrical Dynamic Comic Spread -->
+      <div class="max-w-7xl mx-auto space-y-8">
         
-        <!-- CARD 1: Precast BIM -->
-        <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="precast-bim">
-          <div>
-            <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
-              <span class="bg-navy text-white px-2 py-0.5 rounded">BIM & REVIT</span>
-              <span class="text-gold font-black">CHRONICLE 01</span>
-            </div>
-            <h3 class="font-anton text-2xl text-navy uppercase mb-2">
-              PRECAST BIM & COMPUTATIONAL SUITE
-            </h3>
-            <p class="font-sans text-xs text-neutral-600 leading-relaxed mb-4">
-              Algorithmic modeling of hollow-core slabs, inverted-T ledge beams, and structural corbels with verified bearing calculations inside Autodesk Revit API Transactions.
-            </p>
-            <div class="flex flex-wrap gap-1.5 mb-6 font-fira text-[11px]">
-              <span class="bg-ice text-navy px-2 py-0.5 rounded border border-navy/20 font-bold">Revit API</span>
-              <span class="bg-ice text-navy px-2 py-0.5 rounded border border-navy/20 font-bold">Hollow-Core</span>
-              <span class="bg-ice text-navy px-2 py-0.5 rounded border border-navy/20 font-bold">PCI Code</span>
-            </div>
-          </div>
+        <!-- ROW 1: Wide Flagship Hero Panel (Precast BIM & Computational Suite) -->
+        <div class="manhwa-panel p-6 sm:p-8 rounded border-4 border-ink-deep shadow-crimson-lg" data-project="precast-bim">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <div class="lg:col-span-7 space-y-4">
+              <div class="flex items-center gap-3 font-fira text-xs font-bold">
+                <span class="bg-crimson text-white px-2.5 py-0.5 rounded shadow-brutal-sm">FLAGSHIP BIM</span>
+                <span class="text-ink-deep font-black">第1巻 CHRONICLE 01</span>
+                <span class="text-neutral-500">•</span>
+                <span class="text-azure">PCI 8TH ED. & EUROCODE 2</span>
+              </div>
 
-          <div class="border-t border-navy/20 pt-4 flex items-center justify-between">
-            <button class="btn-open-case-study manga-btn px-4 py-2 bg-navy text-white font-fira text-xs font-bold uppercase rounded border-2 border-navy shadow-brutal-sm hover:bg-azure transition" data-project-id="precast-bim">
-              VIEW CASE STUDY →
-            </button>
-            <span class="font-fira text-[10px] text-neutral-500 font-bold">7 CHAPTERS</span>
+              <h3 class="font-anton text-3xl sm:text-5xl text-ink-deep uppercase tracking-tight">
+                PRECAST BIM & COMPUTATIONAL STRUCTURAL SUITE
+              </h3>
+
+              <p class="font-sans text-sm sm:text-base text-neutral-700 leading-relaxed">
+                Algorithmic modeling of precast hollow-core slabs, inverted-T ledge beams, and structural corbels with verified bearing calculations inside Autodesk Revit API Transactions. Converts millimeters to internal decimal feet with zero geometry drift.
+              </p>
+
+              <div class="p-3 bg-ice rounded border-2 border-ink-deep font-fira text-xs space-y-1">
+                <div class="font-bold text-ink-deep">📐 VERIFIED CRITICAL VALUES:</div>
+                <div class="text-neutral-700">• Minimum nominal bearing: <strong>90mm</strong> on concrete ledges with 50mm structural topping & A142 mesh</div>
+                <div class="text-neutral-700">• Revit API Transactions: All element modifications wrapped in safety transactions with unique mark IDs</div>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-3 pt-2">
+                <button class="btn-open-case-study manga-btn manga-btn-crimson px-5 py-2.5 rounded shadow-brutal text-xs" data-project-id="precast-bim">
+                  READ 7-CHAPTER CASE STUDY →
+                </button>
+                <a href="https://github.com/dagiyosi-pixel" target="_blank" rel="noopener noreferrer" class="manga-btn px-4 py-2.5 bg-white text-ink-deep rounded shadow-brutal-sm text-xs hover:bg-ice transition">
+                  GITHUB REPO ↗
+                </a>
+              </div>
+            </div>
+
+            <!-- Right: Architectural Vector Plate Preview -->
+            <div class="lg:col-span-5 bg-ink-slate p-4 rounded border-3 border-ink-deep shadow-brutal">
+              <div class="flex items-center justify-between pb-2 mb-2 border-b border-azure/40 font-fira text-[11px] text-sky">
+                <span>SECTION DETAIL 1:50</span>
+                <span>HC-250 ON INVERTED-T</span>
+              </div>
+              <div class="relative w-full h-[220px] bg-ink-deep rounded overflow-hidden flex items-center justify-center p-2">
+                <svg viewBox="0 0 400 200" width="100%" height="100%">
+                  <!-- Ledge Beam -->
+                  <path d="M 50 140 L 150 140 L 150 60 L 250 60 L 250 140 L 350 140 L 350 180 L 50 180 Z" fill="#173C5B" stroke="#399DD6" stroke-width="2" />
+                  <!-- Left Slab -->
+                  <rect x="50" y="80" width="90" height="50" fill="#E5F4FF" stroke="#173C5B" stroke-width="2" />
+                  <circle cx="80" cy="105" r="12" fill="#14212D" />
+                  <circle cx="115" cy="105" r="12" fill="#14212D" />
+                  <!-- Right Slab -->
+                  <rect x="260" y="80" width="90" height="50" fill="#E5F4FF" stroke="#173C5B" stroke-width="2" />
+                  <circle cx="285" cy="105" r="12" fill="#14212D" />
+                  <circle cx="320" cy="105" r="12" fill="#14212D" />
+                  <!-- Dimension Line -->
+                  <line x1="50" y1="50" x2="140" y2="50" stroke="#FF2233" stroke-width="2" />
+                  <text x="95" y="42" fill="#FF2233" font-family="'Fira Code', monospace" font-size="10" font-weight="bold" text-anchor="middle">BEARING 90mm</text>
+                </svg>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <!-- CARD 2: Theory of Structures -->
-        <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="theory-of-structures">
-          <div>
-            <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
-              <span class="bg-azure text-white px-2 py-0.5 rounded">ENGINEERING</span>
-              <span class="text-gold font-black">CHRONICLE 02</span>
+        <!-- ROW 2: Two Asymmetrical Columns (Theory of Structures + Ethiopian Curriculum) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          <!-- Chronicle 02: Theory of Structures Mastery Lab -->
+          <div class="manhwa-panel flex flex-col justify-between p-6 sm:p-8 rounded border-4 border-ink-deep shadow-crimson" data-project="theory-of-structures">
+            <div>
+              <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
+                <span class="bg-azure text-white px-2 py-0.5 rounded shadow-brutal-sm">STRUCTURAL ANALYSIS</span>
+                <span class="text-crimson font-black">第2巻 CHRONICLE 02</span>
+              </div>
+              <h3 class="font-anton text-2xl sm:text-3xl text-ink-deep uppercase mb-2">
+                THEORY OF STRUCTURES MASTERY LAB
+              </h3>
+              <p class="font-sans text-xs sm:text-sm text-neutral-600 leading-relaxed mb-4">
+                Interactive structural analysis engine solving virtual work, slope deflection, and moment distribution with real-time KaTeX LaTeX equation rendering and dynamic BMD/SFD diagrams.
+              </p>
+              <div class="flex flex-wrap gap-1.5 mb-6 font-fira text-[11px]">
+                <span class="bg-ice text-ink-deep px-2 py-0.5 rounded border border-ink-deep font-bold">KaTeX Solvers</span>
+                <span class="bg-ice text-ink-deep px-2 py-0.5 rounded border border-ink-deep font-bold">Slope Deflection</span>
+                <span class="bg-ice text-ink-deep px-2 py-0.5 rounded border border-ink-deep font-bold">Canvas BMD/SFD</span>
+              </div>
             </div>
-            <h3 class="font-anton text-2xl text-navy uppercase mb-2">
-              THEORY OF STRUCTURES MASTERY LAB
-            </h3>
-            <p class="font-sans text-xs text-neutral-600 leading-relaxed mb-4">
-              Interactive structural analysis engine solving virtual work, slope deflection, and moment distribution with real-time KaTeX LaTeX equation rendering and BMD/SFD diagrams.
-            </p>
-            <div class="flex flex-wrap gap-1.5 mb-6 font-fira text-[11px]">
-              <span class="bg-ice text-navy px-2 py-0.5 rounded border border-navy/20 font-bold">KaTeX</span>
-              <span class="bg-ice text-navy px-2 py-0.5 rounded border border-navy/20 font-bold">Beam Solvers</span>
-              <span class="bg-ice text-navy px-2 py-0.5 rounded border border-navy/20 font-bold">Canvas Charts</span>
+
+            <div class="border-t-2 border-ink-deep/20 pt-4 flex items-center justify-between">
+              <button class="btn-open-case-study manga-btn px-4 py-2 bg-ink-deep text-white font-fira text-xs font-bold uppercase rounded shadow-brutal-sm hover:bg-azure transition" data-project-id="theory-of-structures">
+                VIEW CASE STUDY →
+              </button>
+              <a href="https://github.com/dagiyosi-pixel/theory-of-structures-mastery-lab" target="_blank" rel="noopener noreferrer" class="font-fira text-xs font-bold text-azure hover:underline">
+                GITHUB ↗
+              </a>
             </div>
           </div>
 
-          <div class="border-t border-navy/20 pt-4 flex items-center justify-between">
-            <button class="btn-open-case-study manga-btn px-4 py-2 bg-azure text-white font-fira text-xs font-bold uppercase rounded border-2 border-navy shadow-brutal-sm hover:bg-navy transition" data-project-id="theory-of-structures">
-              VIEW CASE STUDY →
-            </button>
-            <span class="font-fira text-[10px] text-neutral-500 font-bold">7 CHAPTERS</span>
+          <!-- Chronicle 03: Ethiopian Curriculum Platform (SQ3R) -->
+          <div class="manhwa-panel flex flex-col justify-between p-6 sm:p-8 rounded border-4 border-ink-deep shadow-crimson" data-project="ethiopia-curriculum">
+            <div>
+              <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
+                <span class="bg-gold text-ink-deep px-2 py-0.5 rounded font-black shadow-brutal-sm">FLAGSHIP EDTECH</span>
+                <span class="text-crimson font-black">第3巻 CHRONICLE 03</span>
+              </div>
+              <h3 class="font-anton text-2xl sm:text-3xl text-ink-deep uppercase mb-2">
+                ETHIOPIAN CURRICULUM PLATFORM (SQ3R)
+              </h3>
+              <p class="font-sans text-xs sm:text-sm text-neutral-600 leading-relaxed mb-4">
+                Offline-first examination simulation and honors certification platform covering 96 units, 184 subtopics, and 577+ CBA questions with custom 1200x840 Canvas generator.
+              </p>
+              <div class="flex flex-wrap gap-1.5 mb-6 font-fira text-[11px]">
+                <span class="bg-ice text-ink-deep px-2 py-0.5 rounded border border-ink-deep font-bold">Offline PWA</span>
+                <span class="bg-ice text-ink-deep px-2 py-0.5 rounded border border-ink-deep font-bold">96 Units / 577+ CBA</span>
+                <span class="bg-ice text-ink-deep px-2 py-0.5 rounded border border-ink-deep font-bold">HD Canvas Cert</span>
+              </div>
+            </div>
+
+            <div class="border-t-2 border-ink-deep/20 pt-4 flex items-center justify-between">
+              <button class="btn-open-case-study manga-btn px-4 py-2 bg-ink-deep text-white font-fira text-xs font-bold uppercase rounded shadow-brutal-sm hover:bg-gold hover:text-ink-deep transition" data-project-id="ethiopia-curriculum">
+                VIEW CASE STUDY →
+              </button>
+              <a href="https://github.com/dagiyosi-pixel/ethiopia-curriculum-sq3r-platform" target="_blank" rel="noopener noreferrer" class="font-fira text-xs font-bold text-azure hover:underline">
+                GITHUB ↗
+              </a>
+            </div>
           </div>
+
         </div>
 
-        <!-- CARD 3: Ethiopian Curriculum Platform -->
-        <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="ethiopia-curriculum">
-          <div>
-            <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
-              <span class="bg-gold text-navy px-2 py-0.5 rounded font-black">FLAGSHIP EDTECH</span>
-              <span class="text-navy font-bold">CHRONICLE 03</span>
+        <!-- ROW 3: Three Creative Tech Labs -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+          
+          <div class="manhwa-panel flex flex-col justify-between p-6 rounded border-3 border-ink-deep shadow-brutal" data-project="manga-noir">
+            <div>
+              <div class="flex items-center justify-between mb-2 font-fira text-xs font-bold">
+                <span class="bg-ink-deep text-white px-2 py-0.5 rounded">GLSL / WEBGL</span>
+                <span class="text-crimson font-black">LAB 01</span>
+              </div>
+              <h4 class="font-anton text-xl text-ink-deep uppercase mb-2">MANGA-NOIR SHADER LAB</h4>
+              <p class="font-sans text-xs text-neutral-600 leading-relaxed mb-4">
+                Real-time GLSL cel-shading and procedural ink cross-hatching post-processing shaders with 1,800+ reactive particles and synthesized Web Audio sound.
+              </p>
             </div>
-            <h3 class="font-anton text-2xl text-navy uppercase mb-2">
-              ETHIOPIAN CURRICULUM PLATFORM (SQ3R)
-            </h3>
-            <p class="font-sans text-xs text-neutral-600 leading-relaxed mb-4">
-              Offline-first examination simulation and honors certification platform covering 96 units, 184 subtopics, and 577+ CBA questions with custom 1200x840 Canvas generator.
-            </p>
-            <div class="flex flex-wrap gap-1.5 mb-6 font-fira text-[11px]">
-              <span class="bg-ice text-navy px-2 py-0.5 rounded border border-navy/20 font-bold">Offline PWA</span>
-              <span class="bg-ice text-navy px-2 py-0.5 rounded border border-navy/20 font-bold">Exam Simulator</span>
-              <span class="bg-ice text-navy px-2 py-0.5 rounded border border-navy/20 font-bold">MoE CBA</span>
-            </div>
+            <button class="btn-open-case-study manga-btn px-3 py-2 bg-ink-deep text-white font-fira text-xs font-bold uppercase rounded shadow-brutal-sm hover:bg-crimson transition" data-project-id="manga-noir">
+              INSPECT DOSSIER →
+            </button>
           </div>
 
-          <div class="border-t border-navy/20 pt-4 flex items-center justify-between">
-            <button class="btn-open-case-study manga-btn px-4 py-2 bg-navy text-white font-fira text-xs font-bold uppercase rounded border-2 border-navy shadow-brutal-sm hover:bg-azure transition" data-project-id="ethiopia-curriculum">
-              VIEW CASE STUDY →
+          <div class="manhwa-panel flex flex-col justify-between p-6 rounded border-3 border-ink-deep shadow-brutal" data-project="ethiopia-360">
+            <div>
+              <div class="flex items-center justify-between mb-2 font-fira text-xs font-bold">
+                <span class="bg-azure text-white px-2 py-0.5 rounded">SPATIAL COMPUTING</span>
+                <span class="text-azure font-black">LAB 02</span>
+              </div>
+              <h4 class="font-anton text-xl text-ink-deep uppercase mb-2">ETHIOPIA//360 COMMUNITY ATLAS</h4>
+              <p class="font-sans text-xs text-neutral-600 leading-relaxed mb-4">
+                Interactive digital atlas exploring the geographic, architectural, and historical topology of Ethiopia through vector SVG spatial mapping.
+              </p>
+            </div>
+            <button class="btn-open-case-study manga-btn px-3 py-2 bg-azure text-white font-fira text-xs font-bold uppercase rounded shadow-brutal-sm hover:bg-ink-deep transition" data-project-id="ethiopia-360">
+              INSPECT DOSSIER →
             </button>
-            <span class="font-fira text-[10px] text-neutral-500 font-bold">7 CHAPTERS</span>
           </div>
+
+          <div class="manhwa-panel flex flex-col justify-between p-6 rounded border-3 border-ink-deep shadow-brutal" data-project="amt-exam">
+            <div>
+              <div class="flex items-center justify-between mb-2 font-fira text-xs font-bold">
+                <span class="bg-gold text-ink-deep px-2 py-0.5 rounded font-black">MOBILE PRODUCT</span>
+                <span class="text-ink-deep font-black">LAB 03</span>
+              </div>
+              <h4 class="font-anton text-xl text-ink-deep uppercase mb-2">AMT EXAM ASSESSMENT ENGINE</h4>
+              <p class="font-sans text-xs text-neutral-600 leading-relaxed mb-4">
+                Adaptive diagnostic assessment engine with timed question palettes, performance analytics, and rapid thumb-friendly mobile recall.
+              </p>
+            </div>
+            <button class="btn-open-case-study manga-btn px-3 py-2 bg-ink-deep text-white font-fira text-xs font-bold uppercase rounded shadow-brutal-sm hover:bg-gold hover:text-ink-deep transition" data-project-id="amt-exam">
+              INSPECT DOSSIER →
+            </button>
+          </div>
+
         </div>
 
       </div>
     </section>
 
     <!-- ==================== SECTION D — ARCHITECTURAL DRAFTING VIEWER ==================== -->
-    <section id="building-ideas" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-white">
+    <section id="building-ideas" class="py-24 px-6 md:px-16 border-b-4 border-crimson bg-ink-deep text-white relative">
       
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 border-b-2 border-navy pb-6">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 border-b-2 border-crimson/40 pb-6 max-w-6xl mx-auto">
         <div>
-          <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-1">
+          <span class="font-fira text-xs font-bold text-crimson uppercase tracking-widest block mb-1">
             // SECTION D // BUILDING THE IDEAS
           </span>
-          <h2 class="font-anton text-4xl sm:text-7xl text-navy uppercase tracking-tight">
+          <h2 class="font-anton text-4xl sm:text-7xl text-white uppercase tracking-tight">
             ARCHITECTURAL DRAFTING VIEWER
           </h2>
         </div>
-        <p class="font-fira text-xs text-neutral-600 max-w-md">
-          Inspect real verified architectural drawings, precast joint details, and structural framing plans with live pan, zoom, and layer selection.
+        <p class="font-fira text-xs text-neutral-400 max-w-md">
+          Inspect real verified architectural drawings, precast joint details, and structural framing plans with live pan, zoom, layer selection, and 3D extrusion.
         </p>
       </div>
 
-      <div id="drawing-viewer-root" class="w-full mb-8"></div>
+      <div id="drawing-viewer-root" class="max-w-6xl mx-auto mb-8"></div>
 
       <!-- Engineering Details -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 font-fira text-xs">
-        <div class="bg-ice p-5 rounded border-2 border-navy shadow-brutal-sm">
-          <span class="text-azure font-bold block mb-1">HOLLOW-CORE BEARING CHECKS</span>
-          <p class="text-neutral-700 leading-relaxed text-[11px]">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto font-fira text-xs">
+        <div class="bg-ink-slate p-5 rounded border-2 border-crimson shadow-brutal-sm">
+          <span class="text-crimson font-bold block mb-1">HOLLOW-CORE BEARING CHECKS</span>
+          <p class="text-neutral-300 leading-relaxed text-[11px]">
             Minimum nominal bearing length of 90mm on concrete ledges with 50mm structural topping and A142 reinforcing mesh, compliant with Eurocode 2 and PCI Design Handbook 8th Edition.
           </p>
         </div>
-        <div class="bg-ice p-5 rounded border-2 border-navy shadow-brutal-sm">
-          <span class="text-navy font-bold block mb-1">INVERTED-T LEDGE SHEAR</span>
-          <p class="text-neutral-700 leading-relaxed text-[11px]">
+        <div class="bg-ink-slate p-5 rounded border-2 border-azure shadow-brutal-sm">
+          <span class="text-azure font-bold block mb-1">INVERTED-T LEDGE SHEAR</span>
+          <p class="text-neutral-300 leading-relaxed text-[11px]">
             Ledge cantilever bending, punching shear, and hanger reinforcement calculations ensuring load transfer from slab planks into the beam stem without unzipping failures.
           </p>
         </div>
-        <div class="bg-ice p-5 rounded border-2 border-navy shadow-brutal-sm">
+        <div class="bg-ink-slate p-5 rounded border-2 border-gold shadow-brutal-sm">
           <span class="text-gold font-bold block mb-1">API TRANSACTION SAFETY</span>
-          <p class="text-neutral-700 leading-relaxed text-[11px]">
+          <p class="text-neutral-300 leading-relaxed text-[11px]">
             Every element modification runs inside strict Revit API Transactions, with millimeter-to-feet conversions (304.8) and unique piece mark ID tagging for shop drawing schedules.
           </p>
         </div>
@@ -427,91 +543,15 @@
 
     </section>
 
-    <!-- ==================== SECTION E — THE DIGITAL LABORATORY (3D EXPERIMENTS) ==================== -->
-    <section id="digital-lab" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-cloud">
+    <!-- ==================== SECTION E — THE 5-STAGE MANHWA PIPELINE ==================== -->
+    <section id="process" class="py-24 px-6 md:px-16 border-b-4 border-ink-deep bg-cloud text-ink-slate relative">
       
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16 border-b-2 border-navy pb-6">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16 border-b-3 border-ink-deep pb-6 max-w-6xl mx-auto">
         <div>
-          <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-1">
-            // SECTION E // THE DIGITAL LABORATORY
+          <span class="font-fira text-xs font-bold text-crimson uppercase tracking-widest block mb-1">
+            // SECTION E // THE 5-STAGE MANHWA PIPELINE
           </span>
-          <h2 class="font-anton text-4xl sm:text-7xl text-navy uppercase tracking-tight">
-            INTERACTIVE EXPERIMENTS
-          </h2>
-        </div>
-        <p class="font-fira text-xs text-neutral-600 max-w-md">
-          Experimental 3D applications, spatial GIS atlases, and graphic novel shader experiments combining art and computer science.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        
-        <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="manga-noir">
-          <div>
-            <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
-              <span class="bg-navy text-white px-2 py-0.5 rounded">WEBGL / SHADERS</span>
-              <span class="text-azure font-bold">LAB 01</span>
-            </div>
-            <h3 class="font-anton text-2xl text-navy uppercase mb-2">
-              MANGA-NOIR WEBGL SHADER LAB
-            </h3>
-            <p class="font-sans text-xs text-neutral-600 leading-relaxed mb-4">
-              Real-time GLSL cel-shading and procedural ink cross-hatching post-processing shaders with 1,800+ reactive particles and synthesized Web Audio sound.
-            </p>
-          </div>
-          <button class="btn-open-case-study manga-btn px-4 py-2 bg-navy text-white font-fira text-xs font-bold uppercase rounded border-2 border-navy shadow-brutal-sm hover:bg-azure transition" data-project-id="manga-noir">
-            INSPECT SHADER DOSSIER →
-          </button>
-        </div>
-
-        <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="ethiopia-360">
-          <div>
-            <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
-              <span class="bg-azure text-white px-2 py-0.5 rounded">SPATIAL COMPUTING</span>
-              <span class="text-azure font-bold">LAB 02</span>
-            </div>
-            <h3 class="font-anton text-2xl text-navy uppercase mb-2">
-              ETHIOPIA//360 COMMUNITY ATLAS
-            </h3>
-            <p class="font-sans text-xs text-neutral-600 leading-relaxed mb-4">
-              Interactive digital atlas exploring the geographic, architectural, and historical topology of Ethiopia through vector SVG spatial mapping.
-            </p>
-          </div>
-          <button class="btn-open-case-study manga-btn px-4 py-2 bg-azure text-white font-fira text-xs font-bold uppercase rounded border-2 border-navy shadow-brutal-sm hover:bg-navy transition" data-project-id="ethiopia-360">
-            INSPECT ATLAS DOSSIER →
-          </button>
-        </div>
-
-        <div class="manhwa-panel flex flex-col justify-between p-6 rounded" data-project="amt-exam">
-          <div>
-            <div class="flex items-center justify-between mb-3 font-fira text-xs font-bold">
-              <span class="bg-gold text-navy px-2 py-0.5 rounded font-black">MOBILE PRODUCT</span>
-              <span class="text-navy font-bold">LAB 03</span>
-            </div>
-            <h3 class="font-anton text-2xl text-navy uppercase mb-2">
-              AMT EXAM ASSESSMENT ENGINE
-            </h3>
-            <p class="font-sans text-xs text-neutral-600 leading-relaxed mb-4">
-              Adaptive diagnostic assessment engine with timed question palettes, performance analytics, and rapid thumb-friendly mobile recall.
-            </p>
-          </div>
-          <button class="btn-open-case-study manga-btn px-4 py-2 bg-navy text-white font-fira text-xs font-bold uppercase rounded border-2 border-navy shadow-brutal-sm hover:bg-azure transition" data-project-id="amt-exam">
-            INSPECT EXAM DOSSIER →
-          </button>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ==================== SECTION F — MY PROCESS ==================== -->
-    <section id="process" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-white">
-      
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16 border-b-2 border-navy pb-6">
-        <div>
-          <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-1">
-            // SECTION F // THE 5-STAGE MANHWA PIPELINE
-          </span>
-          <h2 class="font-anton text-4xl sm:text-7xl text-navy uppercase tracking-tight">
+          <h2 class="font-anton text-4xl sm:text-7xl text-ink-deep uppercase tracking-tight">
             HOW IDEAS BECOME REALITY
           </h2>
         </div>
@@ -520,65 +560,65 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div class="p-6 bg-cloud border-2 border-navy rounded shadow-brutal-sm relative">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 max-w-6xl mx-auto">
+        <div class="p-6 bg-white border-3 border-ink-deep rounded shadow-brutal relative">
           <span class="font-anton text-4xl text-azure/40 block mb-2">01</span>
           <span class="font-fira text-xs font-bold text-azure uppercase tracking-wider block mb-1">THE IDEA</span>
-          <h4 class="font-anton text-xl text-navy uppercase mb-2">SPATIAL INTUITION</h4>
+          <h4 class="font-anton text-xl text-ink-deep uppercase mb-2">SPATIAL INTUITION</h4>
           <p class="font-sans text-xs text-neutral-600 leading-relaxed">
             Deconstructing the user need, structural constraint, or architectural objective into first-principles logic.
           </p>
         </div>
 
-        <div class="p-6 bg-ice border-2 border-navy rounded shadow-brutal-sm relative">
+        <div class="p-6 bg-ice border-3 border-ink-deep rounded shadow-brutal relative">
           <span class="font-anton text-4xl text-azure/40 block mb-2">02</span>
           <span class="font-fira text-xs font-bold text-azure uppercase tracking-wider block mb-1">THE DRAWING</span>
-          <h4 class="font-anton text-xl text-navy uppercase mb-2">BLUEPRINT SCHEMATIC</h4>
+          <h4 class="font-anton text-xl text-ink-deep uppercase mb-2">BLUEPRINT SCHEMATIC</h4>
           <p class="font-sans text-xs text-neutral-600 leading-relaxed">
             Drafting vector layouts, spatial circulation, component boundaries, and coordinate grids.
           </p>
         </div>
 
-        <div class="p-6 bg-cloud border-2 border-navy rounded shadow-brutal-sm relative">
-          <span class="font-anton text-4xl text-azure/40 block mb-2">03</span>
-          <span class="font-fira text-xs font-bold text-azure uppercase tracking-wider block mb-1">THE ENGINEERING</span>
-          <h4 class="font-anton text-xl text-navy uppercase mb-2">EQUATIONS & CODE</h4>
+        <div class="p-6 bg-white border-3 border-ink-deep rounded shadow-brutal relative">
+          <span class="font-anton text-4xl text-crimson/40 block mb-2">03</span>
+          <span class="font-fira text-xs font-bold text-crimson uppercase tracking-wider block mb-1">THE ENGINEERING</span>
+          <h4 class="font-anton text-xl text-ink-deep uppercase mb-2">EQUATIONS & CODE</h4>
           <p class="font-sans text-xs text-neutral-600 leading-relaxed">
             Formulating structural matrices, API transactions, bearing verifications, and algorithmic optimizations.
           </p>
         </div>
 
-        <div class="p-6 bg-ice border-2 border-navy rounded shadow-brutal-sm relative">
+        <div class="p-6 bg-ice border-3 border-ink-deep rounded shadow-brutal relative">
           <span class="font-anton text-4xl text-azure/40 block mb-2">04</span>
           <span class="font-fira text-xs font-bold text-azure uppercase tracking-wider block mb-1">THE BUILD</span>
-          <h4 class="font-anton text-xl text-navy uppercase mb-2">ASSEMBLY & CODE</h4>
+          <h4 class="font-anton text-xl text-ink-deep uppercase mb-2">ASSEMBLY & CODE</h4>
           <p class="font-sans text-xs text-neutral-600 leading-relaxed">
             Writing hardened JavaScript, Python, GLSL, or Revit automation scripts with zero bloated dependencies.
           </p>
         </div>
 
-        <div class="p-6 bg-white border-2 border-navy rounded shadow-brutal relative border-l-4 border-l-gold">
-          <span class="font-anton text-4xl text-gold block mb-2">05</span>
-          <span class="font-fira text-xs font-bold text-gold uppercase tracking-wider block mb-1">THE RESULT</span>
-          <h4 class="font-anton text-xl text-navy uppercase mb-2">DEPLOYED REALITY</h4>
-          <p class="font-sans text-xs text-neutral-800 leading-relaxed font-medium">
+        <div class="p-6 bg-white border-3 border-ink-deep rounded shadow-crimson relative border-l-6 border-l-crimson">
+          <span class="font-anton text-4xl text-crimson block mb-2">05</span>
+          <span class="font-fira text-xs font-bold text-crimson uppercase tracking-wider block mb-1">THE RESULT</span>
+          <h4 class="font-anton text-xl text-ink-deep uppercase mb-2">DEPLOYED REALITY</h4>
+          <p class="font-sans text-xs text-neutral-800 leading-relaxed font-bold">
             Fast, mathematically verified, accessible products that work seamlessly on every screen and device.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- ==================== SECTION G — ABOUT ME ==================== -->
-    <section id="about" class="py-24 px-6 md:px-16 border-b-2 border-navy bg-ice/30">
-      <div class="max-w-4xl mx-auto manhwa-panel p-8 md:p-12 rounded border-3 border-navy shadow-brutal-lg bg-white">
-        <span class="font-fira text-xs font-bold text-azure uppercase tracking-widest block mb-2">
-          // SECTION G // IDENTITY & PHILOSOPHY
+    <!-- ==================== SECTION F — ABOUT ME ==================== -->
+    <section id="about" class="py-24 px-6 md:px-16 border-b-4 border-crimson bg-ink-slate text-white relative">
+      <div class="max-w-4xl mx-auto manhwa-panel-dark p-8 md:p-12 rounded border-4 border-crimson shadow-crimson-lg bg-ink-deep">
+        <span class="font-fira text-xs font-bold text-crimson uppercase tracking-widest block mb-2">
+          // SECTION F // IDENTITY & PHILOSOPHY
         </span>
-        <h2 class="font-anton text-3xl sm:text-5xl text-navy uppercase tracking-tight mb-6">
+        <h2 class="font-anton text-3xl sm:text-5xl text-white uppercase tracking-tight mb-6">
           "FIRST MAKE IT WORK, THEN MAKE IT RIGHT, THEN MAKE IT FAST."
         </h2>
 
-        <div class="space-y-4 font-sans text-neutral-700 leading-relaxed text-sm md:text-base">
+        <div class="space-y-4 font-sans text-neutral-300 leading-relaxed text-sm md:text-base">
           <p>
             I am a builder at heart. Whether calculating the load transfer of an inverted-T ledge beam under Eurocode standards, writing WebGL fragment shaders for dynamic cross-hatching, or engineering offline educational tools for students across Ethiopia — I believe in craftsmanship and substance.
           </p>
@@ -587,34 +627,34 @@
           </p>
         </div>
 
-        <div class="mt-8 pt-6 border-t-2 border-navy/20 grid grid-cols-2 sm:grid-cols-4 gap-4 font-fira text-xs">
+        <div class="mt-8 pt-6 border-t-2 border-crimson/30 grid grid-cols-2 sm:grid-cols-4 gap-4 font-fira text-xs">
           <div>
-            <span class="text-neutral-500 font-bold block">LOCATION</span>
-            <span class="font-bold text-navy">Addis Ababa, ET</span>
+            <span class="text-neutral-400 font-bold block">LOCATION</span>
+            <span class="font-bold text-white">Addis Ababa, ET</span>
           </div>
           <div>
-            <span class="text-neutral-500 font-bold block">AVAILABILITY</span>
-            <span class="font-bold text-green-700">Open for Builds</span>
+            <span class="text-neutral-400 font-bold block">AVAILABILITY</span>
+            <span class="font-bold text-green-400">Open for Builds</span>
           </div>
           <div>
-            <span class="text-neutral-500 font-bold block">DAILY DRIVERS</span>
-            <span class="font-bold text-navy">VS Code, Git, Revit</span>
+            <span class="text-neutral-400 font-bold block">DAILY DRIVERS</span>
+            <span class="font-bold text-sky">VS Code, Git, Revit</span>
           </div>
           <div>
-            <span class="text-neutral-500 font-bold block">CREED</span>
-            <span class="font-bold text-azure">Zero Bloat</span>
+            <span class="text-neutral-400 font-bold block">CREED</span>
+            <span class="font-bold text-crimson">Zero Bloat</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ==================== SECTION H — CONTACT / CONTRACT ==================== -->
-    <section id="contact" class="py-24 px-6 md:px-16 bg-navy text-white relative">
+    <!-- ==================== SECTION G — CONTACT / CONTRACT ==================== -->
+    <section id="contact" class="py-24 px-6 md:px-16 bg-ink-deep text-white relative">
       <div class="max-w-3xl mx-auto text-center space-y-6">
-        <span class="font-fira text-xs font-bold text-sky uppercase tracking-widest block">
-          // SECTION H // THE CONTRACT
+        <span class="font-fira text-xs font-bold text-crimson uppercase tracking-widest block">
+          // SECTION G // THE CONTRACT
         </span>
-        <h2 class="font-anton text-4xl sm:text-7xl uppercase tracking-tight text-white">
+        <h2 class="font-anton text-4xl sm:text-7xl uppercase tracking-tight text-white drop-shadow-[0_4px_20px_rgba(255,34,51,0.5)]">
           LET'S BUILD SOMETHING EXTRAORDINARY.
         </h2>
         <p class="font-sans text-neutral-300 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
@@ -622,9 +662,9 @@
         </p>
 
         <div class="pt-6 max-w-md mx-auto">
-          <div class="flex items-center gap-2 p-2 bg-cloud text-navy rounded border-2 border-white shadow-brutal">
-            <span id="contact-email-text" class="flex-1 font-fira text-xs sm:text-sm font-bold text-left px-3">dagiyosi5321@gmail.com</span>
-            <button id="btn-copy-email" class="manga-btn px-4 py-2 bg-azure text-white font-fira text-xs font-bold uppercase rounded border border-navy hover:bg-navy transition">
+          <div class="flex items-center gap-2 p-2 bg-ink-slate text-white rounded border-2 border-crimson shadow-crimson">
+            <span id="contact-email-text" class="flex-1 font-fira text-xs sm:text-sm font-bold text-left px-3 text-sky">dagiyosi5321@gmail.com</span>
+            <button id="btn-copy-email" class="manga-btn manga-btn-crimson px-4 py-2 font-fira text-xs font-bold uppercase rounded">
               COPY EMAIL
             </button>
           </div>
@@ -635,22 +675,22 @@
             <span>GITHUB: @dagiyosi-pixel</span>
             <span>↗</span>
           </a>
-          <span class="text-neutral-500">•</span>
+          <span class="text-neutral-600">•</span>
           <a href="mailto:dagiyosi5321@gmail.com" class="text-sky hover:text-white transition font-bold flex items-center gap-1">
             <span>DIRECT INBOX</span>
             <span>✉</span>
           </a>
-          <span class="text-neutral-500">•</span>
+          <span class="text-neutral-600">•</span>
           <span class="text-neutral-400">Telegram: @dagiyosi</span>
         </div>
       </div>
 
-      <footer class="mt-20 pt-8 border-t border-white/20 flex flex-col sm:flex-row items-center justify-between gap-4 font-fira text-[11px] text-neutral-400">
+      <footer class="mt-20 pt-8 border-t border-crimson/30 flex flex-col sm:flex-row items-center justify-between gap-4 font-fira text-[11px] text-neutral-400 max-w-6xl mx-auto">
         <div>
           THE BLUEPRINT UNIVERSE // CONCEIVED & ENGINEERED BY <strong class="text-white">DAGMAWI YOSEF (0xDagi)</strong>
         </div>
         <div>
-          © 2026 ALL RIGHTS RESERVED • LIGHT-BLUE VISUAL IDENTITY
+          © 2026 ALL RIGHTS RESERVED • MANGA ARCHITECTURE VISUAL IDENTITY
         </div>
       </footer>
     </section>
@@ -658,27 +698,28 @@
   </main>
 
   <!-- ==================== REUSABLE 7-CHAPTER MANHWA CASE STUDY MODAL ==================== -->
-  <div id="case-study-modal" class="fixed inset-0 z-50 bg-navy/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 hidden">
-    <div class="bg-cloud border-3 border-navy rounded-lg shadow-brutal-lg max-w-5xl w-full max-h-[92vh] flex flex-col overflow-hidden relative">
-      <div class="bg-white border-b-2 border-navy px-6 py-3 flex items-center justify-between">
-        <span class="font-fira text-xs font-bold text-navy flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-azure inline-block animate-ping"></span>
-          <span>MANHWA ARCHITECTURAL CASE STUDY</span>
+  <div id="case-study-modal" class="fixed inset-0 z-50 bg-ink-deep/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 hidden">
+    <div class="bg-cloud border-4 border-crimson rounded-lg shadow-crimson-lg max-w-5xl w-full max-h-[92vh] flex flex-col overflow-hidden relative">
+      <div class="bg-ink-deep border-b-2 border-crimson px-6 py-3 flex items-center justify-between">
+        <span class="font-fira text-xs font-bold text-white flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-crimson inline-block animate-ping"></span>
+          <span>MANHWA ARCHITECTURAL CASE STUDY // 7 CHAPTERS</span>
         </span>
-        <button id="btn-close-case-study" class="manga-btn px-3 py-1 bg-ice text-navy font-fira text-xs font-bold uppercase rounded border border-navy hover:bg-navy hover:text-white transition">
+        <button id="btn-close-case-study" class="manga-btn px-3 py-1 bg-crimson text-white font-fira text-xs font-bold uppercase rounded border border-white hover:bg-white hover:text-ink-deep transition">
           ESC / CLOSE [✕]
         </button>
       </div>
 
-      <div id="case-study-content" class="flex-1 overflow-y-auto p-6 sm:p-10"></div>
+      <div id="case-study-content" class="flex-1 overflow-y-auto p-6 sm:p-10 text-ink-slate"></div>
     </div>
   </div>
 
   <!-- Toast Notification -->
-  <div id="blueprint-toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-navy text-white font-fira text-xs font-bold uppercase border-2 border-white rounded shadow-brutal transition-all duration-300 opacity-0 pointer-events-none">
+  <div id="blueprint-toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-crimson text-white font-fira text-xs font-bold uppercase border-2 border-white rounded shadow-brutal transition-all duration-300 opacity-0 pointer-events-none">
     Email copied to clipboard!
   </div>
 
-  <!-- Main Entry Script -->
+  <!-- Main Entry Script for Vite -->
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>

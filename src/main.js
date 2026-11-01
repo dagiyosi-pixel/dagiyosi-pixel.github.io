@@ -64,20 +64,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnArch?.addEventListener('click', () => {
       shaderGallery.setTransition(0.0);
-      btnArch.classList.add('bg-navy', 'text-white');
-      btnArch.classList.remove('bg-ice', 'text-navy');
-      btnManga.classList.add('bg-ice', 'text-navy');
-      btnManga.classList.remove('bg-navy', 'text-white');
+      btnArch.classList.add('bg-crimson', 'text-white', 'border-white');
+      btnArch.classList.remove('bg-ink-slate', 'text-cloud', 'border-azure');
+      btnManga.classList.add('bg-ink-slate', 'text-cloud', 'border-azure');
+      btnManga.classList.remove('bg-crimson', 'text-white', 'border-white');
       sound.playBlueprintUnfold();
+      showToast('Shader Active: Architectural Perspective');
     });
 
     btnManga?.addEventListener('click', () => {
       shaderGallery.setTransition(1.0);
-      btnManga.classList.add('bg-navy', 'text-white');
-      btnManga.classList.remove('bg-ice', 'text-navy');
-      btnArch.classList.add('bg-ice', 'text-navy');
-      btnArch.classList.remove('bg-navy', 'text-white');
+      btnManga.classList.add('bg-crimson', 'text-white', 'border-white');
+      btnManga.classList.remove('bg-ink-slate', 'text-cloud', 'border-azure');
+      btnArch.classList.add('bg-ink-slate', 'text-cloud', 'border-azure');
+      btnArch.classList.remove('bg-crimson', 'text-white', 'border-white');
       sound.playStructuralClack();
+      showToast('Shader Active: Manga Awakening');
     });
   }
 
@@ -107,14 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 8. Hero 3D Assembly Controls
   const btnExplode = document.getElementById('btn-hero-toggle-exploded');
-  const tagExplode = document.getElementById('hero-exploded-tag');
   const btnReset = document.getElementById('btn-hero-reset-cam');
   const btnCycleMode = document.getElementById('btn-hero-cycle-mode');
 
   btnExplode?.addEventListener('click', () => {
     if (blueprintWorld) {
       const isExp = blueprintWorld.toggleExploded();
-      if (tagExplode) tagExplode.classList.toggle('hidden', !isExp);
       btnExplode.innerHTML = isExp ? '<span>🔄 COLLAPSE 3D ASSEMBLY</span>' : '<span>💥 EXPLODE 3D ASSEMBLY</span>';
       showToast(isExp ? 'Exploded Assembly: Precast components separated' : 'Assembly Restored: Structural joints locked');
     }
@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnReset?.addEventListener('click', () => {
     if (blueprintWorld) {
       blueprintWorld.resetCamera();
-      if (tagExplode) tagExplode.classList.add('hidden');
       if (btnExplode) btnExplode.innerHTML = '<span>💥 EXPLODE 3D ASSEMBLY</span>';
       showToast('Camera orientation reset');
     }
@@ -132,8 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
   btnCycleMode?.addEventListener('click', () => {
     if (blueprintWorld) {
       const mode = blueprintWorld.cycleVisualMode();
-      btnCycleMode.textContent = `MODE: ${mode.toUpperCase()}`;
-      showToast(`Visual Style: ${mode.toUpperCase()}`);
+      btnCycleMode.textContent = `MODE: ${mode.toUpperCase()} MANGA`;
+      showToast(`Visual Style: ${mode.toUpperCase()} MODE`);
     }
   });
 
@@ -142,10 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const layer = btn.getAttribute('data-layer');
       if (blueprintWorld && layer) {
         const visible = blueprintWorld.toggleLayer(layer);
-        btn.classList.toggle('bg-navy', visible);
+        btn.classList.toggle('bg-crimson', visible);
         btn.classList.toggle('text-white', visible);
-        btn.classList.toggle('bg-ice', !visible);
-        btn.classList.toggle('text-navy', !visible);
+        btn.classList.toggle('border-crimson', visible);
+        btn.classList.toggle('bg-ink-slate', !visible);
+        btn.classList.toggle('text-cloud', !visible);
+        btn.classList.toggle('border-azure', !visible);
       }
     });
   });
@@ -172,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   requestAnimationFrame(renderCursor);
 
-  document.querySelectorAll('a, button, input, .manhwa-panel').forEach(el => {
+  document.querySelectorAll('a, button, input, .manhwa-panel, .comic-shard').forEach(el => {
     el.addEventListener('mouseenter', () => {
       cursor?.classList.add('cursor-hover');
       sound.playPencilScratch();
@@ -222,6 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log(
     '%cTHE BLUEPRINT UNIVERSE // ARCHITECTURAL MANHWA ENGINE LOADED\nWebGL Shaders, 3D Assembly, Ink Trail & Motion Active',
-    'color: #399DD6; font-weight: bold; font-size: 14px; background: #173C5B; padding: 6px 12px; border: 2px solid #399DD6; border-radius: 4px;'
+    'color: #FF2233; font-weight: bold; font-size: 14px; background: #09090B; padding: 6px 12px; border: 2px solid #FF2233; border-radius: 4px;'
   );
 });

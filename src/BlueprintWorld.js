@@ -1,9 +1,10 @@
 // ==========================================================================
 // BLUEPRINT WORLD // THE ARCHITECTURAL MANHWA UNIVERSE
-// Fullscreen & Section 3D Architectural Engine with Red Perspective Rays & Exploded Assembly
+// Fullscreen 3D Architectural Engine with Red Perspective Rays, Cel-Shaded Hand & Exploded Assembly
 // ==========================================================================
 
 import * as THREE from 'three';
+import { MangaHatchShader } from './shaders.js';
 import { sound } from './audio.js';
 
 export class BlueprintWorld {
@@ -22,34 +23,40 @@ export class BlueprintWorld {
     this.groupStairs = null;
     this.groupPerspectiveRays = null;
     this.groupDomeVault = null;
-    this.groupAnnotations = null;
+    this.groupMangaHand = null;
+    this.groupRelics = null;
+    this.groupParticles = null;
 
     // Exploded View State
     this.explodedProgress = 0.0;
     this.targetExploded = 0.0;
     this.isExploded = false;
 
-    // Visual Mode: 'blueprint', 'drafting', or 'crimson'
-    this.visualMode = 'blueprint';
+    // Visual Mode: 'crimson' (default manga), 'blueprint', or 'wireframe'
+    this.visualMode = 'crimson';
 
     // Layer Controls
     this.layers = {
-      grid: true,
       columns: true,
       beams: true,
       slabs: true,
       stairs: true,
       perspectiveRays: true,
       dome: true,
-      annotations: true,
+      mangaHand: true,
       wireframe: false
     };
 
-    // Orbit & Inertia
+    // Mouse & Inertia
+    this.mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
     this.isDragging = false;
     this.previousMousePosition = { x: 0, y: 0 };
-    this.targetRotation = { x: 0.35, y: -0.6 };
-    this.rotationSpeed = { x: 0, y: 0.0018 };
+    this.targetRotation = { x: 0.28, y: -0.45 };
+    this.rotationSpeed = { x: 0, y: 0.0012 };
+
+    // Scroll tracking
+    this.scrollY = 0;
+    this.targetScrollProgress = 0;
 
     this.clock = new THREE.Clock();
 
@@ -58,13 +65,14 @@ export class BlueprintWorld {
 
   init() {
     this.scene = new THREE.Scene();
+    this.scene.fog = new THREE.FogExp2(0x09090b, 0.028);
 
     const width = this.canvas.clientWidth || window.innerWidth;
     const height = this.canvas.clientHeight || window.innerHeight;
 
-    this.camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 120);
-    this.camera.position.set(12, 9, 14);
-    this.camera.lookAt(0, 2.0, 0);
+    this.camera = new THREE.PerspectiveCamera(44, width / height, 0.1, 150);
+    this.camera.position.set(9.5, 7.5, 13.5);
+    this.camera.lookAt(0, 2.2, 0);
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -75,23 +83,29 @@ export class BlueprintWorld {
     this.resize();
 
     // Lighting
-    const amb = new THREE.AmbientLight(0xffffff, 0.65);
+    const amb = new THREE.AmbientLight(0xffffff, 0.55);
     this.scene.add(amb);
 
-    const dir1 = new THREE.DirectionalLight(0xffffff, 1.2);
-    dir1.position.set(10, 16, 12);
+    const dir1 = new THREE.DirectionalLight(0xffffff, 1.4);
+    dir1.position.set(12, 18, 14);
     this.scene.add(dir1);
 
-    this.accentLight = new THREE.PointLight(0x399dd6, 2.5, 35);
-    this.accentLight.position.set(-6, 6, -4);
+    this.accentLight = new THREE.PointLight(0xff2233, 3.2, 38);
+    this.accentLight.position.set(-6, 5, 2);
     this.scene.add(this.accentLight);
 
-    // Build the Grand Architectural Assembly
+    this.cyanLight = new THREE.PointLight(0x399dd6, 2.0, 30);
+    this.cyanLight.position.set(7, 3, -4);
+    this.scene.add(this.cyanLight);
+
+    // Build the World
     this.buildWorld();
 
     window.addEventListener('resize', () => this.resize());
-    this.setupInteractions();
+    window.addEventListener('mousemove', (e) => this.onMouseMove(e));
+    window.addEventListener('scroll', () => this.onScroll());
 
+    this.setupInteractions();
     this.animate();
   }
 
@@ -104,6 +118,26 @@ export class BlueprintWorld {
 
     this.renderer.setSize(width, height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  }
+
+  onMouseMove(e) {
+    const normX = (e.clientX / window.innerWidth) * 2 - 1;
+    const normY = -(e.clientY / window.innerHeight) * 2 + 1;
+
+    this.mouse.targetX = normX;
+    this.mouse.targetY = normY;
+
+    if (!this.isDragging) {
+      this.targetRotation.y = -0.45 + normX * 0.28;
+      this.targetRotation.x = 0.28 - normY * 0.18;
+    }
+  }
+
+  onScroll() {
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (maxScroll > 0) {
+      this.targetScrollProgress = Math.min(1.0, Math.max(0.0, window.scrollY / (window.innerHeight * 1.5)));
+    }
   }
 
   setupInteractions() {
@@ -129,49 +163,40 @@ export class BlueprintWorld {
 
       this.previousMousePosition = { x: e.clientX, y: e.clientY };
     });
+  }
 
-    // Touch controls
-    c.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 1) {
-        this.isDragging = true;
-        this.previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      }
-    }, { passive: true });
-
-    window.addEventListener('touchend', () => {
-      this.isDragging = false;
+  createMangaMaterial(baseColorHex, rimColorHex = 0xff2233) {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uLightDir: { value: new THREE.Vector3(3, 5, 4).normalize() },
+        uColor: { value: new THREE.Color(baseColorHex) },
+        uRimColor: { value: new THREE.Color(rimColorHex) },
+        uHatchDensity: { value: 28.0 },
+        uTime: { value: 0 }
+      },
+      vertexShader: MangaHatchShader.vertexShader,
+      fragmentShader: MangaHatchShader.fragmentShader
     });
-
-    c.addEventListener('touchmove', (e) => {
-      if (!this.isDragging || e.touches.length !== 1) return;
-      const dx = e.touches[0].clientX - this.previousMousePosition.x;
-      const dy = e.touches[0].clientY - this.previousMousePosition.y;
-
-      this.targetRotation.y += dx * 0.009;
-      this.targetRotation.x += dy * 0.009;
-      this.targetRotation.x = Math.max(-0.25, Math.min(1.2, this.targetRotation.x));
-
-      this.previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    }, { passive: true });
   }
 
   buildWorld() {
     this.rootAssembly = new THREE.Group();
     this.scene.add(this.rootAssembly);
 
-    // Architectural Materials
-    this.matColumn = new THREE.MeshStandardMaterial({ color: 0xe5f4ff, roughness: 0.25 });
+    // Architectural & Comic Materials
+    this.matColumn = new THREE.MeshStandardMaterial({ color: 0xf4f4f5, roughness: 0.25 });
     this.matCorbel = new THREE.MeshStandardMaterial({ color: 0x8ccdf2, roughness: 0.35 });
-    this.matBeam = new THREE.MeshStandardMaterial({ color: 0x399dd6, roughness: 0.3, metalness: 0.2 });
-    this.matSlab = new THREE.MeshStandardMaterial({ color: 0xf7fbff, roughness: 0.2 });
-    this.matStair = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2, metalness: 0.1 });
-    this.matRedVector = new THREE.LineBasicMaterial({ color: 0xff2233, transparent: true, opacity: 0.85, linewidth: 2 });
-    this.matCyanVector = new THREE.LineBasicMaterial({ color: 0x399dd6, transparent: true, opacity: 0.5 });
+    this.matBeam = new THREE.MeshStandardMaterial({ color: 0x173c5b, roughness: 0.3, metalness: 0.2 });
+    this.matSlab = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2 });
+    this.matStair = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.15, metalness: 0.1 });
+    this.matRedVector = new THREE.LineBasicMaterial({ color: 0xff2233, transparent: true, opacity: 0.9, linewidth: 2 });
+    this.matCyanVector = new THREE.LineBasicMaterial({ color: 0x399dd6, transparent: true, opacity: 0.65 });
     this.matGold = new THREE.MeshStandardMaterial({ color: 0xe5a93c, roughness: 0.3, metalness: 0.6 });
 
-    // 1. Blueprint Grid & Ground
+    // 1. Grid & Ground
     this.groupGround = new THREE.Group();
-    const grid = new THREE.GridHelper(18, 36, 0x399dd6, 0xc9e9fc);
+    const grid = new THREE.GridHelper(24, 48, 0xff2233, 0x173c5b);
+    grid.position.y = -0.01;
     this.groupGround.add(grid);
 
     // Column Footings
@@ -190,8 +215,8 @@ export class BlueprintWorld {
 
     // 2. Precast Columns with Structural Corbels
     this.groupColumns = new THREE.Group();
-    const colGeo = new THREE.BoxGeometry(0.6, 5.4, 0.6);
-    const corbelGeo = new THREE.BoxGeometry(0.9, 0.4, 0.6);
+    const colGeo = new THREE.BoxGeometry(0.65, 5.6, 0.65);
+    const corbelGeo = new THREE.BoxGeometry(0.95, 0.45, 0.65);
 
     colCoords.forEach(c => {
       const colGroup = new THREE.Group();
@@ -217,7 +242,7 @@ export class BlueprintWorld {
     this.beamsL1 = new THREE.Group();
     this.beamsL2 = new THREE.Group();
 
-    const beamGeo = new THREE.BoxGeometry(8.6, 0.6, 0.7);
+    const beamGeo = new THREE.BoxGeometry(8.8, 0.65, 0.75);
 
     const b1_A = new THREE.Mesh(beamGeo, this.matBeam);
     b1_A.position.set(0, 2.5, -3);
@@ -245,77 +270,233 @@ export class BlueprintWorld {
     this.slabsL2 = new THREE.Group();
 
     for (let i = -3; i <= 3; i++) {
-      const slabGeo = new THREE.BoxGeometry(1.15, 0.3, 5.8);
-      
+      const slabGeo = new THREE.BoxGeometry(1.18, 0.32, 5.85);
+
       const s1 = new THREE.Mesh(slabGeo, this.matSlab);
-      s1.position.set(i * 1.22, 2.8, 0);
+      s1.position.set(i * 1.24, 2.8, 0);
       this.slabsL1.add(s1);
 
       const s2 = new THREE.Mesh(slabGeo, this.matSlab);
-      s2.position.set(i * 1.22, 5.3, 0);
+      s2.position.set(i * 1.24, 5.3, 0);
       this.slabsL2.add(s2);
     }
     this.groupSlabs.add(this.slabsL1);
     this.groupSlabs.add(this.slabsL2);
     this.rootAssembly.add(this.groupSlabs);
 
-    // 5. Grand Architectural Staircase (Inspired by uploaded image 2!)
+    // 5. Grand Architectural Staircase (Homage to uploaded architectural-perspective.jpg!)
     this.groupStairs = new THREE.Group();
-    const stepCount = 14;
-    const stepWidth = 2.4;
-    const stepDepth = 0.35;
-    const stepHeight = 0.18;
+    const stepCount = 16;
+    const stepWidth = 3.2;
+    const stepDepth = 0.38;
+    const stepHeight = 0.2;
 
     for (let s = 0; s < stepCount; s++) {
       const stepGeo = new THREE.BoxGeometry(stepWidth, stepHeight, stepDepth);
       const step = new THREE.Mesh(stepGeo, this.matStair);
       step.position.set(0, (s + 1) * stepHeight, (stepCount / 2 - s) * stepDepth);
       this.groupStairs.add(step);
+
+      // Edge inking line for each step
+      const stepEdges = new THREE.EdgesGeometry(stepGeo);
+      const stepLine = new THREE.LineSegments(stepEdges, this.matRedVector);
+      stepLine.position.copy(step.position);
+      this.groupStairs.add(stepLine);
     }
     this.rootAssembly.add(this.groupStairs);
 
-    // 6. Red Perspective Vanishing Lines (Direct homage to uploaded artwork!)
+    // 6. Radiant Red Vanishing Lines (Direct tribute to uploaded artwork!)
     this.groupPerspectiveRays = new THREE.Group();
-    const focalPoint = new THREE.Vector3(0, 8.5, -6);
+    const focalPoint = new THREE.Vector3(0, 9.2, -6.5);
 
-    // Draw radiant red construction lines to staircase steps and columns
-    for (let r = -5; r <= 5; r++) {
-      const targetPoint = new THREE.Vector3(r * 1.8, 0, 5);
+    // Draw radiant red rays to perimeter points
+    for (let r = -7; r <= 7; r++) {
+      const targetPoint = new THREE.Vector3(r * 2.2, -0.2, 7.5);
       const rayGeo = new THREE.BufferGeometry().setFromPoints([focalPoint, targetPoint]);
       const rayLine = new THREE.Line(rayGeo, this.matRedVector);
       this.groupPerspectiveRays.add(rayLine);
     }
+    // Lateral rays
+    for (let h = 0; h <= 6; h += 1.5) {
+      const pLeft = new THREE.Vector3(-10, h, 2);
+      const pRight = new THREE.Vector3(10, h, 2);
+      const lineLeft = new THREE.Line(new THREE.BufferGeometry().setFromPoints([focalPoint, pLeft]), this.matCyanVector);
+      const lineRight = new THREE.Line(new THREE.BufferGeometry().setFromPoints([focalPoint, pRight]), this.matCyanVector);
+      this.groupPerspectiveRays.add(lineLeft);
+      this.groupPerspectiveRays.add(lineRight);
+    }
     this.rootAssembly.add(this.groupPerspectiveRays);
 
-    // 7. Dome Vault Radial Wireframe
+    // 7. Celestial Dome Wireframe
     this.groupDomeVault = new THREE.Group();
-    const domeGeo = new THREE.SphereGeometry(6.5, 18, 12, 0, Math.PI * 2, 0, Math.PI * 0.45);
+    const domeGeo = new THREE.SphereGeometry(7.2, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.48);
     const domeWire = new THREE.WireframeGeometry(domeGeo);
     const domeMesh = new THREE.LineSegments(domeWire, this.matRedVector);
-    domeMesh.position.set(0, 5.5, -2);
+    domeMesh.position.set(0, 5.8, -2.5);
     this.groupDomeVault.add(domeMesh);
     this.rootAssembly.add(this.groupDomeVault);
 
-    // 8. Dimension Callouts
-    this.groupAnnotations = new THREE.Group();
-    this.createDimCallout(new THREE.Vector3(-4.5, 0, 3.6), new THREE.Vector3(4.5, 0, 3.6), "BAY: 9000 mm");
-    this.createDimCallout(new THREE.Vector3(-4.8, 0, -3.2), new THREE.Vector3(-4.8, 5.4, -3.2), "HEIGHT: 5400 mm");
-    this.rootAssembly.add(this.groupAnnotations);
+    // 8. Manga Cel-Shaded Hand & Arm (From mangaScene.js)
+    this.createMangaArmAndHand();
+
+    // 9. Floating Relics
+    this.createFloatingRelics();
+
+    // 10. Ink & Crimson Particle System
+    this.createInkParticles();
   }
 
-  createDimCallout(p1, p2, text) {
-    const geo = new THREE.BufferGeometry().setFromPoints([p1, p2]);
-    const line = new THREE.Line(geo, new THREE.LineDashedMaterial({ color: 0x399dd6, dashSize: 0.4, gapSize: 0.2 }));
-    line.computeLineDistances();
-    this.groupAnnotations.add(line);
+  createMangaArmAndHand() {
+    this.groupMangaHand = new THREE.Group();
 
-    const tick1 = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.18, 0.18), this.matGold);
-    tick1.position.copy(p1);
-    this.groupAnnotations.add(tick1);
+    const skinMat = this.createMangaMaterial(0xf4f4f5, 0xff2233);
+    const cuffMat = this.createMangaMaterial(0x09090b, 0xff2233);
 
-    const tick2 = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.18, 0.18), this.matGold);
-    tick2.position.copy(p2);
-    this.groupAnnotations.add(tick2);
+    // Forearm reaching forward
+    const forearmGeo = new THREE.CylinderGeometry(0.48, 0.62, 3.2, 16);
+    forearmGeo.rotateZ(Math.PI / 14);
+    const forearm = new THREE.Mesh(forearmGeo, skinMat);
+    forearm.position.set(0.6, -1.8, 0);
+    this.groupMangaHand.add(forearm);
+
+    // Manga Wrist Cuff / Ring
+    const cuffGeo = new THREE.TorusGeometry(0.68, 0.12, 12, 32);
+    cuffGeo.rotateX(Math.PI / 2.3);
+    const cuff = new THREE.Mesh(cuffGeo, cuffMat);
+    cuff.position.set(0.25, -0.4, 0.1);
+    this.groupMangaHand.add(cuff);
+
+    // Palm
+    const palmGeo = new THREE.BoxGeometry(1.0, 1.2, 0.35);
+    const palm = new THREE.Mesh(palmGeo, skinMat);
+    palm.position.set(0, 0.4, 0);
+    this.groupMangaHand.add(palm);
+
+    // 4 Articulated Fingers
+    const fingerPositions = [
+      { x: -0.38, y: 1.1, len: 0.8, rotZ: 0.15 },
+      { x: -0.12, y: 1.2, len: 0.95, rotZ: 0.05 },
+      { x: 0.15, y: 1.15, len: 0.9, rotZ: -0.05 },
+      { x: 0.38, y: 1.0, len: 0.75, rotZ: -0.15 }
+    ];
+
+    fingerPositions.forEach(cfg => {
+      const fingerGroup = new THREE.Group();
+      fingerGroup.position.set(cfg.x, 0.9, 0);
+
+      const seg1Geo = new THREE.CylinderGeometry(0.12, 0.14, cfg.len * 0.6, 12);
+      const seg1 = new THREE.Mesh(seg1Geo, skinMat);
+      seg1.position.y = (cfg.len * 0.6) / 2;
+      seg1.rotation.x = -0.4;
+      fingerGroup.add(seg1);
+
+      const seg2Geo = new THREE.CylinderGeometry(0.09, 0.12, cfg.len * 0.5, 12);
+      const seg2 = new THREE.Mesh(seg2Geo, skinMat);
+      seg2.position.set(0, cfg.len * 0.55, 0.2);
+      seg2.rotation.x = -0.65;
+      fingerGroup.add(seg2);
+
+      fingerGroup.rotation.z = cfg.rotZ;
+      this.groupMangaHand.add(fingerGroup);
+    });
+
+    // Thumb
+    const thumbGroup = new THREE.Group();
+    thumbGroup.position.set(-0.55, 0.2, 0.1);
+    const thumbGeo = new THREE.CylinderGeometry(0.13, 0.15, 0.7, 12);
+    const thumb = new THREE.Mesh(thumbGeo, skinMat);
+    thumb.position.y = 0.35;
+    thumb.rotation.z = 0.6;
+    thumb.rotation.x = -0.3;
+    thumbGroup.add(thumb);
+    this.groupMangaHand.add(thumbGroup);
+
+    // Position Hand in Perspective View (bottom right)
+    this.groupMangaHand.position.set(4.2, -0.6, 5.0);
+    this.groupMangaHand.rotation.set(0.18, -0.55, -0.12);
+    this.groupMangaHand.scale.set(1.4, 1.4, 1.4);
+    this.rootAssembly.add(this.groupMangaHand);
+  }
+
+  createFloatingRelics() {
+    this.groupRelics = new THREE.Group();
+
+    // 1. Tech Ribbed Cylinder
+    const bottleMat = this.createMangaMaterial(0xff2233, 0xffffff);
+    const bottleGeo = new THREE.CylinderGeometry(0.35, 0.35, 1.8, 24);
+    this.bottle = new THREE.Mesh(bottleGeo, bottleMat);
+    this.bottle.position.set(-5.2, 2.2, 1.0);
+    this.groupRelics.add(this.bottle);
+
+    for (let i = -3; i <= 3; i++) {
+      const ringGeo = new THREE.TorusGeometry(0.38, 0.03, 8, 24);
+      const ring = new THREE.Mesh(ringGeo, this.createMangaMaterial(0x09090b, 0xff2233));
+      ring.rotation.x = Math.PI / 2;
+      ring.position.set(-5.2, 2.2 + i * 0.2, 1.0);
+      this.groupRelics.add(ring);
+    }
+
+    // 2. Precast Inverted-T Beam Floating Relic
+    const beamRelicMat = this.createMangaMaterial(0xf4f4f5, 0xff2233);
+    const beamRelicGeo = new THREE.BoxGeometry(2.4, 0.45, 0.55);
+    this.beamRelic = new THREE.Mesh(beamRelicGeo, beamRelicMat);
+    this.beamRelic.position.set(-3.5, -1.2, 3.5);
+    this.beamRelic.rotation.set(0.4, 0.6, 0.2);
+    this.groupRelics.add(this.beamRelic);
+
+    // 3. Geodesic Tech Dodecahedron
+    const polyMat = this.createMangaMaterial(0x18181b, 0xff2233);
+    const polyGeo = new THREE.DodecahedronGeometry(0.75, 0);
+    this.poly = new THREE.Mesh(polyGeo, polyMat);
+    this.poly.position.set(4.5, 4.2, -1.0);
+    this.groupRelics.add(this.poly);
+
+    this.rootAssembly.add(this.groupRelics);
+  }
+
+  createInkParticles() {
+    const count = 1800;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(count * 3);
+    const velocities = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+
+    const crimson = new THREE.Color(0xff2233);
+    const cyan = new THREE.Color(0x399dd6);
+    const white = new THREE.Color(0xffffff);
+
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 28;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 20 + 4;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 22;
+
+      velocities[i * 3] = (Math.random() - 0.5) * 0.015;
+      velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.015;
+      velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.015;
+
+      const r = Math.random();
+      let col = white;
+      if (r > 0.65) col = crimson;
+      else if (r > 0.4) col = cyan;
+
+      colors[i * 3] = col.r;
+      colors[i * 3 + 1] = col.g;
+      colors[i * 3 + 2] = col.b;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    const pMat = new THREE.PointsMaterial({
+      size: 0.14,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.85
+    });
+
+    this.particles = new THREE.Points(geometry, pMat);
+    this.particleVelocities = velocities;
+    this.scene.add(this.particles);
   }
 
   toggleExploded() {
@@ -330,14 +511,13 @@ export class BlueprintWorld {
       this.layers[key] = !this.layers[key];
       sound.playCaliperClick();
 
-      if (key === 'grid' && this.groupGround) this.groupGround.visible = this.layers.grid;
       if (key === 'columns' && this.groupColumns) this.groupColumns.visible = this.layers.columns;
       if (key === 'beams' && this.groupBeams) this.groupBeams.visible = this.layers.beams;
       if (key === 'slabs' && this.groupSlabs) this.groupSlabs.visible = this.layers.slabs;
       if (key === 'stairs' && this.groupStairs) this.groupStairs.visible = this.layers.stairs;
       if (key === 'perspectiveRays' && this.groupPerspectiveRays) this.groupPerspectiveRays.visible = this.layers.perspectiveRays;
       if (key === 'dome' && this.groupDomeVault) this.groupDomeVault.visible = this.layers.dome;
-      if (key === 'annotations' && this.groupAnnotations) this.groupAnnotations.visible = this.layers.annotations;
+      if (key === 'mangaHand' && this.groupMangaHand) this.groupMangaHand.visible = this.layers.mangaHand;
       if (key === 'wireframe') this.setWireframeMode(this.layers.wireframe);
 
       return this.layers[key];
@@ -348,46 +528,50 @@ export class BlueprintWorld {
   setWireframeMode(enabled) {
     this.layers.wireframe = enabled;
     this.rootAssembly.traverse((child) => {
-      if (child.isMesh) {
-        child.material.wireframe = enabled;
+      if (child.isMesh && child.material) {
+        if (Array.isArray(child.material)) {
+          child.material.forEach(m => m.wireframe = enabled);
+        } else {
+          child.material.wireframe = enabled;
+        }
       }
     });
   }
 
   cycleVisualMode() {
-    const modes = ['blueprint', 'drafting', 'crimson'];
+    const modes = ['crimson', 'blueprint', 'wireframe'];
     const idx = (modes.indexOf(this.visualMode) + 1) % modes.length;
     this.visualMode = modes[idx];
     sound.playPencilScratch();
 
-    if (this.visualMode === 'blueprint') {
-      this.matColumn.color.setHex(0xe5f4ff);
-      this.matBeam.color.setHex(0x399dd6);
-      this.matSlab.color.setHex(0xf7fbff);
-      this.matRedVector.color.setHex(0xff2233);
-      this.accentLight.color.setHex(0x399dd6);
-    } else if (this.visualMode === 'drafting') {
-      this.matColumn.color.setHex(0x173c5b);
-      this.matBeam.color.setHex(0x14212d);
-      this.matSlab.color.setHex(0x8ccdf2);
-      this.matRedVector.color.setHex(0x399dd6);
-      this.accentLight.color.setHex(0x8ccdf2);
-    } else {
-      // Crimson Manga Perspective (Stark Black, White, Red slashes!)
-      this.matColumn.color.setHex(0x14212d);
-      this.matBeam.color.setHex(0xff2233);
+    if (this.visualMode === 'crimson') {
+      this.setWireframeMode(false);
+      this.matColumn.color.setHex(0xf4f4f5);
+      this.matBeam.color.setHex(0x173c5b);
       this.matSlab.color.setHex(0xffffff);
       this.matRedVector.color.setHex(0xff2233);
       this.accentLight.color.setHex(0xff2233);
+    } else if (this.visualMode === 'blueprint') {
+      this.setWireframeMode(false);
+      this.matColumn.color.setHex(0xe5f4ff);
+      this.matBeam.color.setHex(0x399dd6);
+      this.matSlab.color.setHex(0xc9e9fc);
+      this.matRedVector.color.setHex(0x399dd6);
+      this.accentLight.color.setHex(0x399dd6);
+    } else {
+      // Pure Wireframe Overdrive
+      this.setWireframeMode(true);
+      this.matRedVector.color.setHex(0xff2233);
+      this.accentLight.color.setHex(0xffaa00);
     }
     return this.visualMode;
   }
 
   resetCamera() {
-    this.targetRotation.x = 0.35;
-    this.targetRotation.y = -0.6;
-    this.camera.position.set(12, 9, 14);
-    this.camera.lookAt(0, 2.0, 0);
+    this.targetRotation.x = 0.28;
+    this.targetRotation.y = -0.45;
+    this.camera.position.set(9.5, 7.5, 13.5);
+    this.camera.lookAt(0, 2.2, 0);
     this.targetExploded = 0.0;
     this.isExploded = false;
     sound.playBlueprintUnfold();
@@ -402,26 +586,57 @@ export class BlueprintWorld {
       this.targetRotation.y += this.rotationSpeed.y;
     }
 
-    this.rootAssembly.rotation.y += (this.targetRotation.y - this.rootAssembly.rotation.y) * 0.08;
-    this.rootAssembly.rotation.x += (this.targetRotation.x - this.rootAssembly.rotation.x) * 0.08;
+    this.rootAssembly.rotation.y += (this.targetRotation.y - this.rootAssembly.rotation.y) * 0.06;
+    this.rootAssembly.rotation.x += (this.targetRotation.x - this.rootAssembly.rotation.x) * 0.06;
 
-    // Smooth Exploded Separation
+    // Exploded View smooth tween
     this.explodedProgress += (this.targetExploded - this.explodedProgress) * 0.08;
 
     if (this.groupDomeVault) {
-      this.groupDomeVault.position.y = 5.5 + this.explodedProgress * 4.2;
+      this.groupDomeVault.position.y = 5.8 + this.explodedProgress * 5.0;
     }
     if (this.slabsL2) {
-      this.slabsL2.position.y = this.explodedProgress * 2.8;
+      this.slabsL2.position.y = this.explodedProgress * 3.6;
     }
     if (this.beamsL2) {
-      this.beamsL2.position.y = this.explodedProgress * 1.8;
+      this.beamsL2.position.y = this.explodedProgress * 2.2;
     }
     if (this.slabsL1) {
-      this.slabsL1.position.y = this.explodedProgress * 1.0;
+      this.slabsL1.position.y = this.explodedProgress * 1.2;
     }
     if (this.groupStairs) {
-      this.groupStairs.position.z = this.explodedProgress * 1.6;
+      this.groupStairs.position.z = this.explodedProgress * 2.0;
+    }
+
+    // Scroll Camera Flight (Smooth dolly into the stairs)
+    const scrollTargetZ = 13.5 - this.targetScrollProgress * 5.5;
+    const scrollTargetY = 7.5 - this.targetScrollProgress * 2.5;
+    this.camera.position.z += (scrollTargetZ - this.camera.position.z) * 0.05;
+    this.camera.position.y += (scrollTargetY - this.camera.position.y) * 0.05;
+
+    // Relics float
+    if (this.bottle) {
+      this.bottle.rotation.y += 0.012;
+      this.bottle.position.y = 2.2 + Math.sin(this.clock.getElapsedTime() * 1.5) * 0.25;
+    }
+    if (this.beamRelic) {
+      this.beamRelic.rotation.x += 0.008;
+      this.beamRelic.rotation.y += 0.01;
+    }
+    if (this.poly) {
+      this.poly.rotation.y += 0.015;
+      this.poly.rotation.z += 0.01;
+    }
+
+    // Floating particles drift
+    if (this.particles) {
+      const positions = this.particles.geometry.attributes.position.array;
+      for (let i = 0; i < positions.length / 3; i++) {
+        positions[i * 3 + 1] += this.particleVelocities[i * 3 + 1];
+        if (positions[i * 3 + 1] < -4) positions[i * 3 + 1] = 16;
+        if (positions[i * 3 + 1] > 16) positions[i * 3 + 1] = -4;
+      }
+      this.particles.geometry.attributes.position.needsUpdate = true;
     }
 
     this.renderer.render(this.scene, this.camera);
