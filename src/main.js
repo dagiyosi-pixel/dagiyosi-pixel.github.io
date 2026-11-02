@@ -1,6 +1,7 @@
 // ==========================================================================
 // MAIN CONTROLLER — DAGMAWI YOSEF (0xDagi) // THE BLUEPRINT UNIVERSE
 // Orchestrates Lenis Smooth Scroll, 3D WebGL, Drawing CAD Viewer, Shaders & GSAP
+// Inspired by The Greatest Estate Developer & Space-Age Agency Polish
 // ==========================================================================
 
 import gsap from 'gsap';
@@ -34,12 +35,26 @@ document.addEventListener('DOMContentLoaded', () => {
   if (targetSec) {
     setTimeout(() => {
       lenis.scrollTo('#' + targetSec, { immediate: true });
+      ScrollTrigger.refresh();
     }, 150);
   }
 
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
+
+  // Speedlines overlay on velocity scroll
+  const speedlinesOverlay = document.getElementById('speedlines-overlay');
+  lenis.on('scroll', (e) => {
+    const vel = Math.abs(e.velocity || 0);
+    if (speedlinesOverlay) {
+      if (vel > 2.2) {
+        speedlinesOverlay.style.opacity = Math.min(0.35, (vel - 2.2) * 0.08).toString();
+      } else {
+        speedlinesOverlay.style.opacity = '0';
+      }
+    }
+  });
 
   // ====== 2. CUSTOM CURSOR ======
   const cursor = document.getElementById('custom-cursor');
@@ -61,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
   requestAnimationFrame(renderCursor);
 
   function attachCursorHover() {
-    document.querySelectorAll('a, button, input, .project-card, .mini-project, .process-step, .ref-card, .gallery-canvas, .drawing-viewer-frame').forEach(el => {
+    document.querySelectorAll('a, button, input, .project-card, .mini-project, .process-step, .ref-card, .gallery-canvas, .drawing-viewer-frame, .comic-spread-frame').forEach(el => {
       el.removeEventListener('mouseenter', cursorEnter);
       el.removeEventListener('mouseleave', cursorLeave);
       el.addEventListener('mouseenter', cursorEnter);
@@ -95,12 +110,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnExplode = document.getElementById('btn-explode');
   const btnReset = document.getElementById('btn-reset');
   const btnMode = document.getElementById('btn-mode');
+  const btnBurstSpeedlines = document.getElementById('btn-burst-speedlines');
+
+  function triggerSpeedlinesBurst(duration = 400) {
+    if (!speedlinesOverlay) return;
+    speedlinesOverlay.style.opacity = '0.55';
+    sound.playPencilScratch();
+    setTimeout(() => {
+      speedlinesOverlay.style.opacity = '0';
+    }, duration);
+  }
+
+  btnBurstSpeedlines?.addEventListener('click', () => {
+    triggerSpeedlinesBurst(600);
+    showToast('⚡ SKILL TRIGGERED: SPEEDLINES OVERDRIVE');
+  });
 
   btnExplode?.addEventListener('click', () => {
     if (blueprintWorld) {
       const isExp = blueprintWorld.toggleExploded();
       btnExplode.innerHTML = isExp ? '<span>🔄 RESTORE ASSEMBLY</span>' : '<span>💥 EXPLODE 3D ASSEMBLY</span>';
-      showToast(isExp ? 'Assembly Exploded: Components Separated' : 'Assembly Restored: Structural Joints Locked');
+      triggerSpeedlinesBurst(300);
+      showToast(isExp ? 'Assembly Exploded: Slabs & Beams Separated' : 'Assembly Restored: Structural Joints Locked');
     }
   });
 
@@ -115,21 +146,57 @@ document.addEventListener('DOMContentLoaded', () => {
   btnMode?.addEventListener('click', () => {
     if (blueprintWorld) {
       const mode = blueprintWorld.cycleVisualMode();
-      showToast(`Visual Style: ${mode.toUpperCase()} MODE`);
+      triggerSpeedlinesBurst(250);
+      showToast(`Visual Style: ${mode.toUpperCase()} MANGA`);
     }
   });
 
-  // ====== 6. PROJECT VISUALIZERS (Precast Explode, Beam Solver, Atlas, SQ3R) ======
+  // ====== 6. THE GREATEST ESTATE DEVELOPER: RPG SYSTEM WINDOW ======
+  const systemWindow = document.getElementById('estate-system-window');
+  const btnToggleSystem = document.getElementById('btn-toggle-system');
+  const btnMinimizeSystem = document.getElementById('btn-minimize-system');
+  const btnSystemDon = document.getElementById('btn-system-sfx-don');
+  const btnSystemBuff = document.getElementById('btn-system-buff');
+
+  btnToggleSystem?.addEventListener('click', () => {
+    if (systemWindow) {
+      const isHidden = window.getComputedStyle(systemWindow).display === 'none';
+      systemWindow.style.display = isHidden ? 'block' : 'none';
+      sound.playCaliperClick();
+      showToast(isHidden ? '[SYSTEM WINDOW OPENED]' : '[SYSTEM WINDOW CONCEALED]');
+    }
+  });
+
+  btnMinimizeSystem?.addEventListener('click', () => {
+    if (systemWindow) {
+      systemWindow.classList.toggle('minimized');
+      sound.playCaliperClick();
+    }
+  });
+
+  btnSystemDon?.addEventListener('click', () => {
+    sound.playStructuralClack();
+    triggerSpeedlinesBurst(500);
+    showToast('💥 IMPACT: ドーン! (FOUNDATION LOCKED)');
+  });
+
+  btnSystemBuff?.addEventListener('click', () => {
+    sound.playAwakening();
+    triggerSpeedlinesBurst(700);
+    showToast('★ BUFF ACTIVE: +500% LLROYD CONSTRUCT MANA');
+  });
+
+  // ====== 7. PROJECT VISUALIZERS (Precast Explode, Beam Solver, Atlas, SQ3R) ======
   new ProjectVisualizers();
 
-  // ====== 7. ARCHITECTURAL DRAFTING VIEWER (CAD / BIM) ======
+  // ====== 8. ARCHITECTURAL DRAFTING VIEWER (CAD / BIM) ======
   const dvRoot = document.getElementById('drawing-viewer-root');
   if (dvRoot) {
     new DrawingViewer('drawing-viewer-root');
     setTimeout(attachCursorHover, 300);
   }
 
-  // ====== 8. SHADER IMAGE GALLERY (GLSL Wave Displacement) ======
+  // ====== 9. SHADER IMAGE GALLERY (GLSL Wave Displacement) ======
   const shaderCanvas = document.getElementById('shader-gallery-canvas');
   let shaderGallery = null;
   if (shaderCanvas) {
@@ -165,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast('Shader: Manga Awakening');
   });
 
-  // ====== 9. 7-CHAPTER CASE STUDY MODAL ======
+  // ====== 10. 7-CHAPTER CASE STUDY MODAL ======
   const caseStudyModal = new CaseStudyModal();
 
   document.querySelectorAll('.btn-open-case-study').forEach(btn => {
@@ -176,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ====== 10. AUDIO TOGGLE ======
+  // ====== 11. AUDIO TOGGLE ======
   const btnAudio = document.getElementById('btn-audio');
   const audioIcon = document.getElementById('audio-icon');
   const audioText = btnAudio?.querySelector('.audio-text');
@@ -188,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast(isEnabled ? 'Synthesized Drafting Audio: Active' : 'Audio Muted');
   });
 
-  // ====== 11. COPY EMAIL ======
+  // ====== 12. COPY EMAIL ======
   const btnCopy = document.getElementById('btn-copy-email');
 
   btnCopy?.addEventListener('click', () => {
@@ -198,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ====== 12. TOAST SYSTEM ======
+  // ====== 13. TOAST SYSTEM ======
   const toast = document.getElementById('blueprint-toast');
   let toastTimer = null;
 
@@ -210,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toastTimer = setTimeout(() => toast.classList.remove('visible'), 2400);
   }
 
-  // ====== 13. SMOOTH ANCHOR NAVIGATION ======
+  // ====== 14. SMOOTH ANCHOR NAVIGATION ======
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
       const href = anchor.getAttribute('href');
@@ -224,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ====== 14. GSAP ENTRANCE & SCROLL REVEALS ======
+  // ====== 15. GSAP SCROLL REVEALS ======
   gsap.utils.toArray('.project-card').forEach((card, i) => {
     gsap.from(card, {
       scrollTrigger: {
@@ -233,8 +300,8 @@ document.addEventListener('DOMContentLoaded', () => {
         once: true
       },
       opacity: 0,
-      y: 50,
-      duration: 0.9,
+      y: 45,
+      duration: 0.8,
       delay: i * 0.05,
       ease: 'expo.out'
     });
@@ -248,9 +315,9 @@ document.addEventListener('DOMContentLoaded', () => {
         once: true
       },
       opacity: 0,
-      y: 35,
-      duration: 0.7,
-      delay: i * 0.1,
+      y: 30,
+      duration: 0.6,
+      delay: i * 0.08,
       ease: 'expo.out'
     });
   });
@@ -263,39 +330,27 @@ document.addEventListener('DOMContentLoaded', () => {
         once: true
       },
       opacity: 0,
-      y: 35,
-      duration: 0.7,
-      delay: i * 0.08,
+      y: 30,
+      duration: 0.6,
+      delay: i * 0.06,
       ease: 'expo.out'
     });
   });
 
-  gsap.from('.drafting-viewer-container', {
+  gsap.from('.comic-spread-frame', {
     scrollTrigger: {
-      trigger: '.drafting-viewer-container',
+      trigger: '.comic-spread-frame',
       start: 'top 85%',
       once: true
     },
     opacity: 0,
-    y: 40,
-    duration: 0.9,
-    ease: 'expo.out'
-  });
-
-  gsap.from('.gallery-canvas-wrap', {
-    scrollTrigger: {
-      trigger: '.gallery-canvas-wrap',
-      start: 'top 85%',
-      once: true
-    },
-    opacity: 0,
-    y: 40,
+    scale: 0.96,
     duration: 0.9,
     ease: 'expo.out'
   });
 
   console.log(
-    '%cTHE BLUEPRINT UNIVERSE // 0xDagi Portfolio Engine Active\n3D WebGL, Drawing CAD Workstation, GLSL Shaders & Lenis Online',
-    'color: #FF2233; font-weight: bold; font-size: 13px; background: #09090B; padding: 6px 14px; border: 1px solid #FF2233; border-radius: 6px;'
+    '%cTHE BLUEPRINT UNIVERSE // The Greatest Estate Developer Mode Active\nFull-Scale Manga Spread, 3D Inked Assembly & Hologram System Ready',
+    'color: #FF2233; font-weight: bold; font-size: 13px; background: #09090B; padding: 6px 14px; border: 2px solid #FF2233; border-radius: 6px;'
   );
 });

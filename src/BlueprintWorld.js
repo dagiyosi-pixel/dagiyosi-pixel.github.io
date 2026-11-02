@@ -193,6 +193,8 @@ export class BlueprintWorld {
     this.matRedVector = new THREE.LineBasicMaterial({ color: 0xff2233, transparent: true, opacity: 0.9, linewidth: 2 });
     this.matCyanVector = new THREE.LineBasicMaterial({ color: 0x399dd6, transparent: true, opacity: 0.65 });
     this.matGold = new THREE.MeshStandardMaterial({ color: 0xe5a93c, roughness: 0.3, metalness: 0.6 });
+    this.matInkEdge = new THREE.LineBasicMaterial({ color: 0x09090b, linewidth: 2 });
+    this.matCrimsonEdge = new THREE.LineBasicMaterial({ color: 0xff2233, linewidth: 2 });
 
     // 1. Grid & Ground
     this.groupGround = new THREE.Group();
@@ -225,14 +227,22 @@ export class BlueprintWorld {
 
       const colMesh = new THREE.Mesh(colGeo, this.matColumn);
       colGroup.add(colMesh);
+      const colLine = new THREE.LineSegments(new THREE.EdgesGeometry(colGeo), this.matInkEdge);
+      colGroup.add(colLine);
 
       const corbel1 = new THREE.Mesh(corbelGeo, this.matCorbel);
       corbel1.position.set(0, -0.6, 0);
       colGroup.add(corbel1);
+      const corbel1Line = new THREE.LineSegments(new THREE.EdgesGeometry(corbelGeo), this.matCrimsonEdge);
+      corbel1Line.position.copy(corbel1.position);
+      colGroup.add(corbel1Line);
 
       const corbel2 = new THREE.Mesh(corbelGeo, this.matCorbel);
       corbel2.position.set(0, 1.9, 0);
       colGroup.add(corbel2);
+      const corbel2Line = new THREE.LineSegments(new THREE.EdgesGeometry(corbelGeo), this.matCrimsonEdge);
+      corbel2Line.position.copy(corbel2.position);
+      colGroup.add(corbel2Line);
 
       this.groupColumns.add(colGroup);
     });
@@ -245,21 +255,34 @@ export class BlueprintWorld {
 
     const beamGeo = new THREE.BoxGeometry(8.8, 0.65, 0.75);
 
+    const beamEdges = new THREE.EdgesGeometry(beamGeo);
     const b1_A = new THREE.Mesh(beamGeo, this.matBeam);
     b1_A.position.set(0, 2.5, -3);
     this.beamsL1.add(b1_A);
+    const b1_A_Line = new THREE.LineSegments(beamEdges, this.matCrimsonEdge);
+    b1_A_Line.position.copy(b1_A.position);
+    this.beamsL1.add(b1_A_Line);
 
     const b1_B = new THREE.Mesh(beamGeo, this.matBeam);
     b1_B.position.set(0, 2.5, 3);
     this.beamsL1.add(b1_B);
+    const b1_B_Line = new THREE.LineSegments(beamEdges, this.matCrimsonEdge);
+    b1_B_Line.position.copy(b1_B.position);
+    this.beamsL1.add(b1_B_Line);
 
     const b2_A = new THREE.Mesh(beamGeo, this.matBeam);
     b2_A.position.set(0, 5.0, -3);
     this.beamsL2.add(b2_A);
+    const b2_A_Line = new THREE.LineSegments(beamEdges, this.matCrimsonEdge);
+    b2_A_Line.position.copy(b2_A.position);
+    this.beamsL2.add(b2_A_Line);
 
     const b2_B = new THREE.Mesh(beamGeo, this.matBeam);
     b2_B.position.set(0, 5.0, 3);
     this.beamsL2.add(b2_B);
+    const b2_B_Line = new THREE.LineSegments(beamEdges, this.matCrimsonEdge);
+    b2_B_Line.position.copy(b2_B.position);
+    this.beamsL2.add(b2_B_Line);
 
     this.groupBeams.add(this.beamsL1);
     this.groupBeams.add(this.beamsL2);
@@ -273,13 +296,20 @@ export class BlueprintWorld {
     for (let i = -3; i <= 3; i++) {
       const slabGeo = new THREE.BoxGeometry(1.18, 0.32, 5.85);
 
+      const slabEdges = new THREE.EdgesGeometry(slabGeo);
       const s1 = new THREE.Mesh(slabGeo, this.matSlab);
       s1.position.set(i * 1.24, 2.8, 0);
       this.slabsL1.add(s1);
+      const s1Line = new THREE.LineSegments(slabEdges, this.matInkEdge);
+      s1Line.position.copy(s1.position);
+      this.slabsL1.add(s1Line);
 
       const s2 = new THREE.Mesh(slabGeo, this.matSlab);
       s2.position.set(i * 1.24, 5.3, 0);
       this.slabsL2.add(s2);
+      const s2Line = new THREE.LineSegments(slabEdges, this.matInkEdge);
+      s2Line.position.copy(s2.position);
+      this.slabsL2.add(s2Line);
     }
     this.groupSlabs.add(this.slabsL1);
     this.groupSlabs.add(this.slabsL2);
