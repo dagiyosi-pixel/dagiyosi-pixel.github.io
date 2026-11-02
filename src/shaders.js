@@ -1,17 +1,17 @@
 // ==========================================================================
 // GLSL MANGA SHADERS & POST-PROCESSING PIPELINE // 0xDagi
-// Cel-shading, Screen-Space Cross-Hatching, Sobel Ink Outlines & Ink Explosions
+// Hand-Inked Comic Aesthetic: Directional Hatching, Sobel Outlines & Clean Backdrops
 // ==========================================================================
 
 import * as THREE from 'three';
 
-// 1. Mesh Material Cel-Shading & Screen-Space Hatching Shader
+// 1. Mesh Material Cel-Shading & Directional Contour Hatching Shader
 export const MangaHatchShader = {
   uniforms: {
     uLightDir: { value: new THREE.Vector3(3, 5, 4).normalize() },
     uColor: { value: new THREE.Color(0xf4f4f5) },
     uRimColor: { value: new THREE.Color(0xff2233) },
-    uHatchDensity: { value: 28.0 },
+    uHatchDensity: { value: 20.0 },
     uTime: { value: 0 }
   },
 
@@ -51,40 +51,45 @@ export const MangaHatchShader = {
       // Diffuse N.L
       float nDotL = dot(normal, light);
 
-      // Screen-space coordinates for hatching
-      vec2 screenCoord = (vScreenPos.xy / vScreenPos.w) * 0.5 + 0.5;
-      vec2 hatchUV = screenCoord * uHatchDensity;
+      // Screen-space coordinates for ink strokes
+      vec2 pixelPos = gl_FragCoord.xy;
 
-      // Diagonal cross-hatch lines
-      float hatch1 = mod(hatchUV.x + hatchUV.y, 1.0);
-      float hatch2 = mod(hatchUV.x - hatchUV.y, 1.0);
+      // Surface contour angle from view-space normal
+      float surfAngle = atan(normal.y, normal.x + 0.001);
+      float strokeAngle = surfAngle + 1.5708; // perpendicular to normal, following geometric contour
 
-      // Stepped cel shading
+      // Organic hand-drawn pen wobble & irregular stroke spacing
+      float wobble = sin(pixelPos.y * 0.05 + uTime * 0.4) * 2.2 + cos(pixelPos.x * 0.04) * 1.5;
+      float cosA = cos(strokeAngle);
+      float sinA = sin(strokeAngle);
+      float rotCoord1 = (pixelPos.x + wobble) * cosA - (pixelPos.y + wobble) * sinA;
+
+      // Expressive Manga Ink Spacing (distinct pen lines, not micro-screen)
+      float spacing = 20.0;
+      float hatch1 = mod(rotCoord1, spacing);
+
+      // Dynamic pen pressure: tapering from shadow into light
+      float penPressure = smoothstep(0.50, 0.05, nDotL);
+      float penWidth = penPressure * 3.8 + sin(pixelPos.y * 0.03) * 0.6;
+
+      // Stepped Manga Cel-Shading
       vec3 finalColor = uColor;
 
-      // Highlight
-      if (nDotL > 0.6) {
-        finalColor = uColor * 1.25;
+      // Highlight Zone: clean lit surface
+      if (nDotL > 0.48) {
+        finalColor = uColor * 1.15;
       } 
-      // Midtones - single hatch
-      else if (nDotL > 0.15) {
-        if (hatch1 < 0.28) {
-          finalColor = vec3(0.04, 0.04, 0.06); // Ink line
+      // Midtone Penumbra: visible hand-drawn ink pen strokes along contour
+      else if (nDotL > 0.06) {
+        if (hatch1 < penWidth) {
+          finalColor = vec3(0.015, 0.015, 0.025); // Bold ink stroke
         } else {
-          finalColor = uColor * 0.88;
+          finalColor = uColor * 0.95;
         }
       } 
-      // Deep Shadow - cross hatch
-      else if (nDotL > -0.3) {
-        if (hatch1 < 0.42 || hatch2 < 0.42) {
-          finalColor = vec3(0.02, 0.02, 0.04); // Dark ink
-        } else {
-          finalColor = uColor * 0.42;
-        }
-      } 
-      // Pitch black void
+      // Deep Core Shadow: solid black ink (beta fill)
       else {
-        finalColor = vec3(0.01, 0.01, 0.02);
+        finalColor = vec3(0.015, 0.015, 0.02);
       }
 
       // Manga Rim / Edge Lighting (Fresnel) with Crimson glow
@@ -101,6 +106,7 @@ export const MangaHatchShader = {
 export const MangaPostShader = {
   uniforms: {
     tDiffuse: { value: null },
+    tDepth: { value: null },
     uTime: { value: 0 },
     uMouse: { value: new THREE.Vector2(0.5, 0.5) },
     uVelocity: { value: 0.0 },
@@ -118,7 +124,9 @@ export const MangaPostShader = {
   `,
 
   fragmentShader: `
+    #include <packing>
     uniform sampler2D tDiffuse;
+    uniform sampler2D tDepth;
     uniform float uTime;
     uniform vec2 uMouse;
     uniform float uVelocity;
@@ -143,9 +151,14 @@ export const MangaPostShader = {
       vec4 colR = texture2D(tDiffuse, uv + vec2(split, 0.0));
       vec4 colG = texture2D(tDiffuse, uv);
       vec4 colB = texture2D(tDiffuse, uv - vec2(split, 0.0));
-      vec4 baseColor = vec4(colR.r, colG.g, colB.b, 1.0);
+      vec4 baseColor = vec4(colR.r, colG.g, colB.b, colG.a);
 
-      // 3. Sobel Edge Detection for Hand-Inked Outlines
+      // 3. Reliable Geometry & Depth Mask
+      float depthVal = texture2D(tDepth, uv).r;
+      // Foreground 3D elements have depth < 0.970; background wall and sky have depth >= 0.970
+      bool isForeground = (depthVal < 0.970) && (colG.a > 0.05);
+
+      // 4. Sobel Edge Detection for Bold Hand-Inked Manga Outlines
       vec2 texel = 1.0 / uResolution;
       vec4 n[9];
       n[0] = texture2D(tDiffuse, uv + vec2(-texel.x, -texel.y));
@@ -162,38 +175,49 @@ export const MangaPostShader = {
       vec4 sobelV = n[0] + (2.0 * n[1]) + n[2] - (n[6] + (2.0 * n[7]) + n[8]);
       float edge = length(sqrt(sobelH * sobelH + sobelV * sobelV));
 
-      if (edge > 0.32) {
-        baseColor.rgb = mix(baseColor.rgb, vec3(0.03, 0.03, 0.05), 0.88);
+      // Calculate surface luminance gradient to orient hatch strokes along surface form
+      float luma[9];
+      for (int i = 0; i < 9; i++) {
+        luma[i] = dot(n[i].rgb, vec3(0.299, 0.587, 0.114));
+      }
+      float gx = (luma[2] + 2.0 * luma[5] + luma[8]) - (luma[0] + 2.0 * luma[3] + luma[6]);
+      float gy = (luma[0] + 2.0 * luma[1] + luma[2]) - (luma[6] + 2.0 * luma[7] + luma[8]);
+      float gradMag = length(vec2(gx, gy));
+      float brightness = luma[4];
+
+      // Bold ink outline on silhouettes and geometric edges
+      if (edge > 0.20 && (isForeground || brightness > 0.06)) {
+        baseColor.rgb = mix(baseColor.rgb, vec3(0.01, 0.01, 0.02), 0.95);
       }
 
-      // 4. Directional Cross-Hatching in Shadows
-      float brightness = dot(baseColor.rgb, vec3(0.299, 0.587, 0.114));
-      vec2 screenPos = gl_FragCoord.xy;
-      float hatch1 = mod(screenPos.x + screenPos.y, 8.0);
-      float hatch2 = mod(screenPos.x - screenPos.y, 8.0);
+      // 5. Directional Organic Cross-Hatching STRICTLY on Foreground 3D Geometry
+      // Flat backdrops, background walls and deep voids are strictly excluded
+      if (isForeground && gradMag > 0.025 && brightness >= 0.14 && brightness < 0.62) {
+        float surfAngle = atan(gy, gx + 0.001);
+        float hatchAngle = surfAngle + 0.40;
 
-      if (brightness < 0.22) {
-        if (hatch1 < 2.0 || hatch2 < 2.0) {
-          baseColor.rgb = vec3(0.02, 0.02, 0.04);
+        vec2 screenPos = gl_FragCoord.xy;
+        float wobble = sin(screenPos.y * 0.05) * 2.0 + cos(screenPos.x * 0.04) * 1.4;
+
+        float cosA = cos(hatchAngle);
+        float sinA = sin(hatchAngle);
+        float rotCoord1 = (screenPos.x + wobble) * cosA - screenPos.y * sinA;
+
+        // Expressive manga pen spacing: 18px between strokes
+        float strokeSpacing = 18.0;
+        float hatch1 = mod(rotCoord1, strokeSpacing);
+        
+        // Pen stroke width tapers from shadow into light
+        float penWidth = smoothstep(0.60, 0.14, brightness) * 3.2 + 1.2;
+
+        // Single directional ink hatch along surface curvature
+        if (hatch1 < penWidth) {
+          baseColor.rgb = mix(baseColor.rgb, vec3(0.015, 0.015, 0.025), 0.88);
         }
-      } else if (brightness < 0.42) {
-        if (hatch1 < 1.6) {
-          baseColor.rgb = mix(baseColor.rgb, vec3(0.04, 0.04, 0.06), 0.75);
-        }
       }
 
-      // 5. Halftone Screentone in Midtones
-      float dotPattern = sin(screenPos.x * 0.38) * sin(screenPos.y * 0.38);
-      if (brightness > 0.45 && brightness < 0.72 && dotPattern > 0.88) {
-        baseColor.rgb = mix(baseColor.rgb, vec3(0.09, 0.23, 0.35), 0.22);
-      }
-
-      // 6. Subtle Saturated Crimson Rim
-      float radial = distance(uv, vec2(0.5, 0.5));
-      float vignette = smoothstep(0.45, 0.85, radial);
-      baseColor.rgb = mix(baseColor.rgb, vec3(0.55, 0.05, 0.08), vignette * 0.25);
-
-      gl_FragColor = baseColor;
+      // Clean, high-contrast final output: empty background and deep blacks are 100% free of wallpaper grids
+      gl_FragColor = vec4(baseColor.rgb, 1.0);
     }
   `
 };

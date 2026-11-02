@@ -70,20 +70,20 @@ export class DrawingViewer {
       <div id="dv-main-frame" class="drawing-viewer-frame border-4 border-crimson bg-ink-deep rounded relative overflow-hidden shadow-crimson-lg flex flex-col h-[620px]">
         
         <!-- Top Drawing Toolbar -->
-        <div class="viewer-toolbar bg-ink-slate border-b-2 border-crimson px-4 py-3 flex flex-wrap items-center justify-between gap-3 z-10 font-fira text-xs">
+        <div class="viewer-toolbar bg-ink-slate border-b-2 border-crimson px-4 py-3 flex flex-wrap items-center justify-between gap-3 z-10 font-body text-xs">
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-crimson inline-block animate-ping"></span>
-            <span class="font-black text-white uppercase tracking-wider">${d.ref}</span>
+            <span class="font-mono font-black text-white uppercase tracking-wider">${d.ref}</span>
             <span class="text-crimson hidden sm:inline">•</span>
-            <span class="text-sky font-bold hidden sm:inline">${d.title}</span>
+            <span class="font-editorial text-sky font-bold hidden sm:inline tracking-tight">${d.title}</span>
           </div>
 
           <!-- Controls: Zoom, Pan, 3D Morph & Fullscreen -->
           <div class="flex items-center gap-2">
             <button id="btn-dv-zoom-in" class="manga-btn px-2.5 py-1 bg-ink-deep text-white border border-azure rounded hover:bg-azure hover:text-ink-deep font-bold" title="Zoom In">+</button>
-            <span id="dv-scale-text" class="px-2 py-1 text-[11px] font-bold text-white bg-ink-deep rounded border border-ink-slate">${Math.round(this.scale * 100)}%</span>
+            <span id="dv-scale-text" class="px-2 py-1 text-[11px] font-mono font-bold text-white bg-ink-deep rounded border border-ink-slate">${Math.round(this.scale * 100)}%</span>
             <button id="btn-dv-zoom-out" class="manga-btn px-2.5 py-1 bg-ink-deep text-white border border-azure rounded hover:bg-azure hover:text-ink-deep font-bold" title="Zoom Out">-</button>
-            <button id="btn-dv-reset" class="manga-btn px-3 py-1 bg-ink-deep text-neutral-300 border border-neutral-600 rounded text-[11px] hover:text-white" title="Reset View">RESET</button>
+            <button id="btn-dv-reset" class="manga-btn px-3 py-1 bg-ink-deep text-neutral-300 border border-neutral-600 rounded text-[11px] font-bold hover:text-white" title="Reset View">RESET</button>
             <button id="btn-dv-3d" class="manga-btn px-3 py-1 ${this.is3DIsometric ? 'bg-crimson text-white' : 'bg-ink-deep text-sky border-azure'} rounded text-[11px] font-bold" title="3D Isometric Mode">
               ${this.is3DIsometric ? '⚡ 3D ISOMETRIC: ON' : '📐 3D ISOMETRIC'}
             </button>
@@ -91,15 +91,15 @@ export class DrawingViewer {
         </div>
 
         <!-- Layer Toggles Strip -->
-        <div class="bg-ink-deep border-b border-crimson/40 px-4 py-1.5 flex flex-wrap items-center justify-between gap-2 z-10 font-fira text-[11px]">
+        <div class="bg-ink-deep border-b border-crimson/40 px-4 py-1.5 flex flex-wrap items-center justify-between gap-2 z-10 font-editorial text-[11px]">
           <div class="flex items-center gap-2">
-            <span class="text-neutral-400 font-bold">LAYERS:</span>
+            <span class="font-mono text-neutral-400 font-bold">LAYERS:</span>
             <button class="dv-layer-btn px-2 py-0.5 rounded border border-crimson font-bold ${this.layers.dimensions ? 'bg-crimson text-white' : 'bg-ink-slate text-neutral-400'}" data-layer="dimensions">DIMENSIONS (90mm)</button>
             <button class="dv-layer-btn px-2 py-0.5 rounded border border-azure font-bold ${this.layers.grid ? 'bg-azure text-ink-deep' : 'bg-ink-slate text-neutral-400'}" data-layer="grid">AXIS GRID</button>
             <button class="dv-layer-btn px-2 py-0.5 rounded border border-gold font-bold ${this.layers.rebar ? 'bg-gold text-ink-deep' : 'bg-ink-slate text-neutral-400'}" data-layer="rebar">REBAR & MESH</button>
             <button class="dv-layer-btn px-2 py-0.5 rounded border border-white font-bold ${this.layers.annotations ? 'bg-white text-ink-deep' : 'bg-ink-slate text-neutral-400'}" data-layer="annotations">ANNOTATIONS</button>
           </div>
-          <div class="text-neutral-400 font-bold hidden md:inline">
+          <div class="font-body text-neutral-400 font-medium hidden md:inline">
             🖱️ DRAG TO PAN • SCROLL WHEEL TO ZOOM
           </div>
         </div>
@@ -114,21 +114,21 @@ export class DrawingViewer {
           <div class="absolute inset-0 pointer-events-none opacity-20 bg-[linear-gradient(to_right,#399dd6_1px,transparent_1px),linear-gradient(to_bottom,#399dd6_1px,transparent_1px)] bg-[size:32px_32px]"></div>
 
           <!-- Floating Scale & Compass Tag -->
-          <div class="absolute bottom-3 right-3 pointer-events-none bg-ink-deep/90 border border-crimson px-3 py-1.5 rounded font-fira text-[11px] text-white shadow-brutal-sm">
+          <div class="absolute bottom-3 right-3 pointer-events-none bg-ink-deep/90 border border-crimson px-3 py-1.5 rounded font-mono text-[11px] text-white shadow-brutal-sm">
             <span>PCI 8TH ED. & EN 1992-1-1</span> • <span class="text-crimson font-black">VERIFIED NOMINAL</span>
           </div>
         </div>
 
         <!-- Bottom Selector Tabs: Plan, Section, Elevation & Detail -->
-        <div class="bg-ink-slate border-t-2 border-crimson px-4 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-3 z-10 font-fira text-xs">
-          <div class="flex flex-wrap items-center gap-2">
+        <div class="bg-ink-slate border-t-2 border-crimson px-4 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-3 z-10 font-body text-xs">
+          <div class="flex flex-wrap items-center gap-2 font-editorial">
             <button class="dv-tab-btn manga-btn px-3 py-1.5 rounded text-[11px] font-bold ${this.currentDrawing === 'section-precast' ? 'manga-btn-crimson' : 'bg-ink-deep text-white border-azure'}" data-drawing="section-precast">1. SECTION 1:50</button>
             <button class="dv-tab-btn manga-btn px-3 py-1.5 rounded text-[11px] font-bold ${this.currentDrawing === 'framing-plan' ? 'manga-btn-crimson' : 'bg-ink-deep text-white border-azure'}" data-drawing="framing-plan">2. FRAMING PLAN 1:100</button>
             <button class="dv-tab-btn manga-btn px-3 py-1.5 rounded text-[11px] font-bold ${this.currentDrawing === 'elevation-corbel' ? 'manga-btn-crimson' : 'bg-ink-deep text-white border-azure'}" data-drawing="elevation-corbel">3. CORBEL ELEVATION 1:50</button>
             <button class="dv-tab-btn manga-btn px-3 py-1.5 rounded text-[11px] font-bold ${this.currentDrawing === 'stair-detail' ? 'manga-btn-crimson' : 'bg-ink-deep text-white border-azure'}" data-drawing="stair-detail">4. STAIR RECESS 1:25</button>
           </div>
 
-          <div class="text-[11px] text-neutral-300 font-fira flex items-center gap-3">
+          <div class="text-[11px] text-neutral-300 font-mono flex items-center gap-3">
             <span>${d.scaleLabel}</span>
             <span class="text-crimson font-black">● LIVE AUDIT ACTIVE</span>
           </div>
