@@ -99,46 +99,173 @@ document.addEventListener('DOMContentLoaded', () => {
     nav?.classList.toggle('scrolled', window.scrollY > 50);
   });
 
-  // ====== 5. 3D HERO ENGINE ======
+  // ====== 5. 3D HERO ENGINE & GAME INTERACTION DECK ======
   const bpCanvas = document.getElementById('blueprint-canvas');
   let blueprintWorld = null;
   if (bpCanvas) {
     blueprintWorld = new BlueprintWorld(bpCanvas);
   }
 
-  // Hero Controls
-  const btnExplode = document.getElementById('btn-explode');
-  const btnReset = document.getElementById('btn-reset');
-  const btnMode = document.getElementById('btn-mode');
-  const btnBurstSpeedlines = document.getElementById('btn-burst-speedlines');
-
-  function triggerSpeedlinesBurst(duration = 400) {
+  // Speedlines overlay burst helper
+  function triggerSpeedlinesBurst(duration = 450) {
     if (!speedlinesOverlay) return;
-    speedlinesOverlay.style.opacity = '0.55';
+    speedlinesOverlay.style.opacity = '0.65';
     sound.playPencilScratch();
     setTimeout(() => {
       speedlinesOverlay.style.opacity = '0';
     }, duration);
   }
 
-  btnBurstSpeedlines?.addEventListener('click', () => {
-    triggerSpeedlinesBurst(600);
-    showToast('⚡ SKILL TRIGGERED: SPEEDLINES OVERDRIVE');
+  // Dynamic Lloyd Companion Updates
+  const lloydFace = document.getElementById('lloyd-face');
+  const lloydMood = document.getElementById('lloyd-mood');
+  const lloydMsg = document.getElementById('lloyd-msg');
+
+  function setLloydReaction(emoji, mood, message) {
+    if (lloydFace) lloydFace.textContent = emoji;
+    if (lloydMood) lloydMood.textContent = `[${mood.toUpperCase()}]`;
+    if (lloydMsg) lloydMsg.innerHTML = message;
+    gsap.fromTo('#lloyd-companion', { scale: 1.05 }, { scale: 1, duration: 0.35, ease: 'back.out(2)' });
+  }
+
+  // 3D Spatial Holographic Pins Tracking Loop
+  const pinBeam = document.getElementById('pin-beam');
+  const pinBearing = document.getElementById('pin-bearing');
+  const pinCorbel = document.getElementById('pin-corbel');
+  const pins = { beam: pinBeam, bearing: pinBearing, corbel: pinCorbel };
+
+  function update3DPins() {
+    if (blueprintWorld) {
+      const pinCoords = blueprintWorld.getPinScreenPositions();
+      for (const [key, pinEl] of Object.entries(pins)) {
+        if (!pinEl) continue;
+        const info = pinCoords[key];
+        if (info && info.visible) {
+          pinEl.style.display = 'block';
+          pinEl.style.left = `${info.x}px`;
+          pinEl.style.top = `${info.y}px`;
+        } else {
+          pinEl.style.display = 'none';
+        }
+      }
+    }
+    requestAnimationFrame(update3DPins);
+  }
+  requestAnimationFrame(update3DPins);
+
+  // Pin Click Handlers (Focus Camera + Lloyd Dialogue)
+  pinBeam?.addEventListener('click', () => {
+    blueprintWorld?.focusOnTarget('beam');
+    sound.playLaserLock();
+    triggerSpeedlinesBurst(250);
+    setLloydReaction('📐', 'ANALYZING', '&ldquo;Inverted-T ledge beam. 600mm depth, 200mm web. Handles standard floor loads without flinching!&rdquo;');
+    showToast('3D Focus: Inverted-T Ledge Beam (PCI 8th Ed.)');
   });
 
-  btnExplode?.addEventListener('click', () => {
-    if (blueprintWorld) {
-      const isExp = blueprintWorld.toggleExploded();
-      btnExplode.innerHTML = isExp ? '<span>🔄 RESTORE ASSEMBLY</span>' : '<span>💥 EXPLODE 3D ASSEMBLY</span>';
-      triggerSpeedlinesBurst(300);
-      showToast(isExp ? 'Assembly Exploded: Slabs & Beams Separated' : 'Assembly Restored: Structural Joints Locked');
-    }
+  pinBearing?.addEventListener('click', () => {
+    blueprintWorld?.focusOnTarget('bearing');
+    sound.playLaserLock();
+    triggerSpeedlinesBurst(250);
+    setLloydReaction('😈', 'DELIGHTED', '&ldquo;90mm nominal bearing! Check Eurocode 2 Table 10.1! Don’t let the contractor shave off 5mm!&rdquo;');
+    showToast('3D Focus: 90mm Nominal Bearing Joint');
   });
+
+  pinCorbel?.addEventListener('click', () => {
+    blueprintWorld?.focusOnTarget('corbel');
+    sound.playLaserLock();
+    triggerSpeedlinesBurst(250);
+    setLloydReaction('🏛️', 'SECURE', '&ldquo;450kN corbel bracket with closed loop stirrups. Unbreakable shear friction.&rdquo;');
+    showToast('3D Focus: Precast Corbel Shear Seat');
+  });
+
+  // Telemetry HUD Refresh Interval
+  const hudFps = document.getElementById('hud-fps-val');
+  const hudYaw = document.getElementById('hud-yaw-val');
+  const hudPitch = document.getElementById('hud-pitch-val');
+  const hudMesh = document.getElementById('hud-mesh-val');
+
+  setInterval(() => {
+    if (!blueprintWorld) return;
+    const telem = blueprintWorld.getTelemetry();
+    if (hudFps) hudFps.textContent = `${telem.fps} FPS`;
+    if (hudYaw) hudYaw.textContent = `${telem.yaw}°`;
+    if (hudPitch) hudPitch.textContent = `${telem.pitch}°`;
+    if (hudMesh) hudMesh.textContent = telem.exploded;
+  }, 180);
+
+  // Hero Buttons & Hotbar Controls
+  const btnExplode = document.getElementById('btn-explode');
+  const btnReset = document.getElementById('btn-reset');
+  const btnMode = document.getElementById('btn-mode');
+  const btnBurstSpeedlines = document.getElementById('btn-burst-speedlines');
+
+  const deckOrbit = document.getElementById('deck-orbit');
+  const deckExplode = document.getElementById('deck-explode');
+  const deckWireframe = document.getElementById('deck-wireframe');
+  const deckShader = document.getElementById('deck-shader');
+  const deckMana = document.getElementById('deck-mana');
+
+  function handleExplodeToggle() {
+    if (!blueprintWorld) return;
+    const isExp = blueprintWorld.toggleExploded();
+    if (btnExplode) {
+      btnExplode.innerHTML = isExp 
+        ? '<span class="btn-icon">🔄</span><span>RESTORE CITADEL</span>' 
+        : '<span class="btn-icon">💥</span><span>EXPLODE 3D ASSEMBLY</span>';
+    }
+    triggerSpeedlinesBurst(350);
+    setLloydReaction(
+      isExp ? '💥' : '🏗️',
+      isExp ? 'MANIC' : 'COMMANDING',
+      isExp 
+        ? '&ldquo;HA! Full precast breakdown! Slabs flying, rebar exposed! Look at that steel density!&rdquo;'
+        : '&ldquo;Joints locked. Millimeter tolerances verified. The citadel stands unshakable.&rdquo;'
+    );
+    showToast(isExp ? 'Assembly Exploded: Slabs & Beams Separated' : 'Assembly Restored: Structural Joints Locked');
+  }
+
+  function handleManaBurst() {
+    if (!blueprintWorld) return;
+    blueprintWorld.triggerManaShockwave();
+    triggerSpeedlinesBurst(750);
+    sound.playMangaImpact();
+    setLloydReaction('⚡', 'AWAKENED', '&ldquo;UNLIMITED MANA! Constructing 50 floors by twilight! Automate everything!&rdquo;');
+    showToast('⚡ MANA BURST // ドーン! (SPEED BOOST +500%)');
+  }
+
+  btnExplode?.addEventListener('click', handleExplodeToggle);
+  deckExplode?.addEventListener('click', handleExplodeToggle);
+
+  deckOrbit?.addEventListener('click', () => {
+    if (!blueprintWorld) return;
+    const isRotating = blueprintWorld.toggleAutoRotate();
+    deckOrbit.classList.toggle('active', isRotating);
+    sound.playCaliperClick();
+    showToast(isRotating ? 'Auto-Orbit: Resumed' : 'Auto-Orbit: Paused');
+  });
+
+  deckWireframe?.addEventListener('click', () => {
+    if (!blueprintWorld) return;
+    const isWire = blueprintWorld.toggleLayer('wireframe');
+    deckWireframe.classList.toggle('active', isWire);
+    showToast(isWire ? 'X-Ray Wireframe: Active' : 'Solid Shading: Restored');
+  });
+
+  deckShader?.addEventListener('click', () => {
+    if (!blueprintWorld) return;
+    const mode = blueprintWorld.cycleVisualMode();
+    triggerSpeedlinesBurst(250);
+    showToast(`Visual Style: ${mode.toUpperCase()} MANGA`);
+  });
+
+  deckMana?.addEventListener('click', handleManaBurst);
+  btnBurstSpeedlines?.addEventListener('click', handleManaBurst);
 
   btnReset?.addEventListener('click', () => {
     if (blueprintWorld) {
       blueprintWorld.resetCamera();
-      if (btnExplode) btnExplode.innerHTML = '<span>💥 EXPLODE 3D ASSEMBLY</span>';
+      if (btnExplode) btnExplode.innerHTML = '<span class="btn-icon">💥</span><span>EXPLODE 3D ASSEMBLY</span>';
+      setLloydReaction('📐', 'CALM', '&ldquo;Perspective reset to origin. Ready for the next inspection.&rdquo;');
       showToast('Camera Orientation Reset');
     }
   });
@@ -149,6 +276,56 @@ document.addEventListener('DOMContentLoaded', () => {
       triggerSpeedlinesBurst(250);
       showToast(`Visual Style: ${mode.toUpperCase()} MANGA`);
     }
+  });
+
+  // Keyboard Game Hotkeys [1, 2, 3, 4, Space]
+  window.addEventListener('keydown', (e) => {
+    // Avoid interfering if user is in an input field
+    if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+
+    if (e.key === '1') {
+      deckOrbit?.click();
+    } else if (e.key === '2') {
+      handleExplodeToggle();
+    } else if (e.key === '3') {
+      deckWireframe?.click();
+    } else if (e.key === '4') {
+      deckShader?.click();
+    } else if (e.code === 'Space') {
+      e.preventDefault();
+      handleManaBurst();
+    }
+  });
+
+  // Tactical Audio Hover Ticks & 3D Card Parallax Tilt (Marcelo Design X / We Are Brand Style)
+  document.querySelectorAll('.project-card, .mini-project, .ref-card, .manifesto-card, .comic-spread-frame').forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      sound.playHoverTick();
+    });
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -5.0;
+      const rotateY = ((x - centerX) / centerX) * 5.0;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'none';
+    });
+  });
+
+  document.querySelectorAll('button, .nav-link, .btn-game-primary, .btn-game-secondary, .btn-game-ghost, .spatial-pin').forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      sound.playHoverTick();
+    });
   });
 
   // ====== 6. THE GREATEST ESTATE DEVELOPER: RPG SYSTEM WINDOW ======
@@ -177,13 +354,15 @@ document.addEventListener('DOMContentLoaded', () => {
   btnSystemDon?.addEventListener('click', () => {
     sound.playStructuralClack();
     triggerSpeedlinesBurst(500);
+    setLloydReaction('💥', 'MANIC', '&ldquo;IMPACT: ドーン! The foundation is welded directly to bedrock!&rdquo;');
     showToast('💥 IMPACT: ドーン! (FOUNDATION LOCKED)');
   });
 
   btnSystemBuff?.addEventListener('click', () => {
     sound.playAwakening();
     triggerSpeedlinesBurst(700);
-    showToast('★ BUFF ACTIVE: +500% LLROYD CONSTRUCT MANA');
+    setLloydReaction('😈', 'SUPERCHARGED', '&ldquo;500% WORK SPEED BUFF ACTIVATED! Let us build an empire!&rdquo;');
+    showToast('★ BUFF ACTIVE: +500% LLOYD CONSTRUCT MANA');
   });
 
   // ====== 7. PROJECT VISUALIZERS (Precast Explode, Beam Solver, Atlas, SQ3R) ======

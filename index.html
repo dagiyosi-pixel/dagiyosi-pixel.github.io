@@ -7,7 +7,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="./src/style.css">
 </head>
@@ -55,9 +55,9 @@
     </div>
   </nav>
 
-  <!-- ==================== HERO SECTION ==================== -->
+  <!-- ==================== HERO SECTION: MANHWA GAME EXPERIENCE ==================== -->
   <section id="hero">
-    <!-- Fullscreen 3D WebGL Canvas (Stairs, Red Perspective Rays, Dome, Cel-Shaded Hand & Particles) -->
+    <!-- Fullscreen 3D WebGL Canvas (Precast Assembly, Inked Edges, Red Vanishing Rays, Cel-Shaded Hand & Particles) -->
     <canvas id="blueprint-canvas" class="hero-3d-canvas"></canvas>
     
     <!-- Cinematic Manga Gradients & Screentone -->
@@ -71,40 +71,94 @@
       <div class="manga-sfx sfx-zudo hidden lg:block">ズドドド</div>
     </div>
 
-    <!-- Hero Foreground Content Spread -->
-    <div class="hero-content">
-      <div class="hero-top-tag">
-        <span class="tag-dot"></span>
-        <span class="tag-title">THE GREATEST ESTATE DEVELOPER × COMPUTATIONAL ARCHITECTURE</span>
-        <span class="tag-sep">•</span>
-        <span class="tag-meta">CHAPTER 01 // AWAKENING</span>
+    <!-- 3D Spatial Holographic Pins (Anchored directly to 3D geometry in space) -->
+    <div id="hero-pins-container" class="hero-pins-layer">
+      <div class="spatial-pin pin-beam" id="pin-beam" data-target="beam" style="display: none;">
+        <div class="pin-marker"><span class="pin-pulse"></span><span class="pin-dot"></span></div>
+        <div class="pin-card">
+          <div class="pin-header"><span class="pin-code">DWG-B01</span><span class="pin-rank">[S-BEAM]</span></div>
+          <strong class="pin-label">INVERTED-T LEDGE BEAM</strong>
+          <span class="pin-sub">DEPTH: 600mm • STEM: 200mm • PCI 8th Ed.</span>
+        </div>
       </div>
-      
-      <h1 class="hero-title">
-        <span class="hero-line hero-line-1">BUILDING IDEAS</span>
-        <span class="hero-line hero-line-2">BEYOND THE</span>
-        <span class="hero-line hero-line-3">BLUEPRINT<span class="accent-dot">.</span></span>
-      </h1>
-      
-      <p class="hero-subtitle">
-        Where computational precast BIM, structural matrix algorithms, and immersive manhwa visual storytelling collide. Like Lloyd transforming raw terrain into unshakeable kingdoms, abstract drawings become habitable 3D reality.
-      </p>
-      
-      <div class="hero-actions">
-        <a href="#work" class="btn-primary manga-btn-glow">
-          <span>EXPLORE CHRONICLES</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-        </a>
-        <button id="btn-explode" class="btn-secondary btn-explode-hero">
-          <span>💥 EXPLODE 3D ASSEMBLY</span>
-        </button>
-        <button id="btn-burst-speedlines" class="btn-ghost btn-speedlines">
-          <span>⚡ SPEEDLINES BURST</span>
-        </button>
+      <div class="spatial-pin pin-bearing" id="pin-bearing" data-target="bearing" style="display: none;">
+        <div class="pin-marker"><span class="pin-pulse"></span><span class="pin-dot"></span></div>
+        <div class="pin-card">
+          <div class="pin-header"><span class="pin-code">SPEC-HC200</span><span class="pin-rank">[VERIFIED]</span></div>
+          <strong class="pin-label">90mm NOMINAL BEARING</strong>
+          <span class="pin-sub">EUROCODE 2 & PCI 8TH ED. • ZERO SLIP</span>
+        </div>
+      </div>
+      <div class="spatial-pin pin-corbel" id="pin-corbel" data-target="corbel" style="display: none;">
+        <div class="pin-marker"><span class="pin-pulse"></span><span class="pin-dot"></span></div>
+        <div class="pin-card">
+          <div class="pin-header"><span class="pin-code">SEAT-C02</span><span class="pin-rank">[450kN]</span></div>
+          <strong class="pin-label">STRUCTURAL CORBEL SEAT</strong>
+          <span class="pin-sub">SHEAR FRICTION • CLOSED LOOP TIES</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Foreground Content: High-Impact Manhwa Game Headline -->
+    <div class="hero-content">
+      <!-- Real-time HUD Telemetry Widget (Samana Studio & AAA Game Style) -->
+      <div class="hero-telemetry-hud" id="hero-telemetry-hud">
+        <div class="hud-top">
+          <div class="hud-live-tag"><span class="hud-blink"></span> TELEMETRY // 3D SENSOR</div>
+          <div class="hud-fps" id="hud-fps-val">60 FPS</div>
+        </div>
+        <div class="hud-matrix-row">
+          <div class="hud-cell"><span class="cell-k">ORBIT YAW</span><span class="cell-v" id="hud-yaw-val">-25.8°</span></div>
+          <div class="hud-cell"><span class="cell-k">PITCH</span><span class="cell-v" id="hud-pitch-val">+16.0°</span></div>
+          <div class="hud-cell"><span class="cell-k">ASSEMBLY</span><span class="cell-v text-crimson" id="hud-mesh-val">LOCKED</span></div>
+        </div>
+        <div class="hud-sound-wave" id="hud-sound-wave">
+          <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
+          <span class="wave-label">SPATIAL HARMONICS</span>
+        </div>
       </div>
 
-      <div class="hero-helper-text">
-        <span>● CURSOR ROTATES VIEW • DRAG CANVAS TO ORBIT • EXPLODE TO INSPECT PRECAST JOINTS</span>
+      <div class="hero-domain-pill">
+        <span class="domain-tag">DOMAIN EXPANSION</span>
+        <span class="domain-kanji">領域展開</span>
+        <span class="domain-meta">S-RANK CONSTRUCTOR • 0xDAGI</span>
+      </div>
+      
+      <h1 class="hero-game-title">
+        <span class="title-sup">COMPUTATIONAL ARCHITECT & ESTATE DEVELOPER</span>
+        <span class="title-main">BENDING REALITY</span>
+        <span class="title-glow">INTO STEEL & STONE<span class="dot-crimson">.</span></span>
+      </h1>
+      
+      <!-- Punchy Mission Briefing Card -->
+      <div class="hero-mission-card">
+        <div class="mission-tag-row">
+          <span class="mission-status-pill"><span class="pill-glow"></span> MISSION BRIEF: REALITY TRANSMUTATION</span>
+          <span class="mission-rank">[S-RANK]</span>
+        </div>
+        <p class="mission-quote">
+          &ldquo;Steel yields. Concrete hardens. But verified matrix algorithms never bend. Like Lloyd transmuting barren rock into unbreakable citadels.&rdquo;
+        </p>
+        <div class="mission-specs-strip">
+          <div class="spec-pill"><span class="spec-dot green"></span> <strong>90mm</strong> NOMINAL BEARING</div>
+          <div class="spec-pill"><span class="spec-dot azure"></span> <strong>60 FPS</strong> WEBGL ENGINE</div>
+          <div class="spec-pill"><span class="spec-dot crimson"></span> <strong>PCI 8th Ed.</strong> RIGOR</div>
+        </div>
+      </div>
+      
+      <div class="hero-actions">
+        <a href="#work" class="btn-game-primary manga-btn-glow">
+          <span class="btn-icon">⚡</span>
+          <span>ENTER THE CHRONICLES</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+        <button id="btn-explode" class="btn-game-secondary">
+          <span class="btn-icon">💥</span>
+          <span>EXPLODE 3D ASSEMBLY</span>
+        </button>
+        <button id="btn-burst-speedlines" class="btn-game-ghost">
+          <span>⚡ SPEEDLINES</span>
+        </button>
       </div>
     </div>
 
@@ -150,7 +204,49 @@
       </div>
     </div>
 
-    <!-- Hero Interactive HUD Controls -->
+    <!-- Interactive Lloyd Frontera Familiar / Companion Widget -->
+    <div class="lloyd-companion-widget" id="lloyd-companion">
+      <div class="lloyd-avatar-box">
+        <div class="lloyd-face-emoji" id="lloyd-face">😈</div>
+        <span class="lloyd-rank-tag">LLOYD // S-RANK</span>
+      </div>
+      <div class="lloyd-bubble">
+        <div class="lloyd-bubble-header">
+          <span class="lloyd-name">ESTATE FAMILIAR:</span>
+          <span class="lloyd-mood" id="lloyd-mood">[SCHEMING]</span>
+        </div>
+        <p class="lloyd-message" id="lloyd-msg">&ldquo;Calculations check out. 90mm bearing locked into place. Not a single coin wasted!&rdquo;</p>
+      </div>
+    </div>
+
+    <!-- Game Hotbar Action Deck (Keyboard Shortcuts [1] [2] [3] [4] [SPACE]) -->
+    <div class="game-action-deck" id="game-hotbar">
+      <div class="deck-inner">
+        <span class="deck-label">HOTBAR:</span>
+        <button class="deck-btn" id="deck-orbit" data-key="1" title="Toggle Auto-Rotation [Key 1]">
+          <span class="deck-key">[1]</span>
+          <span class="deck-txt">ORBIT</span>
+        </button>
+        <button class="deck-btn" id="deck-explode" data-key="2" title="Explode / Collapse Precast Assembly [Key 2]">
+          <span class="deck-key">[2]</span>
+          <span class="deck-txt">EXPLODE</span>
+        </button>
+        <button class="deck-btn" id="deck-wireframe" data-key="3" title="Toggle X-Ray Wireframe [Key 3]">
+          <span class="deck-key">[3]</span>
+          <span class="deck-txt">X-RAY</span>
+        </button>
+        <button class="deck-btn" id="deck-shader" data-key="4" title="Cycle Shader Mode [Key 4]">
+          <span class="deck-key">[4]</span>
+          <span class="deck-txt">SHADERS</span>
+        </button>
+        <button class="deck-btn deck-btn-special" id="deck-mana" data-key="SPACE" title="Trigger Mana Burst & Speedlines [SPACE]">
+          <span class="deck-key">[SPACE]</span>
+          <span class="deck-txt">⚡ MANA BURST (ドーン!)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hero Interactive Quick Corner Controls -->
     <div class="hero-controls">
       <button id="btn-reset" class="hero-ctrl-btn" title="Reset Camera Orientation">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>

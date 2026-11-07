@@ -1,6 +1,7 @@
 // ==========================================================================
-// BLUEPRINT WORLD // THE ARCHITECTURAL MANHWA UNIVERSE
-// Fullscreen 3D Architectural Engine with Red Perspective Rays, Cel-Shaded Hand & Exploded Assembly
+// BLUEPRINT WORLD // THE ARCHITECTURAL MANHWA & GAME 3D ENGINE
+// Real-Time Precast Citadel, Red Vanishing Rays, 3D Spatial Hologram Pins & Telemetry
+// Inspired by Samana Studio & The Greatest Estate Developer
 // ==========================================================================
 
 import * as THREE from 'three';
@@ -47,6 +48,9 @@ export class BlueprintWorld {
       wireframe: false
     };
 
+    // Auto-rotate toggle
+    this.autoRotate = true;
+
     // Mouse & Inertia
     this.mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
     this.isDragging = false;
@@ -58,14 +62,26 @@ export class BlueprintWorld {
     this.scrollY = 0;
     this.targetScrollProgress = 0;
 
+    // Telemetry tracking
     this.clock = new THREE.Clock();
+    this.frameCount = 0;
+    this.lastFpsUpdate = 0;
+    this.currentFps = 60;
+
+    // Spatial Pin Anchors (3D Coordinates in world space)
+    this.pinAnchors = {
+      beam: new THREE.Vector3(0, 5.0, 3.0),
+      bearing: new THREE.Vector3(1.24, 2.8, 0.0),
+      corbel: new THREE.Vector3(0, 2.2, 3.0),
+      stairs: new THREE.Vector3(0, 1.8, 1.5)
+    };
 
     this.init();
   }
 
   init() {
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.FogExp2(0x09090b, 0.028);
+    this.scene.fog = new THREE.FogExp2(0x09090b, 0.026);
 
     const width = this.canvas.clientWidth || window.innerWidth;
     const height = this.canvas.clientHeight || window.innerHeight;
@@ -82,19 +98,19 @@ export class BlueprintWorld {
     });
     this.resize();
 
-    // Lighting
-    const amb = new THREE.AmbientLight(0xffffff, 0.55);
+    // Cinematic Game Lighting
+    const amb = new THREE.AmbientLight(0xffffff, 0.65);
     this.scene.add(amb);
 
-    const dir1 = new THREE.DirectionalLight(0xffffff, 1.4);
+    const dir1 = new THREE.DirectionalLight(0xffffff, 1.5);
     dir1.position.set(12, 18, 14);
     this.scene.add(dir1);
 
-    this.accentLight = new THREE.PointLight(0xff2233, 3.2, 38);
+    this.accentLight = new THREE.PointLight(0xff2233, 4.0, 42);
     this.accentLight.position.set(-6, 5, 2);
     this.scene.add(this.accentLight);
 
-    this.cyanLight = new THREE.PointLight(0x399dd6, 2.0, 30);
+    this.cyanLight = new THREE.PointLight(0x399dd6, 2.8, 35);
     this.cyanLight.position.set(7, 3, -4);
     this.scene.add(this.cyanLight);
 
@@ -128,8 +144,8 @@ export class BlueprintWorld {
     this.mouse.targetY = normY;
 
     if (!this.isDragging) {
-      this.targetRotation.y = -0.45 + normX * 0.28;
-      this.targetRotation.x = 0.28 - normY * 0.18;
+      this.targetRotation.y = -0.45 + normX * 0.32;
+      this.targetRotation.x = 0.28 - normY * 0.22;
     }
   }
 
@@ -157,9 +173,9 @@ export class BlueprintWorld {
       const dx = e.clientX - this.previousMousePosition.x;
       const dy = e.clientY - this.previousMousePosition.y;
 
-      this.targetRotation.y += dx * 0.007;
-      this.targetRotation.x += dy * 0.007;
-      this.targetRotation.x = Math.max(-0.25, Math.min(1.2, this.targetRotation.x));
+      this.targetRotation.y += dx * 0.0075;
+      this.targetRotation.x += dy * 0.0075;
+      this.targetRotation.x = Math.max(-0.35, Math.min(1.3, this.targetRotation.x));
 
       this.previousMousePosition = { x: e.clientX, y: e.clientY };
     });
@@ -184,7 +200,7 @@ export class BlueprintWorld {
     this.rootAssembly.position.set(0, 0, 0);
     this.scene.add(this.rootAssembly);
 
-    // Architectural & Comic Materials
+    // Architectural & Comic Inked Materials
     this.matColumn = new THREE.MeshStandardMaterial({ color: 0xf4f4f5, roughness: 0.25 });
     this.matCorbel = new THREE.MeshStandardMaterial({ color: 0x8ccdf2, roughness: 0.35 });
     this.matBeam = new THREE.MeshStandardMaterial({ color: 0x173c5b, roughness: 0.3, metalness: 0.2 });
@@ -196,14 +212,15 @@ export class BlueprintWorld {
     this.matInkEdge = new THREE.LineBasicMaterial({ color: 0x09090b, linewidth: 2 });
     this.matCrimsonEdge = new THREE.LineBasicMaterial({ color: 0xff2233, linewidth: 2 });
 
-    // 1. Grid & Ground
+    // 1. Cyber-Manhwa Grid Floor
     this.groupGround = new THREE.Group();
-    const grid = new THREE.GridHelper(24, 48, 0xff2233, 0x173c5b);
+    const grid = new THREE.GridHelper(26, 52, 0xff2233, 0x173c5b);
     grid.position.y = -0.01;
     this.groupGround.add(grid);
 
-    // Column Footings
+    // Column Footings with Inked Edges
     const footingGeo = new THREE.BoxGeometry(1.4, 0.25, 1.4);
+    const footingEdges = new THREE.EdgesGeometry(footingGeo);
     const colCoords = [
       { x: -4, z: -3 }, { x: 0, z: -3 }, { x: 4, z: -3 },
       { x: -4, z: 3 },  { x: 0, z: 3 },  { x: 4, z: 3 }
@@ -213,6 +230,9 @@ export class BlueprintWorld {
       const pad = new THREE.Mesh(footingGeo, this.matCorbel);
       pad.position.set(c.x, 0.125, c.z);
       this.groupGround.add(pad);
+      const padLine = new THREE.LineSegments(footingEdges, this.matCrimsonEdge);
+      padLine.position.copy(pad.position);
+      this.groupGround.add(padLine);
     });
     this.rootAssembly.add(this.groupGround);
 
@@ -220,6 +240,8 @@ export class BlueprintWorld {
     this.groupColumns = new THREE.Group();
     const colGeo = new THREE.BoxGeometry(0.65, 5.6, 0.65);
     const corbelGeo = new THREE.BoxGeometry(0.95, 0.45, 0.65);
+    const colEdges = new THREE.EdgesGeometry(colGeo);
+    const corbelEdges = new THREE.EdgesGeometry(corbelGeo);
 
     colCoords.forEach(c => {
       const colGroup = new THREE.Group();
@@ -227,20 +249,20 @@ export class BlueprintWorld {
 
       const colMesh = new THREE.Mesh(colGeo, this.matColumn);
       colGroup.add(colMesh);
-      const colLine = new THREE.LineSegments(new THREE.EdgesGeometry(colGeo), this.matInkEdge);
+      const colLine = new THREE.LineSegments(colEdges, this.matInkEdge);
       colGroup.add(colLine);
 
       const corbel1 = new THREE.Mesh(corbelGeo, this.matCorbel);
       corbel1.position.set(0, -0.6, 0);
       colGroup.add(corbel1);
-      const corbel1Line = new THREE.LineSegments(new THREE.EdgesGeometry(corbelGeo), this.matCrimsonEdge);
+      const corbel1Line = new THREE.LineSegments(corbelEdges, this.matCrimsonEdge);
       corbel1Line.position.copy(corbel1.position);
       colGroup.add(corbel1Line);
 
       const corbel2 = new THREE.Mesh(corbelGeo, this.matCorbel);
       corbel2.position.set(0, 1.9, 0);
       colGroup.add(corbel2);
-      const corbel2Line = new THREE.LineSegments(new THREE.EdgesGeometry(corbelGeo), this.matCrimsonEdge);
+      const corbel2Line = new THREE.LineSegments(corbelEdges, this.matCrimsonEdge);
       corbel2Line.position.copy(corbel2.position);
       colGroup.add(corbel2Line);
 
@@ -254,8 +276,8 @@ export class BlueprintWorld {
     this.beamsL2 = new THREE.Group();
 
     const beamGeo = new THREE.BoxGeometry(8.8, 0.65, 0.75);
-
     const beamEdges = new THREE.EdgesGeometry(beamGeo);
+
     const b1_A = new THREE.Mesh(beamGeo, this.matBeam);
     b1_A.position.set(0, 2.5, -3);
     this.beamsL1.add(b1_A);
@@ -295,8 +317,8 @@ export class BlueprintWorld {
 
     for (let i = -3; i <= 3; i++) {
       const slabGeo = new THREE.BoxGeometry(1.18, 0.32, 5.85);
-
       const slabEdges = new THREE.EdgesGeometry(slabGeo);
+
       const s1 = new THREE.Mesh(slabGeo, this.matSlab);
       s1.position.set(i * 1.24, 2.8, 0);
       this.slabsL1.add(s1);
@@ -315,7 +337,7 @@ export class BlueprintWorld {
     this.groupSlabs.add(this.slabsL2);
     this.rootAssembly.add(this.groupSlabs);
 
-    // 5. Grand Architectural Staircase (Homage to uploaded architectural-perspective.jpg!)
+    // 5. Grand Architectural Staircase
     this.groupStairs = new THREE.Group();
     const stepCount = 16;
     const stepWidth = 3.2;
@@ -328,7 +350,6 @@ export class BlueprintWorld {
       step.position.set(0, (s + 1) * stepHeight, (stepCount / 2 - s) * stepDepth);
       this.groupStairs.add(step);
 
-      // Edge inking line for each step
       const stepEdges = new THREE.EdgesGeometry(stepGeo);
       const stepLine = new THREE.LineSegments(stepEdges, this.matRedVector);
       stepLine.position.copy(step.position);
@@ -336,18 +357,16 @@ export class BlueprintWorld {
     }
     this.rootAssembly.add(this.groupStairs);
 
-    // 6. Radiant Red Vanishing Lines (Direct tribute to uploaded artwork!)
+    // 6. Radiant Red Vanishing Lines
     this.groupPerspectiveRays = new THREE.Group();
     const focalPoint = new THREE.Vector3(0, 9.2, -6.5);
 
-    // Draw radiant red rays to perimeter points
     for (let r = -7; r <= 7; r++) {
       const targetPoint = new THREE.Vector3(r * 2.2, -0.2, 7.5);
       const rayGeo = new THREE.BufferGeometry().setFromPoints([focalPoint, targetPoint]);
       const rayLine = new THREE.Line(rayGeo, this.matRedVector);
       this.groupPerspectiveRays.add(rayLine);
     }
-    // Lateral rays
     for (let h = 0; h <= 6; h += 1.5) {
       const pLeft = new THREE.Vector3(-10, h, 2);
       const pRight = new THREE.Vector3(10, h, 2);
@@ -367,7 +386,7 @@ export class BlueprintWorld {
     this.groupDomeVault.add(domeMesh);
     this.rootAssembly.add(this.groupDomeVault);
 
-    // 8. Manga Cel-Shaded Hand & Arm (From mangaScene.js)
+    // 8. Manga Cel-Shaded Hand & Arm
     this.createMangaArmAndHand();
 
     // 9. Floating Relics
@@ -383,27 +402,23 @@ export class BlueprintWorld {
     const skinMat = this.createMangaMaterial(0xf4f4f5, 0xff2233);
     const cuffMat = this.createMangaMaterial(0x09090b, 0xff2233);
 
-    // Forearm reaching forward
     const forearmGeo = new THREE.CylinderGeometry(0.48, 0.62, 3.2, 16);
     forearmGeo.rotateZ(Math.PI / 14);
     const forearm = new THREE.Mesh(forearmGeo, skinMat);
     forearm.position.set(0.6, -1.8, 0);
     this.groupMangaHand.add(forearm);
 
-    // Manga Wrist Cuff / Ring
     const cuffGeo = new THREE.TorusGeometry(0.68, 0.12, 12, 32);
     cuffGeo.rotateX(Math.PI / 2.3);
     const cuff = new THREE.Mesh(cuffGeo, cuffMat);
     cuff.position.set(0.25, -0.4, 0.1);
     this.groupMangaHand.add(cuff);
 
-    // Palm
     const palmGeo = new THREE.BoxGeometry(1.0, 1.2, 0.35);
     const palm = new THREE.Mesh(palmGeo, skinMat);
     palm.position.set(0, 0.4, 0);
     this.groupMangaHand.add(palm);
 
-    // 4 Articulated Fingers
     const fingerPositions = [
       { x: -0.38, y: 1.1, len: 0.8, rotZ: 0.15 },
       { x: -0.12, y: 1.2, len: 0.95, rotZ: 0.05 },
@@ -431,7 +446,6 @@ export class BlueprintWorld {
       this.groupMangaHand.add(fingerGroup);
     });
 
-    // Thumb
     const thumbGroup = new THREE.Group();
     thumbGroup.position.set(-0.55, 0.2, 0.1);
     const thumbGeo = new THREE.CylinderGeometry(0.13, 0.15, 0.7, 12);
@@ -442,7 +456,6 @@ export class BlueprintWorld {
     thumbGroup.add(thumb);
     this.groupMangaHand.add(thumbGroup);
 
-    // Position Hand in Perspective View (bottom right)
     this.groupMangaHand.position.set(4.2, 0.4, 5.2);
     this.groupMangaHand.rotation.set(0.18, -0.55, -0.12);
     this.groupMangaHand.scale.set(1.5, 1.5, 1.5);
@@ -452,7 +465,6 @@ export class BlueprintWorld {
   createFloatingRelics() {
     this.groupRelics = new THREE.Group();
 
-    // 1. Tech Ribbed Cylinder
     const bottleMat = this.createMangaMaterial(0xff2233, 0xffffff);
     const bottleGeo = new THREE.CylinderGeometry(0.35, 0.35, 1.8, 24);
     this.bottle = new THREE.Mesh(bottleGeo, bottleMat);
@@ -467,7 +479,6 @@ export class BlueprintWorld {
       this.groupRelics.add(ring);
     }
 
-    // 2. Precast Inverted-T Beam Floating Relic
     const beamRelicMat = this.createMangaMaterial(0xf4f4f5, 0xff2233);
     const beamRelicGeo = new THREE.BoxGeometry(2.4, 0.45, 0.55);
     this.beamRelic = new THREE.Mesh(beamRelicGeo, beamRelicMat);
@@ -475,7 +486,6 @@ export class BlueprintWorld {
     this.beamRelic.rotation.set(0.4, 0.6, 0.2);
     this.groupRelics.add(this.beamRelic);
 
-    // 3. Geodesic Tech Dodecahedron
     const polyMat = this.createMangaMaterial(0x18181b, 0xff2233);
     const polyGeo = new THREE.DodecahedronGeometry(0.75, 0);
     this.poly = new THREE.Mesh(polyGeo, polyMat);
@@ -530,11 +540,28 @@ export class BlueprintWorld {
     this.scene.add(this.particles);
   }
 
+  triggerManaShockwave() {
+    sound.playMangaImpact();
+    if (!this.particles) return;
+    const positions = this.particles.geometry.attributes.position.array;
+    for (let i = 0; i < positions.length / 3; i++) {
+      this.particleVelocities[i * 3] += (Math.random() - 0.5) * 0.2;
+      this.particleVelocities[i * 3 + 1] += Math.random() * 0.25;
+      this.particleVelocities[i * 3 + 2] += (Math.random() - 0.5) * 0.2;
+    }
+  }
+
   toggleExploded() {
     this.isExploded = !this.isExploded;
     this.targetExploded = this.isExploded ? 1.0 : 0.0;
     sound.playStructuralClack();
     return this.isExploded;
+  }
+
+  toggleAutoRotate() {
+    this.autoRotate = !this.autoRotate;
+    sound.playCaliperClick();
+    return this.autoRotate;
   }
 
   toggleLayer(key) {
@@ -573,7 +600,7 @@ export class BlueprintWorld {
     const modes = ['crimson', 'blueprint', 'wireframe'];
     const idx = (modes.indexOf(this.visualMode) + 1) % modes.length;
     this.visualMode = modes[idx];
-    sound.playPencilScratch();
+    sound.playCaliperClick();
 
     if (this.visualMode === 'crimson') {
       this.setWireframeMode(false);
@@ -590,7 +617,6 @@ export class BlueprintWorld {
       this.matRedVector.color.setHex(0x399dd6);
       this.accentLight.color.setHex(0x399dd6);
     } else {
-      // Pure Wireframe Overdrive
       this.setWireframeMode(true);
       this.matRedVector.color.setHex(0xff2233);
       this.accentLight.color.setHex(0xffaa00);
@@ -605,15 +631,81 @@ export class BlueprintWorld {
     this.camera.lookAt(0.5, 2.2, 0);
     this.targetExploded = 0.0;
     this.isExploded = false;
-    sound.playBlueprintUnfold();
+    sound.playStructuralClack();
+  }
+
+  // Smooth Focus on 3D Component Target (Pin Click)
+  focusOnTarget(pinKey) {
+    sound.playLaserLock();
+    if (pinKey === 'beam') {
+      this.targetRotation.x = 0.15;
+      this.targetRotation.y = -0.2;
+      this.camera.position.set(6.5, 6.2, 9.5);
+    } else if (pinKey === 'bearing') {
+      this.targetRotation.x = 0.42;
+      this.targetRotation.y = -0.6;
+      this.camera.position.set(4.5, 4.8, 7.5);
+    } else if (pinKey === 'corbel') {
+      this.targetRotation.x = 0.22;
+      this.targetRotation.y = -0.8;
+      this.camera.position.set(5.0, 3.8, 8.0);
+    } else {
+      this.resetCamera();
+    }
+  }
+
+  // Get 2D Screen Coordinates for Floating Hologram Pins
+  getPinScreenPositions() {
+    const width = this.canvas.clientWidth || window.innerWidth;
+    const height = this.canvas.clientHeight || window.innerHeight;
+    const results = {};
+
+    const tempV = new THREE.Vector3();
+    for (const [key, anchorPos] of Object.entries(this.pinAnchors)) {
+      tempV.copy(anchorPos);
+      tempV.applyEuler(this.rootAssembly.rotation);
+      tempV.add(this.rootAssembly.position);
+      tempV.project(this.camera);
+
+      // Check if behind camera
+      const isVisible = tempV.z < 1.0;
+      const screenX = (tempV.x * 0.5 + 0.5) * width;
+      const screenY = (-(tempV.y * 0.5) + 0.5) * height;
+
+      results[key] = {
+        x: screenX,
+        y: screenY,
+        visible: isVisible && screenX >= 0 && screenX <= width && screenY >= 0 && screenY <= height
+      };
+    }
+    return results;
+  }
+
+  // Telemetry Telemetrics for HUD
+  getTelemetry() {
+    return {
+      fps: this.currentFps,
+      pitch: (this.rootAssembly.rotation.x * (180 / Math.PI)).toFixed(1),
+      yaw: (this.rootAssembly.rotation.y * (180 / Math.PI)).toFixed(1),
+      exploded: this.isExploded ? 'ACTIVE [100%]' : 'LOCKED [0%]',
+      mode: this.visualMode.toUpperCase(),
+      verts: 38400,
+      drawCalls: 22
+    };
   }
 
   animate() {
     requestAnimationFrame(this.animate.bind(this));
 
     const delta = this.clock.getDelta();
+    this.frameCount++;
+    if (this.clock.getElapsedTime() - this.lastFpsUpdate > 0.5) {
+      this.currentFps = Math.round(this.frameCount / (this.clock.getElapsedTime() - this.lastFpsUpdate));
+      this.frameCount = 0;
+      this.lastFpsUpdate = this.clock.getElapsedTime();
+    }
 
-    if (!this.isDragging) {
+    if (!this.isDragging && this.autoRotate) {
       this.targetRotation.y += this.rotationSpeed.y;
     }
 
@@ -666,11 +758,19 @@ export class BlueprintWorld {
       this.poly.rotation.z += 0.01;
     }
 
-    // Floating particles drift
+    // Floating particles drift & decay
     if (this.particles) {
       const positions = this.particles.geometry.attributes.position.array;
       for (let i = 0; i < positions.length / 3; i++) {
+        positions[i * 3] += this.particleVelocities[i * 3];
         positions[i * 3 + 1] += this.particleVelocities[i * 3 + 1];
+        positions[i * 3 + 2] += this.particleVelocities[i * 3 + 2];
+
+        // Dampen velocity back to drift speed
+        this.particleVelocities[i * 3] *= 0.985;
+        this.particleVelocities[i * 3 + 1] *= 0.985;
+        this.particleVelocities[i * 3 + 2] *= 0.985;
+
         if (positions[i * 3 + 1] < -4) positions[i * 3 + 1] = 16;
         if (positions[i * 3 + 1] > 16) positions[i * 3 + 1] = -4;
       }
