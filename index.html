@@ -3,23 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DAGMAWI YOSEF (0xDagi) — Supreme Estate Developer & Computational Constructor</title>
+  <title>DAGMAWI YOSEF (DY) — Architect, Designer & Computational Engineer</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="./src/style.css">
 </head>
-<body class="manga-universe">
+<body class="architectural-universe">
 
-  <!-- Interactive Calligraphy Ink Trail Overlay -->
-  <canvas id="ink-canvas" class="ink-canvas-overlay"></canvas>
+  <!-- Architectural Coordinate Grid & Blueprint Scanlines -->
+  <div class="bg-grid-plane"></div>
+  <div class="bg-vignette-overlay"></div>
 
-  <!-- Manga Speedlines Dynamic Flash Overlay -->
-  <div id="speedlines-overlay" class="speedlines-overlay pointer-events-none fixed inset-0 z-40 opacity-0 transition-opacity duration-150"></div>
-
-  <!-- Custom Blueprint Crosshair Cursor -->
+  <!-- Custom Crosshair Precision Cursor -->
   <div id="custom-cursor">
     <div class="cursor-dot"></div>
     <div class="cursor-ring"></div>
@@ -29,803 +27,583 @@
   <nav id="main-nav">
     <div class="nav-inner">
       <a href="#" class="nav-logo">
-        <span class="logo-mark">0xD</span>
-        <span class="logo-text">DAGMAWI YOSEF</span>
-        <span class="logo-badge">// SUPREME ESTATE DEVELOPER</span>
+        <span class="logo-box">DY</span>
       </a>
+
       <div class="nav-links">
-        <a href="#manga-prologue" class="nav-link" data-index="00">Awakening</a>
-        <a href="#work" class="nav-link" data-index="01">Chronicles</a>
-        <a href="#drafting" class="nav-link" data-index="02">Drafting CAD</a>
-        <a href="#gallery" class="nav-link" data-index="03">Shader Lab</a>
-        <a href="#process" class="nav-link" data-index="04">Metamorphosis</a>
-        <a href="#about" class="nav-link" data-index="05">Identity</a>
-        <a href="#contact" class="nav-link" data-index="06">Contract</a>
+        <a href="#hero" class="nav-link active"><span class="nav-num">01.</span> HERO</a>
+        <a href="#work" class="nav-link"><span class="nav-num">02.</span> WORK</a>
+        <a href="#about" class="nav-link"><span class="nav-num">03.</span> ARCHITECTURE</a>
+        <a href="#gallery" class="nav-link"><span class="nav-num">04.</span> DESIGN</a>
+        <a href="#lab" class="nav-link"><span class="nav-num">05.</span> TECHNOLOGY</a>
+        <a href="#lab" class="nav-link"><span class="nav-num">06.</span> LAB</a>
+        <a href="#contact" class="nav-link"><span class="nav-num">07.</span> CONTACT</a>
       </div>
+
       <div class="nav-actions">
-        <button id="btn-toggle-system" class="nav-btn-system" title="Toggle Estate Developer Status Window">
-          <span>📜 SYSTEM STATUS</span>
-        </button>
-        <button id="btn-audio" class="nav-btn-audio" aria-label="Toggle sound">
-          <span id="audio-icon">📐</span>
+        <button id="btn-audio" class="nav-btn-audio" aria-label="Toggle ambient architectural sound">
+          <span class="audio-wave-icon">
+            <span></span><span></span><span></span>
+          </span>
           <span class="audio-text">SOUND: OFF</span>
         </button>
-        <a href="#contact" class="nav-cta">COMMISSION ESTATE</a>
+        <button class="nav-menu-btn" aria-label="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
       </div>
     </div>
   </nav>
 
-  <!-- ==================== HERO SECTION: MANHWA GAME EXPERIENCE ==================== -->
-  <section id="hero">
-    <!-- Fullscreen 3D WebGL Canvas (Precast Assembly, Inked Edges, Red Vanishing Rays, Cel-Shaded Hand & Particles) -->
-    <canvas id="blueprint-canvas" class="hero-3d-canvas"></canvas>
-    
-    <!-- Cinematic Manga Gradients & Screentone -->
-    <div class="hero-gradient"></div>
-    <div class="hero-screentone"></div>
-    
-    <!-- Floating Japanese Katakana Sound Effects (Onomatopoeia) -->
-    <div class="hero-sfx-layer pointer-events-none">
-      <div class="manga-sfx sfx-don hidden sm:block">ドーン!</div>
-      <div class="manga-sfx sfx-gogo hidden md:block">ゴゴゴゴ</div>
-      <div class="manga-sfx sfx-zudo hidden lg:block">ズドドド</div>
-    </div>
-
-    <!-- 3D Spatial Holographic Pins (Anchored directly to 3D geometry in space) -->
-    <div id="hero-pins-container" class="hero-pins-layer">
-      <div class="spatial-pin pin-beam" id="pin-beam" data-target="beam" style="display: none;">
-        <div class="pin-marker"><span class="pin-pulse"></span><span class="pin-dot"></span></div>
-        <div class="pin-card">
-          <div class="pin-header"><span class="pin-code">DWG-B01</span><span class="pin-rank">[S-BEAM]</span></div>
-          <strong class="pin-label">INVERTED-T LEDGE BEAM</strong>
-          <span class="pin-sub">DEPTH: 600mm • STEM: 200mm • PCI 8th Ed.</span>
-        </div>
-      </div>
-      <div class="spatial-pin pin-bearing" id="pin-bearing" data-target="bearing" style="display: none;">
-        <div class="pin-marker"><span class="pin-pulse"></span><span class="pin-dot"></span></div>
-        <div class="pin-card">
-          <div class="pin-header"><span class="pin-code">SPEC-HC200</span><span class="pin-rank">[VERIFIED]</span></div>
-          <strong class="pin-label">90mm NOMINAL BEARING</strong>
-          <span class="pin-sub">EUROCODE 2 & PCI 8TH ED. • ZERO SLIP</span>
-        </div>
-      </div>
-      <div class="spatial-pin pin-corbel" id="pin-corbel" data-target="corbel" style="display: none;">
-        <div class="pin-marker"><span class="pin-pulse"></span><span class="pin-dot"></span></div>
-        <div class="pin-card">
-          <div class="pin-header"><span class="pin-code">SEAT-C02</span><span class="pin-rank">[450kN]</span></div>
-          <strong class="pin-label">STRUCTURAL CORBEL SEAT</strong>
-          <span class="pin-sub">SHEAR FRICTION • CLOSED LOOP TIES</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Hero Foreground Content: High-Impact Manhwa Game Headline -->
-    <div class="hero-content">
-      <!-- Real-time HUD Telemetry Widget (Samana Studio & AAA Game Style) -->
-      <div class="hero-telemetry-hud" id="hero-telemetry-hud">
-        <div class="hud-top">
-          <div class="hud-live-tag"><span class="hud-blink"></span> TELEMETRY // 3D SENSOR</div>
-          <div class="hud-fps" id="hud-fps-val">60 FPS</div>
-        </div>
-        <div class="hud-matrix-row">
-          <div class="hud-cell"><span class="cell-k">ORBIT YAW</span><span class="cell-v" id="hud-yaw-val">-25.8°</span></div>
-          <div class="hud-cell"><span class="cell-k">PITCH</span><span class="cell-v" id="hud-pitch-val">+16.0°</span></div>
-          <div class="hud-cell"><span class="cell-k">ASSEMBLY</span><span class="cell-v text-crimson" id="hud-mesh-val">LOCKED</span></div>
-        </div>
-        <div class="hud-sound-wave" id="hud-sound-wave">
-          <span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span><span class="wave-bar"></span>
-          <span class="wave-label">SPATIAL HARMONICS</span>
-        </div>
-      </div>
-
-      <div class="hero-domain-pill">
-        <span class="domain-tag">DOMAIN EXPANSION</span>
-        <span class="domain-kanji">領域展開</span>
-        <span class="domain-meta">S-RANK CONSTRUCTOR • 0xDAGI</span>
-      </div>
+  <!-- ==================== HERO SECTION ==================== -->
+  <section id="hero" class="connected-section">
+    <div class="hero-layout">
       
-      <h1 class="hero-game-title">
-        <span class="title-sup">COMPUTATIONAL ARCHITECT & ESTATE DEVELOPER</span>
-        <span class="title-main">BENDING REALITY</span>
-        <span class="title-glow">INTO STEEL & STONE<span class="dot-crimson">.</span></span>
-      </h1>
-      
-      <!-- Punchy Mission Briefing Card -->
-      <div class="hero-mission-card">
-        <div class="mission-tag-row">
-          <span class="mission-status-pill"><span class="pill-glow"></span> MISSION BRIEF: REALITY TRANSMUTATION</span>
-          <span class="mission-rank">[S-RANK]</span>
-        </div>
-        <p class="mission-quote">
-          &ldquo;Steel yields. Concrete hardens. But verified matrix algorithms never bend. Like Lloyd transmuting barren rock into unbreakable citadels.&rdquo;
-        </p>
-        <div class="mission-specs-strip">
-          <div class="spec-pill"><span class="spec-dot green"></span> <strong>90mm</strong> NOMINAL BEARING</div>
-          <div class="spec-pill"><span class="spec-dot azure"></span> <strong>60 FPS</strong> WEBGL ENGINE</div>
-          <div class="spec-pill"><span class="spec-dot crimson"></span> <strong>PCI 8th Ed.</strong> RIGOR</div>
-        </div>
-      </div>
-      
-      <div class="hero-actions">
-        <a href="#work" class="btn-game-primary manga-btn-glow">
-          <span class="btn-icon">⚡</span>
-          <span>ENTER THE CHRONICLES</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-        </a>
-        <button id="btn-explode" class="btn-game-secondary">
-          <span class="btn-icon">💥</span>
-          <span>EXPLODE 3D ASSEMBLY</span>
-        </button>
-        <button id="btn-burst-speedlines" class="btn-game-ghost">
-          <span>⚡ SPEEDLINES</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- THE GREATEST ESTATE DEVELOPER: HOLOGRAPHIC RPG SYSTEM WINDOW -->
-    <div id="estate-system-window" class="estate-system-hud">
-      <div class="system-hud-header">
-        <div class="system-hud-title">
-          <span class="system-pulse-dot"></span>
-          <span>[SYSTEM: ESTATE DEVELOPER STATUS // ACTIVE]</span>
-        </div>
-        <button id="btn-minimize-system" class="system-hud-btn" title="Minimize / Expand Window">_</button>
-      </div>
-      <div class="system-hud-body">
-        <div class="system-user-row">
-          <span class="system-label">CONSTRUCTOR:</span>
-          <strong class="system-val text-white">0xDAGI (Dagmawi Yosef)</strong>
-        </div>
-        <div class="system-user-row">
-          <span class="system-label">CLASS / RANK:</span>
-          <span class="system-val text-crimson font-black">SUPREME ARCHITECT [S-RANK]</span>
-        </div>
-        <div class="system-user-row">
-          <span class="system-label">PASSIVE BUFF:</span>
-          <span class="system-val text-gold">[LLOYD'S DEVILISH SMIRK: +500% WORK SPEED]</span>
+      <!-- Left Column: Monumental Architectural Typography -->
+      <div class="hero-left-col">
+        <div class="hero-meta-vertical">
+          <span>ARCHITECT • DESIGNER • DEVELOPER</span>
         </div>
 
-        <div class="system-stats-grid">
-          <div class="sys-stat"><span class="lbl">STR (Precast Rebar)</span><span class="val">999/999</span></div>
-          <div class="sys-stat"><span class="lbl">INT (Matrix Solvers)</span><span class="val">999/999</span></div>
-          <div class="sys-stat"><span class="lbl">AGI (60 FPS Three.js)</span><span class="val">999/999</span></div>
-          <div class="sys-stat"><span class="lbl">MP (Structural Mana)</span><span class="val text-azure">MAX</span></div>
-        </div>
+        <div class="hero-text-block">
+          <h1 class="hero-title">
+            <span class="name-first">DAGMAWI</span>
+            <span class="name-last">YOSEF</span>
+          </h1>
 
-        <div class="system-active-quest">
-          <div class="quest-title text-sky">★ ACTIVE QUEST:</div>
-          <p class="quest-desc">"Eradicate structural errors. Automate 1,000 hollow-core slabs inside Revit Transactions before noon."</p>
-        </div>
+          <div class="hero-subhead">
+            <span class="subhead-track">SPACES • SYSTEMS • EXPERIENCES</span>
+          </div>
 
-        <div class="system-hud-footer">
-          <button id="btn-system-sfx-don" class="sys-action-btn">💥 SOUND: ドーン!</button>
-          <button id="btn-system-buff" class="sys-action-btn text-gold">⚡ TRIGGER MANA</button>
+          <p class="hero-description">
+            I design at the intersection of architecture, engineering and code to create meaningful solutions.
+          </p>
+
+          <div class="hero-explore-cta">
+            <a href="#about" class="explore-link">
+              <span class="explore-arrow">→</span>
+              <span class="explore-text">SCROLL TO EXPLORE</span>
+            </a>
+            <div class="explore-line-meter">
+              <div class="meter-bar"></div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Interactive Lloyd Frontera Familiar / Companion Widget -->
-    <div class="lloyd-companion-widget" id="lloyd-companion">
-      <div class="lloyd-avatar-box">
-        <div class="lloyd-face-emoji" id="lloyd-face">😈</div>
-        <span class="lloyd-rank-tag">LLOYD // S-RANK</span>
-      </div>
-      <div class="lloyd-bubble">
-        <div class="lloyd-bubble-header">
-          <span class="lloyd-name">ESTATE FAMILIAR:</span>
-          <span class="lloyd-mood" id="lloyd-mood">[SCHEMING]</span>
+      <!-- Right Column: 3D Brutalist Architectural Monolith Canvas -->
+      <div class="hero-right-col">
+        <div class="monolith-canvas-wrapper">
+          <canvas id="hero-monolith-canvas" class="monolith-canvas"></canvas>
+          <div class="canvas-blueprint-specs">
+            <div class="spec-tag">[X: 35.6895 • Y: 139.6917]</div>
+            <div class="spec-tag">REF: BRUTALIST_MONOLITH_01</div>
+            <div class="spec-tag">INTERACTIVE 3D • DRAG TO ROTATE</div>
+          </div>
         </div>
-        <p class="lloyd-message" id="lloyd-msg">&ldquo;Calculations check out. 90mm bearing locked into place. Not a single coin wasted!&rdquo;</p>
       </div>
-    </div>
 
-    <!-- Game Hotbar Action Deck (Keyboard Shortcuts [1] [2] [3] [4] [SPACE]) -->
-    <div class="game-action-deck" id="game-hotbar">
-      <div class="deck-inner">
-        <span class="deck-label">HOTBAR:</span>
-        <button class="deck-btn" id="deck-orbit" data-key="1" title="Toggle Auto-Rotation [Key 1]">
-          <span class="deck-key">[1]</span>
-          <span class="deck-txt">ORBIT</span>
-        </button>
-        <button class="deck-btn" id="deck-explode" data-key="2" title="Explode / Collapse Precast Assembly [Key 2]">
-          <span class="deck-key">[2]</span>
-          <span class="deck-txt">EXPLODE</span>
-        </button>
-        <button class="deck-btn" id="deck-wireframe" data-key="3" title="Toggle X-Ray Wireframe [Key 3]">
-          <span class="deck-key">[3]</span>
-          <span class="deck-txt">X-RAY</span>
-        </button>
-        <button class="deck-btn" id="deck-shader" data-key="4" title="Cycle Shader Mode [Key 4]">
-          <span class="deck-key">[4]</span>
-          <span class="deck-txt">SHADERS</span>
-        </button>
-        <button class="deck-btn deck-btn-special" id="deck-mana" data-key="SPACE" title="Trigger Mana Burst & Speedlines [SPACE]">
-          <span class="deck-key">[SPACE]</span>
-          <span class="deck-txt">⚡ MANA BURST (ドーン!)</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Hero Interactive Quick Corner Controls -->
-    <div class="hero-controls">
-      <button id="btn-reset" class="hero-ctrl-btn" title="Reset Camera Orientation">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>
-      </button>
-      <button id="btn-mode" class="hero-ctrl-btn" title="Cycle Visual Mode (Crimson Manga / Blueprint / Wireframe)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20z"/></svg>
-      </button>
     </div>
   </section>
 
-  <!-- ==================== MARQUEE TICKER ==================== -->
-  <div class="ticker-strip">
-    <div class="ticker-track">
-      <span>COMPUTATIONAL ARCHITECTURE</span><span class="ticker-sep">◆</span>
-      <span>THE GREATEST ESTATE DEVELOPER</span><span class="ticker-sep">◆</span>
-      <span>PRECAST HOLLOW-CORE BIM</span><span class="ticker-sep">◆</span>
-      <span>GLSL CEL-SHADING & CONTOUR HATCHING</span><span class="ticker-sep">◆</span>
-      <span>STRUCTURAL MATRIX SOLVERS</span><span class="ticker-sep">◆</span>
-      <span>REVIT API TRANSACTIONS</span><span class="ticker-sep">◆</span>
-      <span>THREE.JS 60 FPS ENGINES</span><span class="ticker-sep">◆</span>
-      <span>EUROCODE 2 & PCI 8TH ED.</span><span class="ticker-sep">◆</span>
-      <span>COMPUTATIONAL ARCHITECTURE</span><span class="ticker-sep">◆</span>
-      <span>THE GREATEST ESTATE DEVELOPER</span><span class="ticker-sep">◆</span>
-      <span>PRECAST HOLLOW-CORE BIM</span><span class="ticker-sep">◆</span>
-      <span>GLSL CEL-SHADING & CONTOUR HATCHING</span><span class="ticker-sep">◆</span>
-      <span>STRUCTURAL MATRIX SOLVERS</span><span class="ticker-sep">◆</span>
-      <span>REVIT API TRANSACTIONS</span><span class="ticker-sep">◆</span>
-      <span>THREE.JS 60 FPS ENGINES</span><span class="ticker-sep">◆</span>
-      <span>EUROCODE 2 & PCI 8TH ED.</span><span class="ticker-sep">◆</span>
-    </div>
-  </div>
-
-  <!-- ==================== SECTION 00: MANGA PROLOGUE & AWAKENING ==================== -->
-  <section id="manga-prologue" class="manga-prologue-section">
+  <!-- ==================== SECTION 01: ABOUT ==================== -->
+  <section id="about" class="connected-section section-about">
     <div class="section-container">
-      <div class="comic-spread-frame">
-        <div class="comic-spread-grid">
-          
-          <!-- Left Comic Panel: Full-Bleed Manga Awakening Artwork -->
-          <div class="comic-panel-visual">
-            <div class="comic-image-wrap">
-              <img src="./images/manga-awakening.jpg" alt="Manga Awakening Protagonist" class="comic-hero-image" />
-              <div class="comic-screentone-overlay"></div>
-              <div class="comic-diagonal-border"></div>
-              <div class="comic-panel-tag">
-                <span class="font-cjk">第00話</span> // PROLOGUE: THE CONSTRUCTOR AWAKENS
-              </div>
-            </div>
-          </div>
-
-          <!-- Right Comic Panel: Narrative & Manifesto -->
-          <div class="comic-panel-narrative">
-            <div class="dialogue-box">
-              <div class="dialogue-speaker">
-                <span class="speaker-name text-crimson">LLOYD // 0xDAGI:</span>
-                <span class="speaker-role text-sky">[SUPREME ESTATE DEVELOPER]</span>
-              </div>
-              <p class="dialogue-quote">
-                &ldquo;People build in their imagination. But imagination doesn't resist dead loads, shear forces, or budget overruns. The true craft is bending raw reality until every precast beam locks into place with millimeter perfection.&rdquo;
-              </p>
-            </div>
-
-            <div class="system-dialogue-prompt">
-              <div class="sys-badge">SYSTEM NOTIFICATION</div>
-              <p class="sys-text">
-                [SKILL 'THE BLUEPRINT UNIVERSE' HAS AWAKENED.]<br/>
-                All architectural drawings, structural matrices, and full-stack software are now directly transmuted into verified, 60 FPS interactive reality.
-              </p>
-            </div>
-
-            <div class="manga-manifesto-points">
-              <div class="manifesto-card">
-                <span class="card-icon text-crimson">📐</span>
-                <div>
-                  <strong>01. Verified Engineering Rigor</strong>
-                  <p>Never approximate bearing or capacities. Eurocode 2 & PCI 8th Ed. verified formulas only.</p>
-                </div>
-              </div>
-              <div class="manifesto-card">
-                <span class="card-icon text-azure">⚡</span>
-                <div>
-                  <strong>02. GPU-Accelerated Immersion</strong>
-                  <p>Real-time GLSL contour shaders, dynamic chromatic displacement, and Three.js 3D assemblies.</p>
-                </div>
-              </div>
-              <div class="manifesto-card">
-                <span class="card-icon text-gold">🏛️</span>
-                <div>
-                  <strong>03. Unshakable Production Craft</strong>
-                  <p>Semantic markup, accessible architecture, zero bloat, and code that thrives six months later.</p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
+      
+      <div class="section-header-row">
+        <span class="sec-number">01</span>
+        <span class="sec-label">// ABOUT</span>
       </div>
+
+      <div class="about-triptych-grid">
+        
+        <!-- Left: Statement -->
+        <div class="about-statement-col">
+          <h2 class="about-headline">
+            BUILDING IDEAS<br/>
+            THAT ARE<br/>
+            STRUCTURAL,<br/>
+            FUNCTIONAL AND<br/>
+            <span class="text-accent-blue">MEANINGFUL</span>
+          </h2>
+          <p class="about-subtext">
+            Bridging the gap between conceptual architectural thinking and robust computational execution. Every line carries structural purpose.
+          </p>
+        </div>
+
+        <!-- Center: Monolithic DY Concrete & Blue Glass Sculpture -->
+        <div class="about-sculpture-col">
+          <div class="monogram-concrete-block">
+            <div class="monogram-d">D</div>
+            <div class="monogram-y-glass">Y</div>
+            <div class="blueprint-over-lines">
+              <div class="bp-line-h"></div>
+              <div class="bp-line-v"></div>
+              <div class="bp-corner top-left"></div>
+              <div class="bp-corner bottom-right"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: 7 Core Disciplines List -->
+        <div class="about-disciplines-col">
+          <div class="disciplines-header">
+            <span class="disc-label">PRACTICE DOMAINS</span>
+            <span class="disc-num">02</span>
+          </div>
+
+          <ul class="disciplines-list">
+            <li class="disc-item"><span class="disc-arrow">—</span> ARCHITECTURAL DESIGN</li>
+            <li class="disc-item"><span class="disc-arrow">—</span> STRUCTURAL ENGINEERING</li>
+            <li class="disc-item"><span class="disc-arrow">—</span> COMPUTATIONAL DESIGN</li>
+            <li class="disc-item"><span class="disc-arrow">—</span> BIM & AUTOMATION</li>
+            <li class="disc-item"><span class="disc-arrow">—</span> WEB DEVELOPMENT</li>
+            <li class="disc-item"><span class="disc-arrow">—</span> UI/UX DESIGN</li>
+            <li class="disc-item"><span class="disc-arrow">—</span> DATA & ANALYTICS</li>
+          </ul>
+        </div>
+
+      </div>
+
     </div>
   </section>
 
-  <!-- ==================== SECTION 01: SELECTED CHRONICLES ==================== -->
-  <section id="work">
+  <!-- ==================== SECTION 02: SELECTED WORK ==================== -->
+  <section id="work" class="connected-section section-work">
     <div class="section-container">
-      <div class="section-header">
-        <span class="section-index">01 // CHRONICLES</span>
-        <h2 class="section-title">Verified Engineering Assemblies</h2>
-        <p class="section-lead">Algorithmic precast BIM, real-time matrix solvers, offline educational platforms, and custom WebGL shaders.</p>
+      
+      <div class="section-header-row">
+        <span class="sec-number">02</span>
+        <span class="sec-label">// SELECTED WORK</span>
       </div>
 
-      <!-- Chronicle 01: Precast BIM -->
-      <article class="project-card manga-panel" data-project-id="precast-bim">
-        <div class="project-card-inner">
-          <div class="project-media">
-            <canvas id="canvas-precast-interactive" class="project-canvas"></canvas>
-            <div class="project-media-overlay">
-              <span class="project-badge">第01話 // FLAGSHIP BIM</span>
-              <span class="project-badge badge-azure">PCI 8TH ED. & EN 1992-1-1</span>
-            </div>
-            <div class="project-media-hint">
-              <span>● BEARING: 90mm | TOPPING: 50mm | CORBEL: 300mm</span>
-            </div>
-          </div>
-          <div class="project-info">
-            <div class="project-meta">
-              <span class="project-number">01</span>
-              <span class="project-category">COMPUTATIONAL ARCHITECTURE & BIM</span>
-            </div>
-            <h3 class="project-title">Precast BIM & Computational Structural Suite</h3>
-            
-            <!-- Estate Developer Dialogue -->
-            <div class="lloyd-quote-box">
-              <span class="lloyd-avatar">😈</span>
-              <p class="lloyd-quote">
-                <strong>Lloyd:</strong> &ldquo;Do you know how many hundreds of hours we save by calculating hollow-core bearings algorithmically inside Revit API Transactions? A fortune! Not a single plank slips.&rdquo;
-              </p>
-            </div>
-
-            <p class="project-desc">
-              Algorithmic modeling of precast hollow-core slabs, inverted-T ledge beams, and structural corbels with verified bearing calculations inside Autodesk Revit API Transactions. Converts millimeters to internal decimal feet (304.8) with zero geometry drift.
+      <!-- WORK DOSSIER 01: PRECAST BIM (FLAGSHIP) -->
+      <article class="work-dossier" data-project="precast-bim">
+        <div class="dossier-inner">
+          <div class="dossier-meta-col">
+            <div class="dossier-id">01</div>
+            <h3 class="dossier-title">PRECAST BIM & COMPUTATIONAL STRUCTURAL SUITE</h3>
+            <p class="dossier-desc">
+              Automated precast design, structural analysis and BIM documentation system. Algorithmically verifies 90mm nominal bearing on inverted-T ledges with zero geometry drift.
             </p>
-            
-            <div class="project-verified-box">
-              <div class="verified-item">
-                <span class="verified-dot"></span>
-                <span>Minimum nominal bearing: <strong>90mm</strong> on concrete ledges with 50mm structural topping & A142 mesh</span>
-              </div>
-              <div class="verified-item">
-                <span class="verified-dot"></span>
-                <span>Inverted-T Ledge Shear: Verified hanger reinforcement & punching shear capacity</span>
-              </div>
+            <div class="dossier-tags">
+              <span>REVIT</span> • <span>PYTHON</span> • <span>DYNAMO</span> • <span>C#</span>
             </div>
-            
-            <div class="project-tags">
-              <span>Autodesk Revit API</span>
-              <span>pyRevit</span>
-              <span>Python</span>
-              <span>PCI Design Manual</span>
-              <span>Eurocode 2</span>
-            </div>
-            
-            <div class="project-actions">
-              <button class="btn-open-case-study btn-primary btn-small" data-project-id="precast-bim">
-                <span>READ 7-CHAPTER DOSSIER</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </button>
-              <button id="btn-precast-explode" class="btn-secondary btn-small">
-                <span>💥 EXPLODE SLABS</span>
-              </button>
-              <a href="https://github.com/dagiyosi-pixel" target="_blank" rel="noopener noreferrer" class="btn-ghost">
-                GITHUB REPO ↗
-              </a>
+            <button class="btn-dossier-explore" id="btn-precast-explode">
+              <span>EXPLODE 3D ASSEMBLY</span> <span class="arr">→</span>
+            </button>
+          </div>
+
+          <div class="dossier-visual-col">
+            <div class="dossier-canvas-frame">
+              <canvas id="canvas-precast-interactive" class="dossier-3d-canvas"></canvas>
+              <div class="canvas-hud-overlay">
+                <span class="hud-pill">BEARING: 90mm (EN 1992-1-1)</span>
+                <span class="hud-pill">DRAG TO ORBIT</span>
+              </div>
             </div>
           </div>
         </div>
       </article>
 
-      <!-- Chronicle 02: Theory of Structures -->
-      <article class="project-card manga-panel" data-project-id="theory-of-structures">
-        <div class="project-card-inner project-card-reverse">
-          <div class="project-media">
-            <canvas id="canvas-beam-solver" width="560" height="320" class="project-canvas"></canvas>
-            <div class="project-media-overlay">
-              <span class="project-badge badge-azure">第02話 // MATRIX SOLVERS</span>
-              <span class="project-badge">60 FPS REAL-TIME</span>
+      <!-- WORK DOSSIER 02: THEORY OF STRUCTURES MASTERY LAB -->
+      <article class="work-dossier" data-project="theory-of-structures">
+        <div class="dossier-inner">
+          <div class="dossier-meta-col">
+            <div class="dossier-id">02</div>
+            <h3 class="dossier-title">THEORY OF STRUCTURES MASTERY LAB</h3>
+            <p class="dossier-desc">
+              Interactive structural analysis learning platform with real-time computation of shear force, bending moments, and elastic deflections.
+            </p>
+            <div class="dossier-tags">
+              <span>JAVASCRIPT</span> • <span>WEBGL</span> • <span>MATH.JS</span>
             </div>
-            <div class="project-media-slider-wrap">
-              <label for="beam-load-slider" class="slider-label">DRAG POINT LOAD LOCATION (x):</label>
+            <div class="dossier-slider-control">
+              <label for="beam-load-slider">DRAG POINT LOAD LOCATION (x):</label>
               <input id="beam-load-slider" type="range" min="0.5" max="9.5" step="0.1" value="4.0" class="beam-slider" />
             </div>
           </div>
-          <div class="project-info">
-            <div class="project-meta">
-              <span class="project-number">02</span>
-              <span class="project-category">COMPUTATIONAL STRUCTURAL ENGINEERING</span>
-            </div>
-            <h3 class="project-title">Theory of Structures Mastery Lab</h3>
-            
-            <!-- Estate Developer Dialogue -->
-            <div class="lloyd-quote-box">
-              <span class="lloyd-avatar">📐</span>
-              <p class="lloyd-quote">
-                <strong>Lloyd:</strong> &ldquo;Deflection? On my watch? The laws of physics will comply or be rewritten! Virtual Work, Slope-Deflection, and Moment Distribution calculated in real-time.&rdquo;
-              </p>
-            </div>
 
-            <p class="project-desc">
-              Interactive computational structural mechanics application for structural engineers and students. Solves statically determinate and indeterminate beams using <strong>Virtual Work</strong>, <strong>Slope-Deflection</strong>, and <strong>Moment Distribution</strong> with dynamic BMD and elastic curvature rendering.
-            </p>
-            
-            <div id="beam-formula-readout" class="project-formula-readout">
-              P = 50 kN @ x = 4.0m | R_A = 30.0 kN | R_B = 20.0 kN | <strong>M_max = +120.0 kN·m</strong>
-            </div>
-            
-            <div class="project-tags">
-              <span>JavaScript (ES6+)</span>
-              <span>KaTeX Math Engine</span>
-              <span>Canvas 2D Graphics</span>
-              <span>Matrix Solvers</span>
-            </div>
-            
-            <div class="project-actions">
-              <button class="btn-open-case-study btn-primary btn-small" data-project-id="theory-of-structures">
-                <span>READ 7-CHAPTER DOSSIER</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </button>
-              <a href="https://github.com/dagiyosi-pixel/theory-of-structures-mastery-lab" target="_blank" rel="noopener noreferrer" class="btn-ghost">
-                GITHUB REPO ↗
-              </a>
+          <div class="dossier-visual-col">
+            <div class="dossier-canvas-frame">
+              <canvas id="canvas-beam-solver" width="560" height="300" class="beam-diagram-canvas"></canvas>
+              <div class="beam-telemetry-readout" id="beam-formula-readout">
+                <span>P = 50.0 kN @ x = 4.0m</span>
+                <span>R_A = 30.0 kN</span>
+                <span>R_B = 20.0 kN</span>
+                <span class="text-accent-blue">M_max = +120.0 kN·m</span>
+              </div>
             </div>
           </div>
         </div>
       </article>
 
-      <!-- Chronicle 03: Ethiopian Curriculum SQ3R -->
-      <article class="project-card manga-panel" data-project-id="ethiopia-curriculum">
-        <div class="project-card-inner">
-          <div class="project-media project-media-dark">
-            <div class="project-stats-grid">
-              <div class="stat-box"><span class="stat-value">96</span><span class="stat-label">UNITS</span></div>
-              <div class="stat-box"><span class="stat-value">577+</span><span class="stat-label">CBA ITEMS</span></div>
-              <div class="stat-box"><span class="stat-value">184</span><span class="stat-label">SUBTOPICS</span></div>
-              <div class="stat-box"><span id="sq3r-timer" class="stat-value stat-timer">59:45</span><span class="stat-label">EXAM TIMER</span></div>
-            </div>
-            <div class="project-media-overlay">
-              <span class="project-badge badge-gold">第03話 // OFFLINE PWA</span>
-              <span class="project-badge">MOE CURRICULUM</span>
+      <!-- WORK DOSSIER 03: SQ3R EXAM PLATFORM -->
+      <article class="work-dossier" data-project="sq3r">
+        <div class="dossier-inner">
+          <div class="dossier-meta-col">
+            <div class="dossier-id">03</div>
+            <h3 class="dossier-title">SQ3R EXAM PLATFORM</h3>
+            <p class="dossier-desc">
+              Offline examination drill and honors certification engine. 96 units, 184 subtopics, and client-side PWA architecture.
+            </p>
+            <div class="dossier-tags">
+              <span>REACT</span> • <span>NODE.JS</span> • <span>INDEXEDDB</span>
             </div>
           </div>
-          <div class="project-info">
-            <div class="project-meta">
-              <span class="project-number">03</span>
-              <span class="project-category">EDUCATIONAL TECHNOLOGY & SYSTEMS</span>
-            </div>
-            <h3 class="project-title">Ethiopian Curriculum Platform (SQ3R)</h3>
-            
-            <!-- Estate Developer Dialogue -->
-            <div class="lloyd-quote-box">
-              <span class="lloyd-avatar">🎓</span>
-              <p class="lloyd-quote">
-                <strong>Lloyd:</strong> &ldquo;Education is the foundation of any lasting empire. Offline-first, zero-data PWA architecture so every student can drill Ministry exams anywhere!&rdquo;
-              </p>
-            </div>
 
-            <p class="project-desc">
-              Offline-first examination simulation and honors certification platform covering 96 units, 184 subtopics, and 577+ verified CBA questions aligned with the Ethiopian Ministry of Education curriculum. Features custom 1200×840 Canvas generator with stamped MoE seal.
-            </p>
-            
-            <div class="project-verified-box">
-              <div class="verified-item">
-                <span class="verified-dot verified-dot-gold"></span>
-                <span>Automated 1200×840 HD Canvas Certificate with stamped MoE Seal</span>
+          <div class="dossier-visual-col">
+            <div class="dashboard-preview-card">
+              <div class="dash-top-bar">
+                <span class="dash-sub">Mathematics — Grade 7</span>
+                <span class="dash-timer" id="sq3r-timer">59:45</span>
               </div>
-              <div class="verified-item">
-                <span class="verified-dot verified-dot-gold"></span>
-                <span>Zero-data client-side PWA architecture running smoothly on low-cost devices</span>
+              <div class="dash-body-split">
+                <div class="dash-left-metrics">
+                  <div class="dash-metrics-row">
+                    <div class="dash-metric">
+                      <span class="m-val">66%</span>
+                      <span class="m-lbl">OVERALL MASTERY</span>
+                    </div>
+                    <div class="dash-metric">
+                      <span class="m-val">24</span>
+                      <span class="m-lbl">TOTAL UNITS</span>
+                    </div>
+                    <div class="dash-metric">
+                      <span class="m-val">16</span>
+                      <span class="m-lbl">COMPLETED</span>
+                    </div>
+                  </div>
+                  <div class="dash-progress-line">
+                    <div class="progress-fill" style="width: 66%;"></div>
+                  </div>
+                </div>
+
+                <div class="dash-topic-table">
+                  <div class="topic-row"><span class="t-name">Algebra</span><span class="t-bar"><span style="width: 78%;"></span></span><span class="t-pct">78%</span></div>
+                  <div class="topic-row"><span class="t-name">Geometry</span><span class="t-bar"><span style="width: 85%;"></span></span><span class="t-pct">85%</span></div>
+                  <div class="topic-row"><span class="t-name">Trigonometry</span><span class="t-bar"><span style="width: 52%;"></span></span><span class="t-pct">52%</span></div>
+                  <div class="topic-row"><span class="t-name">Matrices</span><span class="t-bar"><span style="width: 60%;"></span></span><span class="t-pct">60%</span></div>
+                  <div class="topic-row"><span class="t-name">Vectors</span><span class="t-bar"><span style="width: 45%;"></span></span><span class="t-pct">45%</span></div>
+                </div>
               </div>
-            </div>
-            
-            <div class="project-tags">
-              <span>Progressive Web App</span>
-              <span>HTML5 Canvas HD</span>
-              <span>Web Audio API</span>
-              <span>SQ3R Study Cycle</span>
-            </div>
-            
-            <div class="project-actions">
-              <button class="btn-open-case-study btn-primary btn-small" data-project-id="ethiopia-curriculum">
-                <span>READ 7-CHAPTER DOSSIER</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </button>
-              <a href="https://dagiyosi-pixel.github.io/ethiopia-curriculum-sq3r-platform/" target="_blank" rel="noopener noreferrer" class="btn-secondary btn-small">
-                LIVE APP ↗
-              </a>
-              <a href="https://github.com/dagiyosi-pixel/ethiopia-curriculum-sq3r-platform" target="_blank" rel="noopener noreferrer" class="btn-ghost">
-                GITHUB ↗
-              </a>
             </div>
           </div>
         </div>
       </article>
 
-      <!-- Bento Grid: Three Specialized Tech Labs -->
-      <div class="mini-projects-header">
-        <span class="section-index">SPECIALIZED LABORATORIES</span>
-        <h3 class="mini-projects-title">Creative Technology & Spatial Computing</h3>
-      </div>
-
-      <div class="mini-projects">
-        <!-- Lab 01: Manga-Noir -->
-        <div class="mini-project manga-panel-dark" data-project-id="manga-noir">
-          <div class="mini-header">
-            <span class="mini-number">04</span>
-            <span class="mini-badge">GLSL / WEBGL</span>
+      <!-- WORK DOSSIER 04: ETHIOPIA // 360 DIGITAL ATLAS -->
+      <article class="work-dossier" data-project="atlas">
+        <div class="dossier-inner">
+          <div class="dossier-meta-col">
+            <div class="dossier-id">04</div>
+            <h3 class="dossier-title">ETHIOPIA // 360 INTERACTIVE DIGITAL ATLAS</h3>
+            <p class="dossier-desc">
+              Immersive 3D geospatial atlas capturing geological elevation models, regional fault rifts, and historic architectural landmarks.
+            </p>
+            <div class="dossier-tags">
+              <span>THREE.JS</span> • <span>GIS</span> • <span>WEBGL</span>
+            </div>
           </div>
-          <h4 class="mini-title">Manga-Noir WebGL Shader Lab</h4>
-          <p class="mini-desc">Real-time GPU cel-shading, procedural cross-hatching post-processing filters, and 1,800+ reactive particles with synthesized Web Audio sound.</p>
-          <div class="mini-footer">
-            <button class="btn-open-case-study mini-link" data-project-id="manga-noir">INSPECT DOSSIER →</button>
+
+          <div class="dossier-visual-col">
+            <div class="terrain-preview-frame">
+              <canvas id="canvas-topo-atlas" width="560" height="260" class="topo-canvas"></canvas>
+              <div class="terrain-markers-overlay">
+                <span class="geo-marker m1"><span class="dot"></span> Simien Mountains</span>
+                <span class="geo-marker m2"><span class="dot"></span> Rift Valley Fault</span>
+                <span class="geo-marker m3"><span class="dot"></span> Lalibela Monolith</span>
+              </div>
+            </div>
           </div>
         </div>
+      </article>
 
-        <!-- Lab 02: Ethiopia//360 -->
-        <div class="mini-project manga-panel-dark" data-project-id="ethiopia-360">
-          <div class="mini-header">
-            <span class="mini-number">05</span>
-            <span class="mini-badge badge-azure">SPATIAL COMPUTING</span>
+      <!-- WORK DOSSIER 05: AMT EXAM ASSESSMENT ENGINE -->
+      <article class="work-dossier" data-project="amt">
+        <div class="dossier-inner">
+          <div class="dossier-meta-col">
+            <div class="dossier-id">05</div>
+            <h3 class="dossier-title">AMT EXAM ASSESSMENT ENGINE</h3>
+            <p class="dossier-desc">
+              Automated assessment and psychometric evaluation engine for university entrance candidates.
+            </p>
+            <div class="dossier-tags">
+              <span>PYTHON</span> • <span>POSTGRESQL</span> • <span>FASTAPI</span>
+            </div>
           </div>
-          <h4 class="mini-title">ETHIOPIA//360 Community Atlas</h4>
-          <p class="mini-desc">Interactive digital atlas exploring the geographic, architectural, and historical topology of Ethiopia through vector SVG spatial mapping.</p>
-          <div class="mini-footer">
-            <button class="btn-open-case-study mini-link" data-project-id="ethiopia-360">INSPECT ATLAS →</button>
+
+          <div class="dossier-visual-col">
+            <div class="assessment-stats-frame">
+              <div class="amt-metric-quad">
+                <div class="q-box"><span class="q-v">8,642</span><span class="q-l">CANDIDATES</span></div>
+                <div class="q-box"><span class="q-v">248</span><span class="q-l">EXAM CENTERS</span></div>
+                <div class="q-box"><span class="q-v">71.6%</span><span class="q-l">MEAN SCORE</span></div>
+                <div class="q-box"><span class="q-v text-accent-blue">78.6%</span><span class="q-l">PASS RATE</span></div>
+              </div>
+              <div class="amt-body-split">
+                <div class="amt-histogram-wrap">
+                  <div class="hist-label">SCORE DISTRIBUTION</div>
+                  <div class="amt-histogram">
+                    <span class="bar" style="height: 25%;"></span>
+                    <span class="bar" style="height: 45%;"></span>
+                    <span class="bar" style="height: 70%;"></span>
+                    <span class="bar" style="height: 90%;"></span>
+                    <span class="bar" style="height: 100%;"></span>
+                    <span class="bar" style="height: 65%;"></span>
+                    <span class="bar" style="height: 35%;"></span>
+                  </div>
+                </div>
+                <div class="amt-subject-meters">
+                  <div class="hist-label">CORE PERFORMANCE PROFILES</div>
+                  <div class="subj-row"><span class="s-name">Mathematics</span><div class="s-meter"><span style="width: 82%;"></span></div><span class="s-val">82%</span></div>
+                  <div class="subj-row"><span class="s-name">Physics</span><div class="s-meter"><span style="width: 75%;"></span></div><span class="s-val">75%</span></div>
+                  <div class="subj-row"><span class="s-name">Chemistry</span><div class="s-meter"><span style="width: 68%;"></span></div><span class="s-val">68%</span></div>
+                  <div class="subj-row"><span class="s-name">Aptitude</span><div class="s-meter"><span style="width: 88%;"></span></div><span class="s-val">88%</span></div>
+                  <div class="subj-row"><span class="s-name">English</span><div class="s-meter"><span style="width: 71%;"></span></div><span class="s-val">71%</span></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </article>
 
-        <!-- Lab 03: AMT Exam -->
-        <div class="mini-project manga-panel-dark" data-project-id="amt-exam">
-          <div class="mini-header">
-            <span class="mini-number">06</span>
-            <span class="mini-badge badge-gold">MOBILE PRODUCT</span>
-          </div>
-          <h4 class="mini-title">AMT Exam Assessment Engine</h4>
-          <p class="mini-desc">Adaptive diagnostic assessment engine with timed question palettes, performance analytics, and rapid active recall on mobile.</p>
-          <div class="mini-footer">
-            <button class="btn-open-case-study mini-link" data-project-id="amt-exam">INSPECT ENGINE →</button>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- ==================== SECTION 02: ARCHITECTURAL DRAFTING WORKSTATION ==================== -->
-  <section id="drafting">
+  <!-- ==================== SECTION 03: ARCHITECTURE & DESIGN ==================== -->
+  <section id="gallery" class="connected-section section-arch-design">
     <div class="section-container">
-      <div class="section-header">
-        <span class="section-index">02 // DRAFTING CAD</span>
-        <h2 class="section-title">Architectural Drawing Workstation</h2>
-        <p class="section-lead">Inspect real verified architectural drawings: Plan, Section, Elevation, and Stair Recess Detail with live pan, zoom, layer selection, and 3D isometric extrusion.</p>
-      </div>
-
-      <!-- Mount for interactive DrawingViewer -->
-      <div id="drawing-viewer-root" class="drafting-viewer-container"></div>
-
-      <!-- Verified Reference Cards -->
-      <div class="drafting-reference-grid">
-        <div class="ref-card manga-panel-dark">
-          <span class="ref-title text-crimson">HOLLOW-CORE BEARING CHECKS</span>
-          <p class="ref-text">Minimum nominal bearing length of <strong>90mm</strong> on concrete ledges with 50mm structural topping and A142 reinforcing mesh, compliant with Eurocode 2 and PCI Design Handbook 8th Edition.</p>
-        </div>
-        <div class="ref-card manga-panel-dark">
-          <span class="ref-title text-azure">INVERTED-T LEDGE SHEAR</span>
-          <p class="ref-text">Ledge cantilever bending, punching shear, and hanger reinforcement calculations ensuring load transfer from slab planks into beam stems without unzipping failures.</p>
-        </div>
-        <div class="ref-card manga-panel-dark">
-          <span class="ref-title text-gold">API TRANSACTION SAFETY</span>
-          <p class="ref-text">Every element modification runs inside strict Revit API Transactions, with millimeter-to-feet conversions (304.8) and unique piece mark ID tagging for shop drawing schedules.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== SECTION 03: GLSL SHADER LABORATORY ==================== -->
-  <section id="gallery">
-    <div class="section-container">
-      <div class="gallery-header">
-        <div>
-          <span class="section-index">03 // GLSL SHADERS</span>
-          <h2 class="section-title">The Art of Ink & Perspective</h2>
-          <p class="gallery-desc">Real-time WebGL image interactions powered by custom GLSL fragment shaders. Move your cursor over the canvas to trigger dynamic wave ripples, chromatic aberration (RGB split), and screentone displacement.</p>
-        </div>
-        <div class="gallery-switcher">
-          <button id="btn-show-arch" class="gallery-btn active">1. ARCH PERSPECTIVE</button>
-          <button id="btn-show-manga" class="gallery-btn">2. MANGA AWAKENING</button>
-        </div>
-      </div>
-
-      <div class="gallery-canvas-wrap manga-panel-dark">
-        <canvas id="shader-gallery-canvas" class="gallery-canvas"></canvas>
-        <div class="gallery-canvas-overlay">
-          <span>🌊 HOVER TO DISPLACE • VELOCITY-SENSITIVE RGB SPLIT</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== SECTION 04: THE 5-STAGE METAMORPHOSIS ==================== -->
-  <section id="process">
-    <div class="section-container">
-      <div class="section-header">
-        <span class="section-index">04 // PIPELINE</span>
-        <h2 class="section-title">How Ideas Become Reality</h2>
-        <p class="section-lead">The rigorous computational engineering workflow from spatial intuition to deployed production reality.</p>
-      </div>
       
-      <div class="process-grid">
-        <div class="process-step manga-panel-dark">
-          <div class="process-step-header">
-            <span class="process-number">01</span>
-            <span class="process-kanji">直感!</span>
-          </div>
-          <h3 class="process-name">Spatial Intuition</h3>
-          <p class="process-desc">Deconstructing spatial constraints and structural requirements from first principles into core physics logic.</p>
-          <div class="process-tag">// FIRST PRINCIPLES</div>
-        </div>
-
-        <div class="process-step manga-panel-dark">
-          <div class="process-step-header">
-            <span class="process-number">02</span>
-            <span class="process-kanji">下絵!</span>
-          </div>
-          <h3 class="process-name">Blueprint Schematic</h3>
-          <p class="process-desc">Drafting coordinate grids, column axes, and component boundaries with millimeter-exact vector lines.</p>
-          <div class="process-tag">// VECTOR DRAFTING</div>
-        </div>
-
-        <div class="process-step manga-panel-dark">
-          <div class="process-step-header">
-            <span class="process-number">03</span>
-            <span class="process-kanji">数式!</span>
-          </div>
-          <h3 class="process-name">Matrix Solvers</h3>
-          <p class="process-desc">Calculating bending moments, shear transfer, and bearing lengths under Eurocode 2 and PCI 8th Ed. standards.</p>
-          <div class="process-tag">// STRUCTURAL MATRIX</div>
-        </div>
-
-        <div class="process-step manga-panel-dark">
-          <div class="process-step-header">
-            <span class="process-number">04</span>
-            <span class="process-kanji">構築!</span>
-          </div>
-          <h3 class="process-name">3D Assembly</h3>
-          <p class="process-desc">Extruding 2D geometry into parametric precast columns, corbels, and hollow-core slabs inside Revit API Transactions.</p>
-          <div class="process-tag">// PRECAST LOCK</div>
-        </div>
-
-        <div class="process-step manga-panel-dark">
-          <div class="process-step-header">
-            <span class="process-number">05</span>
-            <span class="process-kanji">完成!</span>
-          </div>
-          <h3 class="process-name">Deployed Reality</h3>
-          <p class="process-desc">Shipping hardened, accessible, 60 FPS applications that work seamlessly across every device and screen.</p>
-          <div class="process-tag">// VERIFIED PROD</div>
-        </div>
+      <div class="section-header-row">
+        <span class="sec-number">03</span>
+        <span class="sec-label">// ARCHITECTURE & DESIGN</span>
       </div>
+
+      <div class="arch-spread-quad">
+        
+        <!-- Panel 1: Interior Architectural Light -->
+        <div class="arch-quad-panel panel-image">
+          <div class="panel-inner-glow">
+            <img src="./images/architectural-perspective.jpg" alt="Architectural Perspective" class="arch-img" />
+            <div class="panel-caption">SPATIAL MONOLITH 01</div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Technical Elevation Blueprint Wireframe -->
+        <div class="arch-quad-panel panel-cad">
+          <div class="cad-wireframe-grid">
+            <div class="wire-crosshair"></div>
+            <div class="cad-elevation-svg">
+              <svg viewBox="0 0 300 240" fill="none" stroke="#00c8ff" stroke-width="1.2">
+                <rect x="30" y="40" width="240" height="160" stroke="#2a3f5a"/>
+                <line x1="30" y1="120" x2="270" y2="120" stroke="#00c8ff" stroke-dasharray="4 4"/>
+                <line x1="150" y1="40" x2="150" y2="200" stroke="#00c8ff" stroke-dasharray="4 4"/>
+                <polygon points="30,40 150,15 270,40" stroke="#00c8ff"/>
+                <circle cx="150" cy="120" r="45" stroke="#ffffff" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="panel-caption">ELEVATION MATRIX DWG-04</div>
+          </div>
+        </div>
+
+        <!-- Panel 3: Concrete Staircase & Manifesto -->
+        <div class="arch-quad-panel panel-concrete">
+          <div class="concrete-manifesto-wrap">
+            <h4 class="manifesto-big">STRUCTURE<br/>CREATES<br/>FREEDOM<span class="text-accent-blue">.</span></h4>
+            <span class="manifesto-sig">DY // 2026</span>
+          </div>
+        </div>
+
+        <!-- Panel 4: Polar Coordinate Radial Logic -->
+        <div class="arch-quad-panel panel-polar">
+          <div class="polar-logic-wrap">
+            <div class="polar-svg">
+              <svg viewBox="0 0 200 200" fill="none" stroke="#3d5a80" stroke-width="1">
+                <circle cx="100" cy="100" r="80"/>
+                <circle cx="100" cy="100" r="50"/>
+                <circle cx="100" cy="100" r="20"/>
+                <line x1="100" y1="10" x2="100" y2="190" stroke="#00c8ff"/>
+                <line x1="10" y1="100" x2="190" y2="100" stroke="#00c8ff"/>
+                <line x1="36" y1="36" x2="164" y2="164" stroke="#253a55"/>
+              </svg>
+            </div>
+            <div class="polar-quote">
+              <span class="p-lead">// FORM FOLLOWS LOGIC.</span>
+              <span class="p-sub">2026 EDITION 0001</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </section>
 
-  <!-- ==================== SECTION 05: IDENTITY & PHILOSOPHY ==================== -->
-  <section id="about">
+  <!-- ==================== SECTION 04: TECHNOLOGY / LAB ==================== -->
+  <section id="lab" class="connected-section section-lab">
     <div class="section-container">
-      <div class="section-header">
-        <span class="section-index">05 // IDENTITY</span>
-        <h2 class="section-title">The Architect's Workshop</h2>
-      </div>
       
-      <div class="about-grid">
-        <div class="about-text">
-          <p class="about-lead">
-            I am <strong>Dagi (Dagmawi Yosef)</strong> — an architectural designer, computational structural engineer, and full-stack creative technologist based in Addis Ababa.
+      <div class="section-header-row">
+        <span class="sec-number">04</span>
+        <span class="sec-label">// TECHNOLOGY / LAB</span>
+      </div>
+
+      <div class="lab-workspace-grid">
+        
+        <!-- Left: Lab Info -->
+        <div class="lab-info-col">
+          <h3 class="lab-title">PARAMETRIC GEOMETRY LAB</h3>
+          <p class="lab-desc">
+            Interactive parametric geometry built with code. Rotate, explore and adjust mathematical surface parameters in real time.
           </p>
-          <p>
-            Much like the imaginative construction journeys in <em>The Greatest Estate Developer</em>, I believe software and engineering should transform abstract ideas, mathematical equations, and terrain into solid, elegant reality.
-          </p>
-          <p>
-            I care about semantic markup, responsive layouts that behave on every screen size, accessible components, and code that stays clean six months later. On the engineering side, I automate complex precast structural workflows with millimeter precision using the Revit API and custom Python algorithms.
-          </p>
-          <blockquote class="about-quote">
-            &ldquo;First make it work, then make it right, then make it fast.&rdquo;
-          </blockquote>
+          <div class="lab-hints">
+            <div class="hint-item"><span class="hint-icon">●</span> DRAG TO ROTATE</div>
+            <div class="hint-item"><span class="hint-icon">●</span> SCROLL TO ZOOM</div>
+          </div>
         </div>
 
-        <div class="about-details manga-panel-dark">
-          <div class="detail-group">
-            <span class="detail-label">LOCATION</span>
-            <span class="detail-value">Addis Ababa, Ethiopia</span>
-          </div>
-          <div class="detail-group">
-            <span class="detail-label">PRIMARY ARSENAL (3 CORE PILLARS)</span>
-            <div class="pillar-item">
-              <strong>1. Computational Architecture & BIM</strong>
-              <span>Autodesk Revit API, Precast Hollow-Core Systems, Eurocode 2 & PCI 8th Ed.</span>
-            </div>
-            <div class="pillar-item">
-              <strong>2. Structural Analysis Solvers</strong>
-              <span>Virtual Work, Slope Deflection, Moment Distribution, KaTeX Math Engines</span>
-            </div>
-            <div class="pillar-item">
-              <strong>3. Creative 3D & Full-Stack</strong>
-              <span>Three.js, WebGL GLSL, GSAP 3, Lenis, Python (FastAPI), TypeScript</span>
-            </div>
-          </div>
-          <div class="detail-group">
-            <span class="detail-label">DAILY DRIVERS</span>
-            <span class="detail-value">VS Code, Git, Revit, Three.js, Python, Vite</span>
-          </div>
-          <div class="detail-group">
-            <span class="detail-label">AVAILABILITY</span>
-            <span class="detail-value detail-value-green">● Open for Builds & Strategic Collaborations</span>
+        <!-- Center: Rotatable 3D Parametric Mobius / Torus Sculpture -->
+        <div class="lab-canvas-col">
+          <div class="parametric-canvas-wrapper">
+            <canvas id="canvas-parametric-lab" class="parametric-3d-canvas"></canvas>
+            <div class="canvas-spec-label">[TORUS_KNOT // PROCEDURAL WEBGL]</div>
           </div>
         </div>
+
+        <!-- Right: Real-time Controls & Code -->
+        <div class="lab-controls-col">
+          <div class="lab-controls-panel">
+            <div class="panel-header">PARAMETRIC CONTROLS</div>
+
+            <!-- Shape Presets -->
+            <div class="preset-selector-row">
+              <span class="ctrl-sublabel">TOPOLOGY:</span>
+              <div class="preset-btn-group">
+                <button class="btn-preset active" data-preset="torus">TORUS</button>
+                <button class="btn-preset" data-preset="mobius">MÖBIUS</button>
+                <button class="btn-preset" data-preset="hyper">HYPERBOLOID</button>
+              </div>
+            </div>
+
+            <!-- Material Modes -->
+            <div class="preset-selector-row">
+              <span class="ctrl-sublabel">SHADING:</span>
+              <div class="preset-btn-group">
+                <button class="btn-material active" data-mat="titanium">TITANIUM</button>
+                <button class="btn-material" data-mat="wireframe">WIREFRAME</button>
+                <button class="btn-material" data-mat="glass">GLASS</button>
+              </div>
+            </div>
+            
+            <div class="control-row">
+              <label for="param-radius">RADIUS:</label>
+              <input id="param-radius" type="range" min="0.6" max="2.2" step="0.05" value="1.25" class="param-slider">
+              <span id="val-radius" class="param-val">1.25</span>
+            </div>
+
+            <div class="control-row">
+              <label for="param-tube">TUBE:</label>
+              <input id="param-tube" type="range" min="0.1" max="0.7" step="0.02" value="0.38" class="param-slider">
+              <span id="val-tube" class="param-val">0.38</span>
+            </div>
+
+            <div class="control-row">
+              <label for="param-p">TWIST (P):</label>
+              <input id="param-p" type="range" min="1" max="8" step="1" value="2" class="param-slider">
+              <span id="val-p" class="param-val">2</span>
+            </div>
+
+            <div class="control-row">
+              <label for="param-q">LOOPS (Q):</label>
+              <input id="param-q" type="range" min="1" max="9" step="1" value="3" class="param-slider">
+              <span id="val-q" class="param-val">3</span>
+            </div>
+
+            <div class="lab-telemetry-status">
+              <span id="lab-verts-count">VERTS: 2,048</span>
+              <span id="lab-faces-count">FACES: 4,096</span>
+              <span class="text-accent-blue">GLSL OPT: 60 FPS</span>
+            </div>
+          </div>
+
+          <div class="lab-code-preview">
+            <div class="code-title">GEN_PARAMETRIC.GLSL</div>
+            <pre class="code-block"><code>vec3 parametric_torus(float u, float v) {
+  float r = 1.25 + 0.38 * cos(v);
+  float x = r * cos(u * 2.0);
+  float y = r * sin(u * 2.0);
+  float z = 0.38 * sin(v * 3.0);
+  return vec3(x, y, z);
+}</code></pre>
+          </div>
+        </div>
+
       </div>
+
     </div>
   </section>
 
-  <!-- ==================== SECTION 06: THE CONTRACT ==================== -->
-  <section id="contact">
+  <!-- ==================== SECTION 05: CONTACT ==================== -->
+  <section id="contact" class="connected-section section-contact">
     <div class="section-container">
-      <div class="contact-content">
-        <div class="section-header">
-          <span class="section-index">06 // THE CONTRACT</span>
-          <h2 class="contact-title">Let's build something extraordinary.</h2>
-        </div>
-        <p class="contact-desc">
-          Whether you need computational architecture automation, an Awwwards-caliber WebGL 3D interactive experience, or a bulletproof full-stack web application — my drafting table is ready.
-        </p>
+      
+      <div class="section-header-row">
+        <span class="sec-number">05</span>
+        <span class="sec-label">// CONTACT</span>
+      </div>
 
-        <div class="contact-email-wrap manga-panel-dark">
-          <span id="contact-email-text" class="contact-email">dagiyosi5321@gmail.com</span>
-          <button id="btn-copy-email" class="btn-primary btn-small">
-            COPY EMAIL
-          </button>
+      <div class="contact-monolith-card">
+        <div class="contact-left">
+          <h2 class="contact-headline">
+            LET'S BUILD<br/>
+            SOMETHING<br/>
+            <span class="text-accent-blue">IMPACTFUL.</span>
+          </h2>
+          <p class="contact-subhead">
+            Open to architectural collaborations, computational design consultations, and high-impact engineering opportunities.
+          </p>
         </div>
 
-        <div class="contact-links">
-          <a href="https://github.com/dagiyosi-pixel" target="_blank" rel="noopener noreferrer">GITHUB: @dagiyosi-pixel ↗</a>
-          <span class="contact-sep">•</span>
-          <a href="mailto:dagiyosi5321@gmail.com">DIRECT INBOX ✉</a>
-          <span class="contact-sep">•</span>
-          <span>Telegram: @dagiyosi</span>
+        <div class="contact-right">
+          <div class="contact-info-slate">
+            <div class="contact-line">
+              <span class="c-icon">✉</span>
+              <a href="mailto:dagiyosi5321@gmail.com" class="c-link">dagiyosi5321@gmail.com</a>
+            </div>
+            <div class="contact-line">
+              <span class="c-icon">📍</span>
+              <span class="c-text">Addis Ababa, Ethiopia</span>
+            </div>
+            <div class="contact-line">
+              <span class="c-icon">⌥</span>
+              <a href="https://github.com/dagiyosi-pixel" target="_blank" rel="noopener noreferrer" class="c-link">github.com/dagiyosi-pixel</a>
+            </div>
+            <div class="contact-line">
+              <span class="c-icon">⌘</span>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="c-link">linkedin.com/in/dagmawi-yosef</a>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
   </section>
 
-  <!-- ==================== SITE FOOTER ==================== -->
-  <footer class="site-footer">
+  <!-- ==================== FOOTER ==================== -->
+  <footer id="main-footer">
     <div class="footer-inner">
-      <span>THE BLUEPRINT UNIVERSE // CONCEIVED & ENGINEERED BY <strong class="text-white">DAGMAWI YOSEF (0xDagi)</strong></span>
-      <span>© 2026 ALL RIGHTS RESERVED • MANGA ARCHITECTURE VISUAL IDENTITY</span>
+      <div class="footer-left">
+        <span class="footer-logo">DY</span>
+        <span class="footer-copy">© 2026 DAGMAWI YOSEF. ALL RIGHTS RESERVED.</span>
+      </div>
+      <div class="footer-right">
+        <span class="footer-tech">DESIGNED & BUILT WITH THREE.JS & GSAP</span>
+      </div>
     </div>
   </footer>
 
-  <!-- ==================== 7-CHAPTER MANHWA CASE STUDY MODAL ==================== -->
-  <div id="case-study-modal" class="modal-overlay hidden">
-    <div class="modal-container">
-      <div class="modal-header">
-        <div class="modal-header-left">
-          <span class="modal-indicator"></span>
-          <span class="modal-title-text">MANHWA ARCHITECTURAL CASE STUDY</span>
-        </div>
-        <button id="btn-close-case-study" class="modal-close" aria-label="Close modal">ESC / CLOSE [✕]</button>
-      </div>
-      <div id="case-study-content" class="modal-body"></div>
-    </div>
-  </div>
-
-  <!-- Toast Notification -->
-  <div id="blueprint-toast" class="toast">COPIED TO CLIPBOARD</div>
+  <!-- Notification Toast -->
+  <div id="blueprint-toast" class="blueprint-toast"></div>
 
   <script type="module" src="./src/main.js"></script>
 </body>

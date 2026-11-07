@@ -1,6 +1,7 @@
 // ==========================================================================
 // PROJECT VISUALIZERS // THE BLUEPRINT UNIVERSE
-// Real Interactive Graphic Engines for All 6 Chronicles (Exploded Precast, Beam Mechanics, Topo Map, etc.)
+// Real Interactive Graphic Engines for All Projects
+// Precast BIM 4-Column Exploded Frame, Dual SFD/BMD Beam Solver, Topo Atlas & SQ3R
 // ==========================================================================
 
 import * as THREE from 'three';
@@ -14,68 +15,116 @@ export class ProjectVisualizers {
     this.initSq3rVisualizer();
   }
 
-  // 1. Precast BIM: Interactive 3D Exploded Joint Assembly
+  // 1. Precast BIM: Full 4-Column Bay Exploded Joint Assembly
   initPrecastVisualizer() {
     const canvas = document.getElementById('canvas-precast-interactive');
     if (!canvas) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(40, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
-    camera.position.set(4.5, 3.8, 5.5);
-    camera.lookAt(0, 0.8, 0);
+    const camera = new THREE.PerspectiveCamera(38, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+    camera.position.set(5.2, 4.2, 6.2);
+    camera.lookAt(0, 0.9, 0);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    const amb = new THREE.AmbientLight(0xffffff, 0.8);
+    const amb = new THREE.AmbientLight(0xffffff, 0.85);
     scene.add(amb);
-    const dir = new THREE.DirectionalLight(0xffffff, 1.2);
-    dir.position.set(5, 8, 5);
+    const dir = new THREE.DirectionalLight(0xffffff, 1.6);
+    dir.position.set(6, 10, 6);
     scene.add(dir);
+
+    const rimBlue = new THREE.DirectionalLight(0x0088ff, 2.5);
+    rimBlue.position.set(-6, 2, -4);
+    scene.add(rimBlue);
 
     const root = new THREE.Group();
     scene.add(root);
 
-    // Column + Corbel
-    const colMat = new THREE.MeshStandardMaterial({ color: 0x14212D, roughness: 0.3 });
-    const col = new THREE.Mesh(new THREE.BoxGeometry(0.8, 4.0, 0.8), colMat);
-    col.position.y = 1.0;
-    root.add(col);
+    // Architectural Materials
+    const colMat = new THREE.MeshStandardMaterial({ color: 0x181e26, roughness: 0.6, metalness: 0.1 });
+    const corbelMat = new THREE.MeshStandardMaterial({ color: 0x222a36, roughness: 0.5, metalness: 0.2 });
+    const beamMat = new THREE.MeshStandardMaterial({ color: 0x1f2733, roughness: 0.4, metalness: 0.25 });
+    const padMat = new THREE.MeshStandardMaterial({ color: 0x00d4ff, roughness: 0.2, emissive: 0x004488, emissiveIntensity: 0.4 });
+    const slabMat = new THREE.MeshStandardMaterial({ color: 0xdce3ed, roughness: 0.35, metalness: 0.15 });
+    const edgeCyan = new THREE.LineBasicMaterial({ color: 0x00aaff, transparent: true, opacity: 0.85 });
 
-    const corbelMat = new THREE.MeshStandardMaterial({ color: 0xff2233, roughness: 0.3 });
-    const corbel = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.5, 0.8), corbelMat);
-    corbel.position.set(0.2, 1.2, 0);
-    root.add(corbel);
+    function addEdges(mesh, geo, mat = edgeCyan) {
+      const e = new THREE.EdgesGeometry(geo);
+      const l = new THREE.LineSegments(e, mat);
+      mesh.add(l);
+    }
 
-    // Inverted-T Beam resting on Corbel
-    const beamMat = new THREE.MeshStandardMaterial({ color: 0x173C5B, roughness: 0.3 });
-    const beam = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.8, 3.4), beamMat);
-    beam.position.set(0.7, 1.85, 0);
-    root.add(beam);
+    // A. 4 Precast Concrete Columns (400x400mm) with Corbel Brackets
+    const colGroup = new THREE.Group();
+    const colCoords = [
+      { x: -1.7, z: -1.2 },
+      { x:  1.7, z: -1.2 },
+      { x: -1.7, z:  1.2 },
+      { x:  1.7, z:  1.2 }
+    ];
 
-    // Neoprene Pad (10mm)
-    const padMat = new THREE.MeshStandardMaterial({ color: 0xff2233, roughness: 0.1 });
-    const pad = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.08, 0.7), padMat);
-    pad.position.set(0.45, 1.48, 0);
-    root.add(pad);
+    const colGeo = new THREE.BoxGeometry(0.5, 2.8, 0.5);
+    const corbelGeo = new THREE.BoxGeometry(0.4, 0.35, 0.45);
 
-    // Hollow-Core Slab Planks
+    colCoords.forEach(c => {
+      const col = new THREE.Mesh(colGeo, colMat);
+      col.position.set(c.x, 0.6, c.z);
+      addEdges(col, colGeo);
+      colGroup.add(col);
+
+      // Corbel pointing inward
+      const corbel = new THREE.Mesh(corbelGeo, corbelMat);
+      const inwardX = c.x > 0 ? -0.32 : 0.32;
+      corbel.position.set(c.x + inwardX, 1.1, c.z);
+      addEdges(corbel, corbelGeo);
+      colGroup.add(corbel);
+
+      // Neoprene Bearing Pad (10mm thickness)
+      const pad = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.05, 0.35), padMat);
+      pad.position.set(c.x + inwardX, 1.3, c.z);
+      colGroup.add(pad);
+    });
+    root.add(colGroup);
+
+    // B. Longitudinal Inverted-T Ledge Beams
+    const beamGroup = new THREE.Group();
+    const beamGeo = new THREE.BoxGeometry(0.65, 0.55, 3.2);
+
+    const beamL = new THREE.Mesh(beamGeo, beamMat);
+    beamL.position.set(-1.38, 1.6, 0);
+    addEdges(beamL, beamGeo);
+    beamGroup.add(beamL);
+
+    const beamR = new THREE.Mesh(beamGeo, beamMat);
+    beamR.position.set(1.38, 1.6, 0);
+    addEdges(beamR, beamGeo);
+    beamGroup.add(beamR);
+
+    root.add(beamGroup);
+
+    // C. 4 Hollow-Core Slab Planks (1200mm width, 90mm bearing)
     const slabGroup = new THREE.Group();
-    const slabMat = new THREE.MeshStandardMaterial({ color: 0xF7FBFF, roughness: 0.2 });
+    const slabGeo = new THREE.BoxGeometry(2.65, 0.28, 0.68);
 
-    for (let s = -1; s <= 1; s++) {
-      const slab = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.35, 0.95), slabMat);
-      slab.position.set(1.9, 2.1, s * 1.05);
+    for (let s = -1.5; s <= 1.5; s += 1.0) {
+      const slab = new THREE.Mesh(slabGeo, slabMat);
+      slab.position.set(0, 1.88, s * 0.74);
+      addEdges(slab, slabGeo);
+
+      // Circular void markers at end face (simulating extruded hollow cores)
+      const voidMat = new THREE.MeshBasicMaterial({ color: 0x090b0e });
+      for (let v = -0.9; v <= 0.9; v += 0.45) {
+        const voidCyl = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.02, 12), voidMat);
+        voidCyl.rotation.z = Math.PI / 2;
+        voidCyl.position.set(1.33, 0, v * 0.3);
+        slab.add(voidCyl);
+      }
+
       slabGroup.add(slab);
     }
     root.add(slabGroup);
-
-    // Wireframe Edges
-    const edges = new THREE.EdgesGeometry(new THREE.BoxGeometry(1.8, 0.35, 3.2));
-    const edgeLines = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x399dd6 }));
-    edgeLines.position.set(1.9, 2.1, 0);
-    slabGroup.add(edgeLines);
 
     // Orbit State
     let isDragging = false;
@@ -103,26 +152,29 @@ export class ProjectVisualizers {
       e.stopPropagation();
       isExploded = !isExploded;
       sound.playStructuralClack();
-      btnExplode.textContent = isExploded ? '🔄 RESTORE ASSEMBLY' : '💥 EXPLODE SLABS';
+      btnExplode.innerHTML = isExploded ? '<span>RESTORE ASSEMBLY</span> <span class="arr">↺</span>' : '<span>EXPLODE 3D ASSEMBLY</span> <span class="arr">→</span>';
     });
 
     function anim() {
       requestAnimationFrame(anim);
-      if (!isDragging) targetRot.y += 0.003;
+      if (!isDragging) targetRot.y += 0.0025;
       root.rotation.y += (targetRot.y - root.rotation.y) * 0.08;
       root.rotation.x += (targetRot.x - root.rotation.x) * 0.08;
 
       explodeProgress += ((isExploded ? 1.0 : 0.0) - explodeProgress) * 0.08;
-      slabGroup.position.y = explodeProgress * 1.4;
-      slabGroup.position.x = explodeProgress * 0.6;
-      beam.position.y = 1.85 + explodeProgress * 0.5;
+
+      // Explode choreography: Planks lift high, beams separate outward
+      slabGroup.position.y = explodeProgress * 1.25;
+      beamL.position.x = -1.38 - explodeProgress * 0.45;
+      beamR.position.x =  1.38 + explodeProgress * 0.45;
+      beamGroup.position.y = explodeProgress * 0.35;
 
       renderer.render(scene, camera);
     }
     anim();
   }
 
-  // 2. Theory of Structures: Real-Time Interactive Beam Mechanics Solver
+  // 2. Theory of Structures: Real-Time Dual SFD & BMD Beam Solver
   initBeamSolverVisualizer() {
     const canvas = document.getElementById('canvas-beam-solver');
     if (!canvas) return;
@@ -167,97 +219,140 @@ export class ProjectVisualizers {
       const RB = (P * a) / L;
       const Mmax = (P * a * b) / L; // kNm
 
-      // Update KaTeX / DOM formula text
+      // Update Formula Text
       const readout = document.getElementById('beam-formula-readout');
       if (readout) {
-        readout.innerHTML = `P = ${P.toFixed(0)} kN @ x = ${a.toFixed(1)}m | R_A = ${RA.toFixed(1)} kN | R_B = ${RB.toFixed(1)} kN | <strong>M_max = ${Mmax.toFixed(1)} kN·m</strong>`;
+        readout.innerHTML = `<span>P = ${P.toFixed(0)} kN @ x = ${a.toFixed(1)}m</span> <span>R_A = ${RA.toFixed(1)} kN</span> <span>R_B = ${RB.toFixed(1)} kN</span> <span class="text-accent-blue">M_max = +${Mmax.toFixed(1)} kN·m</span>`;
       }
 
-      // 1. Draw Beam Baseline (y = 80)
-      const beamY = 75;
-      const startX = 60;
-      const endX = w - 60;
+      const startX = 50;
+      const endX = w - 50;
       const spanPx = endX - startX;
+      const loadX = startX + (a / L) * spanPx;
 
+      // --- 1. PHYSICAL BEAM & SUPPORTS (y = 60) ---
+      const beamY = 55;
+
+      // Baseline beam
       ctx.strokeStyle = '#FFFFFF';
-      ctx.lineWidth = 4;
+      ctx.lineWidth = 3.5;
       ctx.beginPath();
       ctx.moveTo(startX, beamY);
       ctx.lineTo(endX, beamY);
       ctx.stroke();
 
-      // Supports (Pin at A, Roller at B)
-      ctx.fillStyle = '#399DD6';
-      // Triangle pin A
+      // Pin support A
+      ctx.fillStyle = '#0088ff';
       ctx.beginPath();
       ctx.moveTo(startX, beamY);
-      ctx.lineTo(startX - 12, beamY + 20);
-      ctx.lineTo(startX + 12, beamY + 20);
+      ctx.lineTo(startX - 10, beamY + 16);
+      ctx.lineTo(startX + 10, beamY + 16);
       ctx.closePath();
       ctx.fill();
 
-      // Triangle roller B
+      // Roller support B
       ctx.beginPath();
       ctx.moveTo(endX, beamY);
-      ctx.lineTo(endX - 12, beamY + 16);
-      ctx.lineTo(endX + 12, beamY + 16);
+      ctx.lineTo(endX - 10, beamY + 12);
+      ctx.lineTo(endX + 10, beamY + 12);
       ctx.closePath();
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(endX - 6, beamY + 20, 3, 0, Math.PI * 2);
-      ctx.arc(endX + 6, beamY + 20, 3, 0, Math.PI * 2);
+      ctx.arc(endX - 5, beamY + 16, 2.5, 0, Math.PI * 2);
+      ctx.arc(endX + 5, beamY + 16, 2.5, 0, Math.PI * 2);
       ctx.fill();
 
-      // Point Load Arrow at x = a
-      const loadX = startX + (a / L) * spanPx;
-      ctx.strokeStyle = '#FF2233';
-      ctx.fillStyle = '#FF2233';
-      ctx.lineWidth = 3;
+      // Point Load Arrow
+      ctx.strokeStyle = '#ff3344';
+      ctx.fillStyle = '#ff3344';
+      ctx.lineWidth = 2.5;
       ctx.beginPath();
-      ctx.moveTo(loadX, beamY - 45);
-      ctx.lineTo(loadX, beamY - 4);
-      ctx.stroke();
-      // Arrowhead
-      ctx.beginPath();
-      ctx.moveTo(loadX - 6, beamY - 14);
+      ctx.moveTo(loadX, beamY - 36);
       ctx.lineTo(loadX, beamY - 2);
-      ctx.lineTo(loadX + 6, beamY - 14);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(loadX - 5, beamY - 12);
+      ctx.lineTo(loadX, beamY - 2);
+      ctx.lineTo(loadX + 5, beamY - 12);
       ctx.closePath();
       ctx.fill();
 
-      ctx.font = 'bold 12px "Fira Code", monospace';
-      ctx.fillText(`P = ${P}kN`, loadX - 25, beamY - 50);
+      ctx.font = '600 11px "Fira Code", monospace';
+      ctx.fillText(`P = ${P} kN`, loadX - 24, beamY - 42);
 
-      // 2. Draw Bending Moment Diagram (BMD) at y = 175
+      // --- 2. DUAL DIAGRAMS: SFD (LEFT) & BMD (RIGHT) ---
+      const splitX = w * 0.48;
+
+      // --- A. SHEAR FORCE DIAGRAM (SFD) ---
+      const sfdY = 160;
+      const sfdScale = 0.8;
+      ctx.strokeStyle = '#1d2430';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(startX, sfdY);
+      ctx.lineTo(splitX - 15, sfdY);
+      ctx.stroke();
+
+      const sfdSpan = (splitX - 15) - startX;
+      const sfdLoadX = startX + (a / L) * sfdSpan;
+
+      // SFD Poly: +RA from start to load, then -RB from load to end
+      const raH = RA * sfdScale;
+      const rbH = RB * sfdScale;
+
+      ctx.fillStyle = 'rgba(0, 136, 255, 0.2)';
+      ctx.strokeStyle = '#0088ff';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(startX, sfdY);
+      ctx.lineTo(startX, sfdY - raH);
+      ctx.lineTo(sfdLoadX, sfdY - raH);
+      ctx.lineTo(sfdLoadX, sfdY + rbH);
+      ctx.lineTo(splitX - 15, sfdY + rbH);
+      ctx.lineTo(splitX - 15, sfdY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.font = '10px "Fira Code", monospace';
+      ctx.fillStyle = '#0088ff';
+      ctx.fillText(`SFD: +${RA.toFixed(1)} / -${RB.toFixed(1)} kN`, startX, sfdY + 45);
+
+      // --- B. BENDING MOMENT DIAGRAM (BMD) ---
+      const bmdStartX = splitX + 15;
+      const bmdEndX = endX;
+      const bmdSpan = bmdEndX - bmdStartX;
+      const bmdLoadX = bmdStartX + (a / L) * bmdSpan;
       const bmdY = 160;
-      ctx.strokeStyle = '#399DD6';
-      ctx.lineWidth = 1.5;
+      const bmdH = Math.min(60, (Mmax / 130) * 60);
+
+      ctx.strokeStyle = '#1d2430';
+      ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.moveTo(startX, bmdY);
-      ctx.lineTo(endX, bmdY);
+      ctx.moveTo(bmdStartX, bmdY);
+      ctx.lineTo(bmdEndX, bmdY);
       ctx.stroke();
 
-      // Triangle Moment Peak
-      const peakMomentH = Math.min(65, (Mmax / 130) * 65);
-      ctx.fillStyle = 'rgba(57, 157, 214, 0.25)';
-      ctx.strokeStyle = '#399DD6';
-      ctx.lineWidth = 2.5;
+      ctx.fillStyle = 'rgba(0, 212, 255, 0.22)';
+      ctx.strokeStyle = '#00d4ff';
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(startX, bmdY);
-      ctx.lineTo(loadX, bmdY + peakMomentH);
-      ctx.lineTo(endX, bmdY);
+      ctx.moveTo(bmdStartX, bmdY);
+      ctx.lineTo(bmdLoadX, bmdY + bmdH);
+      ctx.lineTo(bmdEndX, bmdY);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle = '#399DD6';
-      ctx.fillText(`BMD: M_max = +${Mmax.toFixed(1)} kN·m`, loadX + 10, bmdY + peakMomentH);
+      ctx.fillStyle = '#00d4ff';
+      ctx.fillText(`BMD: M_max = +${Mmax.toFixed(1)} kN·m`, bmdStartX, bmdY + 45);
 
-      // 3. Draw Deflected Elastic Curve v(x) at y = 250
-      const defY = 240;
-      ctx.strokeStyle = '#FF2233';
-      ctx.lineWidth = 2.5;
-      ctx.setLineDash([4, 2]);
+      // --- 3. ELASTIC DEFLECTION CURVE v(x) (y = 255) ---
+      const defY = 250;
+      ctx.strokeStyle = '#ff3344';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 3]);
       ctx.beginPath();
       ctx.moveTo(startX, defY);
 
@@ -269,35 +364,118 @@ export class ProjectVisualizers {
         } else {
           v = (P * a * (L - x) * (2 * L * x - x * x - a * a)) / (6 * L);
         }
-        const vy = defY + (v / 80) * 45;
+        const vy = defY + (v / 85) * 36;
         ctx.lineTo(startX + px, vy);
       }
       ctx.stroke();
       ctx.setLineDash([]);
 
-      ctx.fillStyle = '#FF2233';
-      ctx.fillText('ELASTIC DEFLECTION v(x)', startX + 10, defY + 35);
+      ctx.fillStyle = '#ff5566';
+      ctx.font = '10px "Fira Code", monospace';
+      ctx.fillText('ELASTIC DEFLECTION v(x) [PARABOLIC ENVELOPE]', startX, defY + 32);
     }
 
     draw();
   }
 
-  // 3. ETHIOPIA//360 Interactive Topographic SVG Atlas
+  // 3. ETHIOPIA//360 Interactive Digital Topographic Atlas
   initAtlasVisualizer() {
-    const pins = document.querySelectorAll('.atlas-node');
-    const readout = document.getElementById('atlas-coord-readout');
+    const canvas = document.getElementById('canvas-topo-atlas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    pins.forEach(pin => {
-      pin.addEventListener('mouseenter', () => {
-        sound.playPencilScratch();
-        const city = pin.getAttribute('data-city');
-        const elev = pin.getAttribute('data-elev');
-        const coord = pin.getAttribute('data-coord');
-        if (readout) {
-          readout.innerHTML = `SELECTED NODE: <strong class="text-crimson">${city}</strong> | ELEVATION: ${elev} | COORDINATES: ${coord}`;
+    let time = 0;
+    const rows = 20;
+    const cols = 32;
+
+    function renderTopo() {
+      time += 0.015;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Dark background gradient
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+      bgGrad.addColorStop(0, '#090b10');
+      bgGrad.addColorStop(1, '#050608');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Draw Topographic Wireframe Grid (Isometric projection)
+      const originX = w * 0.5;
+      const originY = h * 0.24;
+      const stepX = 13;
+      const stepY = 6.5;
+
+      for (let r = 0; r < rows; r++) {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(0, 180, 255, ${0.12 + (r / rows) * 0.28})`;
+        ctx.lineWidth = 1;
+
+        for (let c = 0; c < cols; c++) {
+          const nx = (c - cols / 2) / 6;
+          const ny = (r - rows / 2) / 5;
+          const elevation = 
+            Math.sin(nx * 1.8 + time * 0.5) * 12 +
+            Math.cos(ny * 2.2 + nx * 0.8) * 16 +
+            Math.sin(Math.sqrt(nx * nx + ny * ny) * 3 - time) * 10;
+
+          const screenX = originX + (c - r) * stepX;
+          const screenY = originY + (c + r) * stepY - elevation;
+
+          if (c === 0) {
+            ctx.moveTo(screenX, screenY);
+          } else {
+            ctx.lineTo(screenX, screenY);
+          }
         }
+        ctx.stroke();
+      }
+
+      // Draw Key Geological Markers
+      const markers = [
+        { label: 'SIMIEN PEAKS [4,550m]', rx: 0.28, ry: 0.38, pulse: 1.0 },
+        { label: 'RIFT VALLEY TRENCH [-120m]', rx: 0.58, ry: 0.62, pulse: 0.7 },
+        { label: 'LALIBELA MONOLITH [2,500m]', rx: 0.44, ry: 0.48, pulse: 0.9 }
+      ];
+
+      markers.forEach((m, idx) => {
+        const mx = w * m.rx;
+        const my = h * m.ry + Math.sin(time * 2 + idx) * 3;
+        const pulseR = 4 + Math.sin(time * 3 + idx) * 2;
+
+        ctx.beginPath();
+        ctx.arc(mx, my, pulseR + 4, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(0, 212, 255, 0.4)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(mx, my, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#00d4ff';
+        ctx.fill();
+
+        ctx.font = '9px "Fira Code", monospace';
+        ctx.fillStyle = '#a0c4e8';
+        ctx.fillText(m.label, mx + 8, my + 3);
       });
-    });
+
+      // HUD crosshairs & coordinates
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.lineWidth = 0.8;
+      ctx.strokeRect(10, 10, w - 20, h - 20);
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.font = '9px "Fira Code", monospace';
+      ctx.fillText(`GIS_LAT: 9.1450° N • GIS_LON: 40.4897° E`, 20, 26);
+      ctx.fillText(`SRTM_30M_ELEVATION_SURFACE // LIVE WEBGL 2.0`, 20, h - 20);
+
+      requestAnimationFrame(renderTopo);
+    }
+
+    renderTopo();
   }
 
   // 4. SQ3R Examination Simulator
